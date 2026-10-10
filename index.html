@@ -1,0 +1,1052 @@
+<title>Transurfing Path</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Manrope:wght@400;500;600;700&family=Young+Serif&display=swap">
+<style>
+/* Layout: a narrow reading column under a quiet tab bar; tools (today, practice, journal) reuse the same column. Sea-glass neutrals, one teal accent, amber only for streaks. */
+:root {
+  --bg: #eef2f1;
+  --surface: #ffffff;
+  --sunk: #e3e9e8;
+  --ink: #15282b;
+  --muted: #5a6d6f;
+  --line: #cfd9d8;
+  --accent: #1f7a74;
+  --accent-soft: #d5ebe8;
+  --on-accent: #ffffff;
+  --amber: #b8661a;
+  --amber-soft: #f6e6d3;
+  --good: #2f7d4a;
+  --bad: #b23b3b;
+  --heat-0: #dfe7e6; --heat-1: #a9d4ce; --heat-2: #5fb0a6; --heat-3: #1f7a74;
+  --display: "Young Serif", Georgia, "Times New Roman", serif;
+  --read: "Literata", Georgia, "Times New Roman", serif;
+  --ui: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0d1617; --surface: #152224; --sunk: #1b2b2d; --ink: #e2ecea; --muted: #90a4a5; --line: #2a3d40;
+  --accent: #55bdb2; --accent-soft: #173a38; --on-accent: #08201e; --amber: #eaa35c; --amber-soft: #3a2a1a;
+  --good: #6cc48a; --bad: #e57d7d;
+  --heat-0: #1d2e30; --heat-1: #1f5550; --heat-2: #2f8c83; --heat-3: #55bdb2;
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0d1617; --surface: #152224; --sunk: #1b2b2d; --ink: #e2ecea; --muted: #90a4a5; --line: #2a3d40;
+  --accent: #55bdb2; --accent-soft: #173a38; --on-accent: #08201e; --amber: #eaa35c; --amber-soft: #3a2a1a;
+  --good: #6cc48a; --bad: #e57d7d;
+  --heat-0: #1d2e30; --heat-1: #1f5550; --heat-2: #2f8c83; --heat-3: #55bdb2;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--ui); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 760px; margin: 0 auto; padding-inline: 16px; padding-block: 0 64px; }
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+.top-inner { max-width: 760px; margin: 0 auto; padding-inline: 16px; padding-block: 12px 0; display: flex; flex-direction: column; gap: 8px; }
+.brand { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.brand h1 { font-family: var(--display); font-weight: 400; font-size: 22px; margin: 0; letter-spacing: .01em; }
+.sync { font-size: 12px; color: var(--muted); }
+nav.tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
+nav.tabs::-webkit-scrollbar { display: none; }
+nav.tabs button { flex: 0 0 auto; background: none; border: 0; border-bottom: 2px solid transparent; padding: 8px 12px 10px; font: 600 14px var(--ui); color: var(--muted); cursor: pointer; }
+nav.tabs button[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
+button, input, textarea, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); padding: 8px 16px; font-weight: 600; font-size: 14px; cursor: pointer; }
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.ghost { background: none; }
+.btn.small { padding: 5px 12px; font-size: 13px; }
+.btn[disabled] { opacity: .5; cursor: default; }
+.eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+h2.view-title { font-family: var(--display); font-weight: 400; font-size: 30px; line-height: 1.15; margin: 28px 0 4px; text-wrap: balance; }
+.lede { color: var(--muted); margin: 0 0 20px; max-width: 60ch; }
+.stack { display: flex; flex-direction: column; gap: 16px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; min-width: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.stat { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.stat b { font-family: var(--display); font-weight: 400; font-size: 30px; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.stat span { font-size: 12px; color: var(--muted); }
+.stat.streak b { color: var(--amber); }
+.bar { height: 8px; border-radius: 999px; background: var(--sunk); overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--accent); border-radius: 999px; transition: width .4s ease; }
+.principle { font-family: var(--read); font-size: 19px; line-height: 1.5; margin: 6px 0 0; }
+.next h3 { font-family: var(--display); font-weight: 400; font-size: 22px; margin: 4px 0 6px; }
+.next p { color: var(--muted); margin: 0 0 14px; }
+.row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.spacer { flex: 1; }
+.chip { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .04em; padding: 2px 9px; border-radius: 999px; background: var(--sunk); color: var(--muted); white-space: nowrap; }
+.chip.read { background: var(--accent-soft); color: var(--accent); }
+.chip.mastered { background: var(--accent); color: var(--on-accent); }
+.chip.amber { background: var(--amber-soft); color: var(--amber); }
+/* lessons list */
+.part { display: flex; flex-direction: column; gap: 6px; }
+.part h3 { font-family: var(--display); font-weight: 400; font-size: 18px; margin: 18px 0 4px; }
+.lesson-item { display: grid; grid-template-columns: 34px 1fr auto; gap: 12px; align-items: center; text-align: left; width: 100%; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; cursor: pointer; }
+.lesson-item:hover { border-color: var(--accent); }
+.lesson-item .num { font-family: var(--display); font-size: 18px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.lesson-item .t { font-weight: 600; }
+.lesson-item .s { font-size: 13px; color: var(--muted); }
+.lesson-item > div { min-width: 0; }
+/* reader */
+.reader { font-family: var(--read); font-size: 18px; line-height: 1.7; max-width: 64ch; }
+.reader p { margin: 0 0 1em; }
+.reader h2 { font-family: var(--display); font-weight: 400; font-size: 32px; line-height: 1.15; margin: 8px 0 18px; text-wrap: balance; font-family: var(--display); }
+.reader h4 { font-family: var(--ui); font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 32px 0 10px; }
+.keys { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; font-family: var(--ui); font-size: 15px; line-height: 1.5; }
+.keys li { padding-left: 18px; position: relative; }
+.keys li::before { content: ""; position: absolute; left: 0; top: .6em; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+.practice-box { font-family: var(--ui); font-size: 15px; background: var(--accent-soft); border-radius: var(--r); padding: 16px; }
+.practice-box b { display: block; margin-bottom: 4px; }
+.quiz { font-family: var(--ui); font-size: 15px; display: flex; flex-direction: column; gap: 18px; }
+.q p { font-weight: 600; margin: 0 0 8px; }
+.opts { display: flex; flex-direction: column; gap: 6px; }
+.opt { text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; cursor: pointer; }
+.opt:hover:not([disabled]) { border-color: var(--accent); }
+.opt.right { border-color: var(--good); color: var(--good); font-weight: 600; }
+.opt.wrong { border-color: var(--bad); color: var(--bad); }
+.explain { font-size: 14px; color: var(--muted); margin-top: 6px; }
+textarea { width: 100%; min-height: 110px; resize: vertical; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font-family: var(--read); font-size: 16px; line-height: 1.55; }
+input[type="text"], input[type="number"], input[type="search"], select { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; min-width: 0; }
+.lesson-nav { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line); font-family: var(--ui); }
+.back { background: none; border: 0; padding: 0; color: var(--accent); font-weight: 600; cursor: pointer; margin-top: 22px; }
+/* practices */
+.prac { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; }
+.check { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--line); background: var(--surface); cursor: pointer; display: grid; place-items: center; color: var(--on-accent); font-weight: 700; font-size: 14px; flex: none; }
+.check.on { background: var(--accent); border-color: var(--accent); }
+.prac h4 { margin: 2px 0 2px; font-size: 15px; }
+.prac p { margin: 0; color: var(--muted); font-size: 14px; }
+.prac > div { min-width: 0; }
+.heat-wrap { overflow-x: auto; }
+.heat { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 13px); gap: 3px; width: max-content; }
+.heat i { width: 13px; height: 13px; border-radius: 3px; background: var(--heat-0); }
+.heat i[data-l="1"] { background: var(--heat-1); } .heat i[data-l="2"] { background: var(--heat-2); } .heat i[data-l="3"] { background: var(--heat-3); }
+.heat i.today { outline: 1.5px solid var(--ink); outline-offset: 1px; }
+.legend { display: flex; gap: 4px; align-items: center; font-size: 12px; color: var(--muted); }
+.legend i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+/* journal */
+.entry { border-top: 1px solid var(--line); padding-top: 12px; }
+.entry:first-child { border-top: 0; padding-top: 0; }
+.entry .meta { font-size: 12px; color: var(--muted); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.entry .body { font-family: var(--read); font-size: 16px; white-space: pre-wrap; overflow-wrap: anywhere; margin-top: 4px; }
+.linkish { background: none; border: 0; padding: 0; color: var(--accent); cursor: pointer; font-size: 12px; font-weight: 600; }
+/* glossary */
+dl.gloss { margin: 0; display: flex; flex-direction: column; gap: 14px; }
+dl.gloss dt { font-family: var(--display); font-size: 18px; }
+dl.gloss dd { margin: 2px 0 0; color: var(--ink); font-family: var(--read); font-size: 16px; line-height: 1.55; max-width: 64ch; }
+dl.gloss dd .linkish { font-family: var(--ui); }
+.note { font-size: 13px; color: var(--muted); }
+.toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 9px 16px; border-radius: 999px; font-size: 14px; font-weight: 600; z-index: 20; }
+.book-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.book-row input[type="number"] { width: 90px; font-variant-numeric: tabular-nums; }
+.book-row input[type="text"] { flex: 1 1 180px; }
+@media (max-width: 480px) {
+  h2.view-title { font-size: 26px; }
+  .reader { font-size: 17px; }
+  .reader h2 { font-size: 27px; }
+  .stat b { font-size: 25px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <h1>Transurfing Path</h1>
+      <span class="sync" id="sync">Saved in this browser</span>
+    </div>
+    <nav class="tabs" id="tabs" aria-label="Sections">
+      <button data-view="today">Today</button>
+      <button data-view="lessons">Lessons</button>
+      <button data-view="practice">Practice</button>
+      <button data-view="journal">Journal</button>
+      <button data-view="glossary">Glossary</button>
+      <button data-view="settings">Data</button>
+    </nav>
+  </div>
+</header>
+<main class="wrap" id="main"></main>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* ------------------------------------------------------------------
+   Content. Plain-language study notes on the ideas in Vadim Zeland's
+   "Reality Transurfing". Written fresh for this app; not the book text.
+------------------------------------------------------------------- */
+const PARTS = [
+  { id: "p1", title: "The space of variations" },
+  { id: "p2", title: "Pendulums" },
+  { id: "p3", title: "Importance and balance" },
+  { id: "p4", title: "Moving with the flow" },
+  { id: "p5", title: "Intention and slides" },
+  { id: "p6", title: "Goals, doors and the soul" },
+];
+
+const LESSONS = [
+{
+  id: "variations", part: "p1", title: "Reality as a field of options",
+  sub: "The space of variations and why the future is not fixed",
+  body: [
+`Transurfing starts from a bold model: every possible version of events already exists, the way every frame of a film exists on the reel before it is projected. Zeland calls this store of possibilities the space of variations. What we experience as "reality" is the one variation that is currently lit up and made material.`,
+`If the options already exist, then changing your life is less about building a new outcome by force and more about shifting to a different sector of that space, one where the outcome you want is already the normal state of things. You do not have to fight the current scenery. You move to where the scenery is different.`,
+`You do not need to accept this as literal physics to use it. Treat it as a working lens: it trades the question "How do I force this to happen?" for "Which version of my life am I tuning into, and how do I tune into a better one?"`
+  ],
+  keys: [
+    "The space of variations is the field of all possible outcomes.",
+    "Your current reality is one variation made material.",
+    "Change comes from shifting sectors, not from wrestling the present.",
+    "Use it as a practical lens even if you hold the metaphysics loosely."
+  ],
+  practice: `Pick one area of your life. Write one sentence describing the "sector" you are in now, and one describing the sector you want to move to. Keep both short and concrete.`,
+  quiz: [
+    { q: "In Transurfing, what is the space of variations?", o: ["A meditation technique", "A store of every possible outcome", "A list of personal goals", "The physical universe only"], a: 1, e: "It is the model's name for the field in which all versions of events already exist." },
+    { q: "According to this model, how do you change your circumstances?", o: ["By struggling harder against them", "By waiting for luck", "By shifting to a sector where the outcome is already normal", "By convincing other people"], a: 2, e: "The emphasis is on moving between variations, not forcing the present one to change." }
+  ],
+  reflect: "Where in your life are you trying to repaint the current scenery instead of moving to a different one?"
+},
+{
+  id: "lifelines", part: "p1", title: "Life lines and thought radiation",
+  sub: "How your habitual thinking selects your track",
+  body: [
+`Variations are grouped into life lines: tracks where the scenery, the quality of events and the general mood are similar. Staying on one line feels like "my life is always like this". Moving to a neighbouring line changes the background of life a little; a series of moves changes it a lot.`,
+`What decides which line you travel along? Zeland's answer is your thought radiation: the steady signal of your beliefs, expectations and emotional tone. Thinking that runs on worry tunes you to lines where worry is justified. Thinking that is calm and expects good things tunes you to lines where those things show up.`,
+`The important word is steady. A single bright thought does little. What moves you is a change in what you habitually broadcast, held long enough that it becomes your new normal.`
+  ],
+  keys: [
+    "Life lines are tracks of variations with similar scenery and mood.",
+    "Your habitual thoughts and feelings work like a broadcast that selects the line.",
+    "Repetition matters more than intensity.",
+    "Small shifts in tone, held over time, move you to new lines."
+  ],
+  practice: `For one day, notice your default commentary on events. Each time you catch a gloomy forecast, swap it for a neutral or hopeful one. Count the swaps.`,
+  quiz: [
+    { q: "What mainly determines which life line you are on?", o: ["Your thought radiation over time", "One strong wish", "Other people's opinions", "Chance alone"], a: 0, e: "The steady signal of your beliefs and expectations tunes you to matching lines." },
+    { q: "Why does one positive thought rarely change much?", o: ["Positive thoughts don't work", "Change depends on the habitual, sustained broadcast", "You need to say it out loud", "It has to be written down"], a: 1, e: "The model stresses consistency: what you broadcast most of the time is what counts." }
+  ],
+  reflect: "What does your mind broadcast most of the day? Write the three phrases you think most often."
+},
+{
+  id: "pendulums", part: "p2", title: "What pendulums are",
+  sub: "Group structures that feed on your attention",
+  body: [
+`When many people put their thoughts and energy into the same thing, a structure forms around it: a company, a political movement, a fandom, a fashion, a family feud, a news cycle. Zeland calls these structures pendulums. They swing harder the more people push them.`,
+`A pendulum has rules of its own and survives by recruiting followers and collecting their energy. It does not care about the wellbeing of any single follower. It wants your attention, and above all your strong emotion, whether that is enthusiasm, outrage or fear.`,
+`Not every pendulum is harmful. Some are useful, like a well-run team or a club you love. The problem is a destructive pendulum that pulls you away from your own goals and leaves you drained, while you believe you are acting by your own choice.`
+  ],
+  keys: [
+    "A pendulum is a structure created by many people's shared thoughts and energy.",
+    "Pendulums feed on attention, especially emotional attention.",
+    "They serve their own survival, not yours.",
+    "Destructive pendulums pull you off your path and drain you."
+  ],
+  practice: `List five pendulums active in your life right now (work, media, groups, habits). Next to each, write whether it gives you energy or takes it.`,
+  quiz: [
+    { q: "What does a pendulum mainly feed on?", o: ["Money", "Attention and emotional energy", "Physical effort", "Silence"], a: 1, e: "Attention, and especially strong emotion of any sign, is what keeps a pendulum swinging." },
+    { q: "Which statement about pendulums is accurate?", o: ["All pendulums are evil", "Only governments are pendulums", "Some are useful; destructive ones pull you off your path", "Pendulums only exist online"], a: 2, e: "The concern is with destructive pendulums, not every group or structure." }
+  ],
+  reflect: "Which pendulum has taken the most of your energy this month? What did you get back?"
+},
+{
+  id: "hooks", part: "p2", title: "How a pendulum hooks you",
+  sub: "Fear, guilt, outrage and the trap of fighting",
+  body: [
+`A pendulum hooks you by pulling an emotional lever. Bad news makes you anxious. A provocation makes you angry. A rule makes you feel guilty. A campaign makes you feel that you must take a side. Each reaction is a small payment of energy, and it brings you further into the pendulum's rhythm.`,
+`Fighting a pendulum is still feeding it. Arguing, hating and resisting all send energy in its direction. That is why struggles against a destructive system so often leave people exhausted and tied to the very thing they oppose.`,
+`The sign of a hook is the feeling that you have no choice: you have to react, have to reply, have to worry. When you notice that compulsion, you have found the line.`
+  ],
+  keys: [
+    "Hooks are emotional levers: fear, guilt, anger, obligation, belonging.",
+    "Fighting a pendulum gives it energy just like supporting it.",
+    "The feeling of \"I have to react\" signals a hook.",
+    "Noticing the hook is the first step to getting free."
+  ],
+  practice: `Next time you feel the urge to react to news, a comment or a provocation, pause for ten breaths and name the lever being pulled. Then decide whether you want to react at all.`,
+  quiz: [
+    { q: "Why doesn't fighting a destructive pendulum free you from it?", o: ["Because pendulums are invincible", "Because resistance still sends it your energy", "Because fighting is illegal", "Because you will always lose"], a: 1, e: "Opposition is attention too, so it keeps you connected and feeding the pendulum." },
+    { q: "What is the clearest sign that you've been hooked?", o: ["You feel curious", "You feel calm", "You feel you have no choice but to react", "You feel bored"], a: 2, e: "The compulsion to respond is the hook in action." }
+  ],
+  reflect: "Describe the last time you got pulled into an argument or worry spiral. What lever was pulled?"
+},
+{
+  id: "release", part: "p2", title: "Getting free of pendulums",
+  sub: "Ignoring, extinguishing and using pendulums wisely",
+  body: [
+`The cleanest way to leave a pendulum is to stop giving it attention: let it go, calmly, without hostility. This is not avoidance driven by fear. It is indifference that comes from understanding. When you neither fight nor feed it, the pendulum loses its grip on you and turns to other followers.`,
+`When ignoring isn't possible, you can extinguish the swing. Do something that doesn't match the rhythm the pendulum expects: answer an aggressive remark with good humour, respond to a scare with curiosity, agree lightly instead of defending. The expected exchange of energy doesn't happen, and the swing loses its force.`,
+`Sometimes you can use a pendulum. Join a structure that carries you toward your goal and take what it offers without handing over your freedom. Membership is fine; ownership of you is not.`
+  ],
+  keys: [
+    "Letting go means calm non-participation, not angry avoidance.",
+    "Extinguish a swing by responding out of rhythm, often with humour or lightness.",
+    "Useful pendulums can carry you if you stay free inside them.",
+    "Your attention is your main currency; spend it on purpose."
+  ],
+  practice: `Choose one recurring irritation. This week, respond to it the opposite way from your usual: agree, shrug, joke or simply don't engage. Note what changes.`,
+  quiz: [
+    { q: "What does \"extinguishing\" a pendulum involve?", o: ["Attacking it publicly", "Responding out of the rhythm it expects", "Joining a rival pendulum", "Complaining to others"], a: 1, e: "A response that doesn't match its expectation, such as humour, breaks the energy exchange." },
+    { q: "Letting a pendulum go works best when it comes from…", o: ["Fear of it", "Calm indifference and understanding", "A plan for revenge", "Strong opposition"], a: 1, e: "Fearful avoidance still holds attention; calm indifference releases it." }
+  ],
+  reflect: "Which pendulum would you most like to step out of? What would calm indifference to it look like in practice?"
+},
+{
+  id: "importance", part: "p3", title: "Importance",
+  sub: "Inner and outer importance and why they backfire",
+  body: [
+`Importance is what happens when you give something more weight than it naturally has. Inner importance is overvaluing yourself: your merits or your flaws, your need to prove something, your fear of looking bad. Outer importance is overvaluing something outside: an exam, a person, a deal, an opinion.`,
+`Importance does not make you more effective. It makes you tense, it fogs your judgment and it hands pendulums a ready lever. The more desperately you need something, the easier you are to manipulate and the clumsier your actions become.`,
+`Lowering importance doesn't mean you stop caring. It means you treat the matter as something you can handle calmly, with care instead of strain. You still act; you just stop clutching.`
+  ],
+  keys: [
+    "Inner importance: overvaluing yourself, good or bad.",
+    "Outer importance: overvaluing things, people and outcomes.",
+    "Importance creates tension and gives pendulums a hook.",
+    "Lowering importance means calm care, not indifference to results."
+  ],
+  practice: `Name one thing you're clutching right now. Write: "This matters, and I can handle it calmly." Then take one small action on it without rushing.`,
+  quiz: [
+    { q: "Worrying constantly about how others judge you is an example of…", o: ["Outer importance", "Inner importance", "A wave of fortune", "Coordination of intention"], a: 1, e: "Overvaluing your own image or flaws is inner importance." },
+    { q: "Lowering importance means…", o: ["Giving up on the goal", "Treating it with calm care instead of strain", "Pretending you don't want it", "Letting someone else decide"], a: 1, e: "You keep acting; you drop the clutching and tension." }
+  ],
+  reflect: "Where is your inner importance highest: proving yourself, avoiding embarrassment, or needing approval?"
+},
+{
+  id: "balance", part: "p3", title: "Excess potential and balancing forces",
+  sub: "Why things go wrong exactly when you need them most",
+  body: [
+`Whenever you give something excess weight, you create what Zeland calls an excess potential: an imbalance in the field, like a dent in a smooth surface. Nature tends toward balance, so balancing forces arise to even it out. Often they act against the very thing you overvalue.`,
+`This explains the familiar pattern where the day you most need everything to go perfectly is the day things fall apart, or where desperate wanting pushes the wanted thing further away. Overvaluation, contempt, idealisation, dissatisfaction, guilt, self-pity and the urge to prove yourself all create excess potentials.`,
+`The fix is not to want less but to hold wanting lightly. Drop the extra charge, accept the possibility of failure calmly, and keep working. When the potential drains, the balancing forces stop pushing back.`
+  ],
+  keys: [
+    "Excess potential is the imbalance that importance creates.",
+    "Balancing forces arise to cancel it, often against you.",
+    "Idealising, despising, demanding and guilt all build potential.",
+    "Accepting that it might not work out drains the potential."
+  ],
+  practice: `Think of a goal you feel desperate about. Write down calmly what you'd do if it didn't happen. Notice the tension ease, then go back to working on it.`,
+  quiz: [
+    { q: "What creates an excess potential?", o: ["Calm action", "Giving something more weight than it naturally has", "Sleeping well", "Making a plan"], a: 1, e: "Overvaluing anything creates an imbalance the model calls excess potential." },
+    { q: "What tends to remove balancing forces working against you?", o: ["Wanting harder", "Holding the goal lightly and accepting possible failure", "Telling everyone your goal", "Giving up action"], a: 1, e: "When the extra charge drops, there is nothing left to balance out." }
+  ],
+  reflect: "When did a balancing force bite you? What were you overvaluing at the time?"
+},
+{
+  id: "waves", part: "p3", title: "Waves of fortune and induced transitions",
+  sub: "Catching good streaks and not amplifying bad ones",
+  body: [
+`Good luck tends to come in clusters: a wave of fortune, a run of favourable variations. Bad luck clusters too. The difference is what you do with each. Zeland suggests welcoming good news fully, letting it lift you onto a wave, and treating bad news with as little emotion as you can manage.`,
+`An induced transition is what happens when a pendulum drags you down a spiral. You react strongly to something negative, that reaction tunes you to a slightly worse line, you see more bad things there and react again. Panic, disaster-watching and gossip are classic engines of this spiral.`,
+`You escape by refusing to amplify. Notice the negative, deal with what's practical, and decline to keep feeding it emotion. Then give your attention generously to whatever is going well.`
+  ],
+  keys: [
+    "Good and bad outcomes come in waves.",
+    "Welcome good news; meet bad news with minimum emotion.",
+    "An induced transition is a downward spiral driven by reacting to negativity.",
+    "Stop amplifying and the spiral loses momentum."
+  ],
+  practice: `For three days, cut one stream of negative input (doom-scrolling, a gossip chat, a news channel). Each evening write down one small thing that went well.`,
+  quiz: [
+    { q: "What drives an induced transition?", o: ["Gratitude", "Repeated strong reactions to negative events", "Calm planning", "A wave of fortune"], a: 1, e: "Each reaction tunes you closer to lines with more of the same." },
+    { q: "How should you treat bad news, according to this idea?", o: ["Share it widely", "Study it in depth", "Handle the practical side and don't amplify it emotionally", "Ignore any practical consequences"], a: 2, e: "Act on what's needed, but don't feed the spiral." }
+  ],
+  reflect: "What input in your life most often starts a negative spiral? What would you replace it with?"
+},
+{
+  id: "flow", part: "p4", title: "Moving with the flow",
+  sub: "Letting go of excess control and the coordination principle",
+  body: [
+`Events move along the easiest path, the way water runs downhill. Zeland calls this the flow of variations. A lot of our effort goes into pushing against it: insisting things happen in a fixed way, controlling every detail, treating every deviation from the plan as a disaster.`,
+`Moving with the flow means keeping your goal steady while loosening your grip on the route. You stay alert and act, but you don't reject the simple solution because it isn't the one you expected. You let others do things their way when it doesn't truly matter.`,
+`The principle of coordinating intention adds a practical habit: when something seems to go wrong, decide on purpose to treat it as possibly helpful. "Good, this turned out differently; let's see what it opens up." The attitude keeps you on calm lines and often turns out to be accurate.`
+  ],
+  keys: [
+    "The flow of variations follows the path of least resistance.",
+    "Hold the goal firmly and the route loosely.",
+    "Don't over-control others or fight the simple solution.",
+    "Coordination: treat apparent setbacks as possibly favourable."
+  ],
+  practice: `Each time today goes off-plan, say (out loud or in your head) "Good, let's see what this opens up," then continue calmly. Tally how often you used it.`,
+  quiz: [
+    { q: "What does moving with the flow mean?", o: ["Having no goals", "Holding the goal steady and the route loosely", "Doing whatever others say", "Never planning"], a: 1, e: "Purpose stays firm; control over the exact path relaxes." },
+    { q: "The coordination principle asks you to…", o: ["Coordinate with a team", "Treat apparent setbacks as possibly positive", "Plan every hour", "Complain constructively"], a: 1, e: "You deliberately choose to read a deviation as potentially helpful." }
+  ],
+  reflect: "Where are you over-controlling a process that could work out more simply?"
+},
+{
+  id: "awareness", part: "p4", title: "Waking up in the game",
+  sub: "Awareness as the basis of every other technique",
+  body: [
+`Most of the time we are absorbed in the scene, like a dreamer who doesn't know they're dreaming. In that state pendulums hook us easily and importance runs the show. Zeland compares the shift into awareness to becoming lucid in a dream: the scene is still there, but now you know you're in it, and you can choose.`,
+`Awareness here is simple and practical. It is the habit of noticing what you're doing, what you're feeling and who is pulling your strings, while it happens. It's an inner watcher that stays calm while the outer person acts.`,
+`None of the other techniques work without this. You can't drop importance you don't notice, or let go of a pendulum you don't see. So the core daily practice is to wake up, many times a day, for a few seconds at a time.`
+  ],
+  keys: [
+    "Ordinary consciousness is absorbed in the scene, like a dream.",
+    "Awareness is noticing your state and its causes while it happens.",
+    "An inner watcher lets you act without being swept away.",
+    "Short, frequent moments of awareness beat rare long ones."
+  ],
+  practice: `Set three reminders today. At each one, ask: "What am I feeling? What is pulling at me? What do I actually want right now?" Answer in one breath each.`,
+  quiz: [
+    { q: "Why is awareness foundational in Transurfing?", o: ["It makes you more popular", "You can't release importance or pendulums you don't notice", "It replaces action", "It is required to visualise"], a: 1, e: "Every other method relies on first noticing what is going on." },
+    { q: "What is the inner watcher?", o: ["A critic who judges you", "A calm observer that notices while you act", "Another person who checks on you", "A visualisation technique"], a: 1, e: "It observes without judgment and keeps you from being swept into the game." }
+  ],
+  reflect: "When are you least aware during the day? What situation sweeps you away most completely?"
+},
+{
+  id: "intention", part: "p5", title: "Inner and outer intention",
+  sub: "Wanting, deciding and allowing yourself to have",
+  body: [
+`Wanting by itself moves nothing. Neither does hoping or worrying. Zeland separates these from intention: the calm decision to have something and to act. Inner intention is the effort to push the world into giving you a result directly. It works on the near and the controllable, and it breaks down when you strain against the world.`,
+`Outer intention works differently. It's the calm, unhurried certainty that the outcome is yours, combined with readiness to step into the variation where it already exists. Instead of forcing events, you let the world arrange itself, and you take the doors that open.`,
+`A key ingredient is permission. Many people secretly don't believe they're allowed to have what they want: it feels too big, undeserved or not for people like them. Outer intention starts with granting yourself that permission plainly, without fuss.`
+  ],
+  keys: [
+    "Desire alone doesn't move reality; intention to have and act does.",
+    "Inner intention pushes the world directly and tires out on big goals.",
+    "Outer intention is calm certainty plus readiness to take open doors.",
+    "Give yourself permission to have what you choose."
+  ],
+  practice: `Write your goal as a calm statement of fact in the present tense, then add: "I allow myself to have this." Read it once in the morning without straining.`,
+  quiz: [
+    { q: "What's the main difference between wanting and intention?", o: ["Intention is louder", "Intention is the calm decision to have and to act", "Wanting is more effective", "There is none"], a: 1, e: "Intention includes resolve and action; wanting is a wish." },
+    { q: "Outer intention is best described as…", o: ["Forcing the result by willpower", "Calm certainty and openness to the route the world offers", "Asking other people for help", "Giving up the goal"], a: 1, e: "It lets the world arrange the path while you hold the outcome as yours." }
+  ],
+  reflect: "Is there something you want but don't feel allowed to have? Where did that rule come from?"
+},
+{
+  id: "slides", part: "p5", title: "Slides",
+  sub: "The distorted pictures in your head and how to replace them",
+  body: [
+`A slide is a mental picture you project onto reality: "they think I'm boring", "I'm bad with money", "people like me don't get that job". Slides distort what you see and, because they shape your thought radiation, they tend to make themselves true.`,
+`Negative slides usually come from importance: inflating a flaw, imagining judgment. You can't argue them away well. A better route is to build a positive slide: a picture of yourself, or of your life, as you'd like it to be, detailed and pleasant, and then to return to it regularly.`,
+`The trick is to live inside the slide rather than watching it like a film. Spend a few minutes in it as if it were already ordinary, noticing the small details. Over time the picture becomes your normal, and your behaviour and choices follow it.`
+  ],
+  keys: [
+    "A slide is a mental picture projected onto reality.",
+    "Negative slides grow from importance and tend to fulfil themselves.",
+    "Build a positive slide and return to it regularly.",
+    "Live inside it as ordinary; don't just watch it from outside."
+  ],
+  practice: `Write a short positive slide (5–8 sentences) of an ordinary day in the life you want. Spend three minutes each morning inside it, adding one new detail each time.`,
+  quiz: [
+    { q: "Why are negative slides a problem?", o: ["They are boring", "They distort perception and tend to fulfil themselves", "They are illegal", "They improve motivation"], a: 1, e: "They colour what you notice and what you broadcast." },
+    { q: "How should you work with a positive slide?", o: ["Watch it like a movie of someone else", "Live inside it as if it were already ordinary", "Show it to your friends", "Only think of it once"], a: 1, e: "Inhabiting the picture makes it part of your normal self-image." }
+  ],
+  reflect: "What is the most persistent negative slide you hold about yourself? What would its positive replacement look like?"
+},
+{
+  id: "visualisation", part: "p5", title: "Visualising the process",
+  sub: "Seeing the next step, not just the finish line",
+  body: [
+`Visualisation in Transurfing has two layers. The target slide is your picture of the end result, held as your reality. But Zeland puts weight on visualising the process too: seeing yourself doing the work, taking the next step, gradually becoming the person who has the result.`,
+`Process visualisation keeps you moving. Instead of staring at a distant prize and feeling the gap, you see the current stage completed well, then the next. Each stage pulls the next one closer and makes the work feel natural rather than heroic.`,
+`Don't fix on exactly how the goal must arrive. Hold the end picture, picture the steps you can see, and leave the rest of the route open. Doors you didn't anticipate often appear when you aren't insisting on a specific one.`
+  ],
+  keys: [
+    "The target slide is the end result held as normal.",
+    "Process visualisation pictures the current stage done well.",
+    "Seeing steps keeps you moving instead of staring at the gap.",
+    "Don't insist on one route; stay open to unexpected doors."
+  ],
+  practice: `Break your goal into three stages. Each day this week, spend two minutes picturing the current stage going smoothly, then do one concrete action for it.`,
+  quiz: [
+    { q: "What does process visualisation focus on?", o: ["Only the final reward", "Doing the current stage well and moving to the next", "Other people's success", "Avoiding failure"], a: 1, e: "It pictures the path step by step, which keeps you in motion." },
+    { q: "Why avoid fixing on exactly how the goal arrives?", o: ["Planning is bad", "It closes you to unexpected routes", "Goals should be vague", "It takes too long"], a: 1, e: "Insisting on one route blocks doors you didn't anticipate." }
+  ],
+  reflect: "What is the very next stage of your main goal? Describe it done well."
+},
+{
+  id: "unity", part: "p6", title: "Heart and mind together",
+  sub: "When the soul and the mind agree",
+  body: [
+`Zeland describes two voices in every decision: the mind, which reasons, plans and worries about what others will think, and the soul (or heart), which knows quietly what is right for you. Outer intention gains real power when the two agree.`,
+`The soul speaks through feeling, not argument. A subtle discomfort, a heavy "I should", a sense of oppression when you imagine something, signals a "no" from the soul even if the mind lists good reasons. A light, warm sense of "yes, that's mine" is its agreement. He calls the soul's quiet signals the rustle of morning stars.`,
+`The mind is not the enemy. It's an excellent servant for the how. But it's often been trained by pendulums to want what is fashionable or approved. Let the soul choose the direction, and let the mind work out the steps.`
+  ],
+  keys: [
+    "Decisions have two voices: mind and soul.",
+    "Intention is strongest when the two agree.",
+    "The soul speaks through subtle comfort or discomfort.",
+    "Let the soul choose the direction and the mind plan the steps."
+  ],
+  practice: `Take one pending decision. Imagine each option for 30 seconds and rate how light or heavy it feels from 1 to 10, ignoring reasons. Compare with your mind's ranking.`,
+  quiz: [
+    { q: "How does the soul usually communicate?", o: ["Through long arguments", "Through subtle feelings of comfort or discomfort", "Through other people", "It doesn't communicate"], a: 1, e: "Its signals are quiet feelings, not reasons." },
+    { q: "What role is left for the mind?", o: ["None; ignore it", "Working out the steps once the direction is chosen", "Choosing every goal", "Arguing with the soul"], a: 1, e: "The mind is a capable servant for the how." }
+  ],
+  reflect: "Recall a decision where your mind said yes and something in you said no. What happened?"
+},
+{
+  id: "goals", part: "p6", title: "Your goal and your door",
+  sub: "Telling your own goal from a borrowed one",
+  body: [
+`Many goals are borrowed: chosen to impress, to fit in, to match a pendulum's idea of success. Chasing a borrowed goal feels like dragging a load uphill. Even reaching it brings little joy. Your own goal feels different: thinking about it lifts you, and the work toward it has its own pleasure.`,
+`Zeland says your goal is something that gives your soul real joy and makes your life a celebration, not something to prove. Your door is the path that leads there, usually through work or activity you would choose for its own sake.`,
+`A useful filter: picture already having the goal. If you feel calm warmth, it's likely yours. If you mostly feel relief that you proved something, or tension about others' reactions, it's likely borrowed. A real goal often also fulfils other wishes along the way.`
+  ],
+  keys: [
+    "Borrowed goals come from pendulums, prestige or other people's expectations.",
+    "Your own goal makes life a celebration and the work itself enjoyable.",
+    "Your door is the path that leads there.",
+    "Check with the soul: warmth signals yours; tension or proving signals borrowed."
+  ],
+  practice: `List your current goals. For each, ask "Would I want this if no one would ever know?" Mark each one as own, borrowed or unsure.`,
+  quiz: [
+    { q: "A borrowed goal typically feels like…", o: ["A celebration", "Dragging a load uphill, even when achieved", "Effortless joy", "Calm warmth"], a: 1, e: "Borrowed goals feel heavy and give little satisfaction." },
+    { q: "Which question helps identify your own goal?", o: ["Will this impress my friends?", "Would I want this if no one would ever know?", "Is this the most prestigious option?", "What do my parents want?"], a: 1, e: "Removing the audience reveals whether the desire is yours." }
+  ],
+  reflect: "If no one were watching or judging, what would you spend the next five years doing?"
+},
+{
+  id: "frailing", part: "p6", title: "Frailing",
+  sub: "Working with people by dropping importance",
+  body: [
+`Frailing is Zeland's principle for relationships. Roughly: drop the intention to take, replace it with the intention to give, and you receive what you were trying to take. In practice it means turning your attention to what the other person needs and values.`,
+`People are mostly occupied with their own inner importance: wanting to be heard, respected and valued. When you put your own importance aside and sincerely give them that, interactions relax. Doors open where pushing would have shut them.`,
+`This is not flattery or manipulation, which people sense and which builds new excess potential. It's genuine interest. Ask what matters to them, listen, give credit, and let go of proving your point.`
+  ],
+  keys: [
+    "Swap the intention to take for the intention to give.",
+    "Most people want to feel heard, respected and valued.",
+    "Lower your own importance in conversations.",
+    "Sincere interest works; manipulation backfires."
+  ],
+  practice: `In your next three conversations, aim to learn one thing that matters to the other person and to say one sincere appreciative sentence. Skip proving your point.`,
+  quiz: [
+    { q: "What does frailing replace?", o: ["Giving with taking", "The intention to take with the intention to give", "Talking with silence", "Honesty with flattery"], a: 1, e: "Giving people what they value opens what pushing would close." },
+    { q: "Why doesn't flattery count as frailing?", o: ["It's too polite", "It's insincere, people sense it, and it builds new potential", "It takes too long", "It's always ignored"], a: 1, e: "Frailing relies on sincere interest, not technique." }
+  ],
+  reflect: "Who in your life would respond best if you dropped your importance with them? What do they want most?"
+},
+{
+  id: "mirror", part: "p6", title: "The world as a mirror",
+  sub: "Reality reflects your attitude, with a delay",
+  body: [
+`Zeland compares the world to a mirror that reflects your attitude back to you, but with a delay. If you look into it with dissatisfaction, it shows you more to be dissatisfied with. The trap is that we react to the reflection, which only strengthens the original attitude.`,
+`Because of the delay, a new attitude doesn't show immediately. People change their outlook, see no difference, and conclude it doesn't work. The mirror needs time and steady input before the image shifts.`,
+`So the practice is to fix the image first: hold the attitude you want reflected, regardless of what the mirror shows for now. Treat current circumstances as old reflections that are on their way out.`
+  ],
+  keys: [
+    "Reality reflects your attitude back to you.",
+    "The reflection arrives with a delay.",
+    "Reacting to the reflection reinforces the old attitude.",
+    "Hold the new attitude steadily until the image catches up."
+  ],
+  practice: `Choose one recurring complaint. For seven days, whenever it comes up, replace the complaint with a statement of the attitude you'd like reflected back.`,
+  quiz: [
+    { q: "Why do people often give up on changing their attitude?", o: ["It's too difficult", "The mirror reflects with a delay, so change isn't visible immediately", "Attitudes cannot change", "Other people stop them"], a: 1, e: "The lag makes it look like nothing happened, so persistence matters." },
+    { q: "What keeps the old reflection in place?", o: ["Reacting emotionally to what the mirror shows", "Ignoring the past", "Visualising", "Gratitude"], a: 0, e: "Reacting to the image strengthens the attitude that produced it." }
+  ],
+  reflect: "What is the mirror showing you most often right now? What attitude might have produced it?"
+},
+{
+  id: "routine", part: "p6", title: "Putting it together",
+  sub: "A simple daily Transurfing routine",
+  body: [
+`The ideas only help if they become habits. A minimal routine might look like this. In the morning, spend a few minutes inside your target slide and picture today's step of the process. Remind yourself to treat setbacks as possibly good.`,
+`During the day, wake up regularly: notice when a pendulum pulls, when importance rises, when you're arguing with the mirror. Let go, lower the charge, respond out of rhythm. Give your attention to good news and starve the bad spirals.`,
+`In the evening, write a few lines: where you were hooked, what went well, how your slide felt. Over weeks, the journal will show you which techniques you actually use and where your life lines are shifting.`
+  ],
+  keys: [
+    "Morning: slide plus a picture of today's step.",
+    "Day: frequent moments of awareness; release pendulums and importance.",
+    "Evening: a short journal of hooks and wins.",
+    "Consistency over weeks is what moves you between lines."
+  ],
+  practice: `Run the full routine (morning slide, three awareness checks, evening journal) for seven days. Use the Practice tab to log each piece.`,
+  quiz: [
+    { q: "Which part of the routine relies most on awareness?", o: ["The morning slide", "Noticing hooks and importance during the day", "Choosing a goal", "Reading the book"], a: 1, e: "Daytime practice is about waking up in the moment." },
+    { q: "What ultimately moves you between life lines?", o: ["One intense session", "Consistent practice over weeks", "Telling others", "Luck"], a: 1, e: "Steady habits change your thought radiation." }
+  ],
+  reflect: "Which part of the routine will be hardest for you, and how will you make it easier?"
+}
+];
+
+const PRACTICES = [
+  { id: "slide", title: "Morning slide", desc: "Three minutes inside your positive slide, as if it were ordinary." },
+  { id: "process", title: "Picture today's step", desc: "See the current stage of your goal going smoothly, then act on it." },
+  { id: "aware", title: "Awareness checks", desc: "At least three times: what am I feeling, what's pulling me, what do I want?" },
+  { id: "pendulum", title: "Let a pendulum go", desc: "Notice a hook and calmly decline to react, or answer out of rhythm." },
+  { id: "importance", title: "Lower importance", desc: "Catch one moment of clutching and handle it with calm care." },
+  { id: "coordinate", title: "\"Good, let's see\"", desc: "Treat a setback as possibly favourable instead of a disaster." },
+  { id: "frail", title: "Frailing", desc: "Give someone genuine attention or appreciation; skip proving your point." },
+  { id: "evening", title: "Evening journal", desc: "Write where you were hooked, what went well, how your slide felt." },
+];
+
+const GLOSSARY = [
+  ["Space of variations", "The field of every possible outcome. Reality is the one variation currently made material.", "variations"],
+  ["Life line", "A track of variations with similar scenery and mood. Thought radiation selects which line you travel.", "lifelines"],
+  ["Thought radiation", "The steady signal of your beliefs, expectations and emotional tone.", "lifelines"],
+  ["Pendulum", "A structure created by many people's shared thoughts and energy, which feeds on attention.", "pendulums"],
+  ["Hook", "An emotional lever, such as fear, guilt or outrage, that pulls you into a pendulum's rhythm.", "hooks"],
+  ["Extinguishing a pendulum", "Responding out of the rhythm a pendulum expects, so the energy exchange fails.", "release"],
+  ["Inner importance", "Overvaluing yourself, your merits or your flaws.", "importance"],
+  ["Outer importance", "Overvaluing something outside yourself: a person, an event, an outcome.", "importance"],
+  ["Excess potential", "The imbalance created when something is given more weight than it naturally has.", "balance"],
+  ["Balancing forces", "Forces that arise to cancel an excess potential, often against what you overvalue.", "balance"],
+  ["Wave of fortune", "A cluster of favourable variations you can catch by welcoming good news.", "waves"],
+  ["Induced transition", "A downward spiral driven by repeated reactions to negative events.", "waves"],
+  ["Flow of variations", "Events moving along the path of least resistance.", "flow"],
+  ["Coordination of intention", "Deliberately treating an apparent setback as possibly favourable.", "flow"],
+  ["Inner intention", "The effort to influence the world directly by willpower.", "intention"],
+  ["Outer intention", "Calm certainty about the outcome plus readiness to take the doors that open.", "intention"],
+  ["Slide", "A mental picture projected onto reality. Negative ones fulfil themselves; positive ones can be built.", "slides"],
+  ["Target slide", "Your picture of the end result, held as your normal reality.", "visualisation"],
+  ["Process visualisation", "Picturing the current stage done well, then the next.", "visualisation"],
+  ["Unity of heart and mind", "Agreement between the soul's feeling and the mind's reasoning; the source of strong intention.", "unity"],
+  ["Rustle of morning stars", "The soul's quiet signals of comfort or discomfort.", "unity"],
+  ["Goal and door", "Your own goal makes life a celebration; your door is the path that leads there.", "goals"],
+  ["Frailing", "Replacing the intention to take with the intention to give in relationships.", "frailing"],
+  ["World mirror", "Reality reflecting your attitude back to you, with a delay.", "mirror"],
+];
+
+const PRINCIPLES = [
+  "Hold the goal firmly and the route loosely.",
+  "Attention is your currency. Spend it on purpose.",
+  "Fighting a pendulum still feeds it.",
+  "Lower importance: this matters, and I can handle it calmly.",
+  "Good, it turned out differently. Let's see what it opens up.",
+  "Welcome good news fully; meet bad news with as little emotion as you can.",
+  "You don't repaint the scenery. You move to different scenery.",
+  "Wake up in the game: what am I feeling, and who is pulling the strings?",
+  "Live inside the slide, not in front of it.",
+  "Give yourself permission to have it.",
+  "The mirror reflects with a delay. Hold the image.",
+  "Ask the soul for the direction and the mind for the steps.",
+  "Would I want this if no one would ever know?",
+  "Drop the intention to take; take up the intention to give.",
+];
+
+/* ------------------------------------------------------------------
+   State and storage. Progress lives in the viewer's private db doc when
+   the page runs as a claude.ai artifact, and in localStorage otherwise.
+------------------------------------------------------------------- */
+const LS_KEY = "transurfing-path-v1";
+const blank = () => ({ v: 1, read: {}, quiz: {}, log: {}, journal: [], reflections: {}, book: { title: "Reality Transurfing", page: 0, pages: 0, where: "" }, last: null, updated: 0 });
+let S = blank();
+let remote = null;      // db doc ref
+let saveTimer = null, saving = Promise.resolve();
+
+function lsRead() { try { const r = localStorage.getItem(LS_KEY); return r ? JSON.parse(r) : null; } catch { return null; } }
+function lsWrite() { try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch {} }
+function normalize(x) { const b = blank(); if (!x || typeof x !== "object") return b; return { ...b, ...x, book: { ...b.book, ...(x.book || {}) } }; }
+
+function setSync(t) { document.getElementById("sync").textContent = t; }
+
+function save() {
+  S.updated = Date.now();
+  lsWrite();
+  if (!remote) return;
+  clearTimeout(saveTimer);
+  setSync("Saving…");
+  saveTimer = setTimeout(() => {
+    const body = JSON.parse(JSON.stringify(S));
+    saving = saving.then(() => remote.set(body)).then(
+      () => setSync("Saved to your account"),
+      (e) => setSync(e && e.code === "quota_exceeded" ? "Account storage full; saved in this browser" : "Saved in this browser (sync failed)")
+    );
+  }, 700);
+}
+
+async function connect() {
+  if (!window.claude || typeof window.claude.use !== "function") return;
+  try {
+    const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
+    if (!db || !user) return;
+    const uid = await user.id();
+    if (!uid) return;
+    const ref = db.doc("data/users/" + uid + "/progress");
+    const snap = await ref.get();
+    if (snap.exists) {
+      const theirs = normalize(snap.data());
+      if ((theirs.updated || 0) >= (S.updated || 0)) { S = theirs; lsWrite(); render(); }
+      remote = ref;
+      if ((S.updated || 0) > (theirs.updated || 0)) save(); else setSync("Saved to your account");
+    } else {
+      remote = ref;
+      if (S.updated) save(); else setSync("Saved to your account");
+    }
+  } catch (e) { /* stay on browser storage */ }
+}
+
+/* ------------------------------------------------------------------
+   Helpers
+------------------------------------------------------------------- */
+const $ = (s, el = document) => el.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const dayKey = (d = new Date()) => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+const lessonById = (id) => LESSONS.find((l) => l.id === id);
+const lessonIndex = (id) => LESSONS.findIndex((l) => l.id === id);
+function status(id) {
+  const q = S.quiz[id];
+  if (q && q.score === q.total) return "mastered";
+  if (S.read[id]) return "read";
+  return "new";
+}
+function statusChip(id) {
+  const s = status(id);
+  return s === "mastered" ? '<span class="chip mastered">Mastered</span>' : s === "read" ? '<span class="chip read">Read</span>' : '<span class="chip">New</span>';
+}
+function activeDays() {
+  const days = new Set(Object.keys(S.log).filter((k) => (S.log[k] || []).length));
+  Object.values(S.read).forEach((t) => days.add(dayKey(new Date(t))));
+  S.journal.forEach((j) => days.add(dayKey(new Date(j.ts))));
+  return days;
+}
+function streak() {
+  const days = activeDays();
+  const d = new Date();
+  if (!days.has(dayKey(d))) d.setDate(d.getDate() - 1);
+  let n = 0;
+  while (days.has(dayKey(d))) { n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+function fmtDate(ts) { return new Date(ts).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }); }
+let toastT;
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => (t.hidden = true), 1800); }
+
+/* ------------------------------------------------------------------
+   Views
+------------------------------------------------------------------- */
+let view = "today", openLesson = null, glossQ = "", journalFilter = "";
+const VIEWS = ["today", "lessons", "practice", "journal", "glossary", "settings"];
+
+function go(v, lessonId) {
+  view = v; openLesson = lessonId || null;
+  if (lessonId) { S.last = lessonId; save(); }
+  render();
+  window.scrollTo(0, 0);
+}
+
+function render() {
+  document.querySelectorAll("#tabs button").forEach((b) => b.setAttribute("aria-current", b.dataset.view === view ? "page" : "false"));
+  const m = $("#main");
+  if (view === "lessons" && openLesson) m.innerHTML = vLesson(lessonById(openLesson));
+  else m.innerHTML = ({ today: vToday, lessons: vLessons, practice: vPractice, journal: vJournal, glossary: vGlossary, settings: vSettings })[view]();
+  bind();
+}
+
+function vToday() {
+  const total = LESSONS.length;
+  const readN = LESSONS.filter((l) => status(l.id) !== "new").length;
+  const masteredN = LESSONS.filter((l) => status(l.id) === "mastered").length;
+  const next = LESSONS.find((l) => status(l.id) === "new") || LESSONS.find((l) => status(l.id) !== "mastered");
+  const resume = S.last && lessonById(S.last);
+  const di = Math.floor((Date.now() - new Date(2026, 0, 1)) / 864e5);
+  const principle = PRINCIPLES[((di % PRINCIPLES.length) + PRINCIPLES.length) % PRINCIPLES.length];
+  const todays = S.log[dayKey()] || [];
+  const b = S.book;
+  const bookPct = b.pages > 0 ? Math.min(100, Math.round((b.page / b.pages) * 100)) : 0;
+  const hello = readN === 0 ? "Start with the first lesson. Each one takes about five minutes." : readN === total ? "You've read every lesson. Keep the daily practice going." : "Pick up where you left off.";
+  return `
+  <h2 class="view-title">Today</h2>
+  <p class="lede">${hello}</p>
+  <div class="stack">
+    <div class="panel stack">
+      <div class="stats">
+        <div class="stat"><b>${readN}<small style="font-size:16px;color:var(--muted)">/${total}</small></b><span>lessons read</span></div>
+        <div class="stat"><b>${masteredN}</b><span>quizzes aced</span></div>
+        <div class="stat streak"><b>${streak()}</b><span>day streak</span></div>
+      </div>
+      <div class="bar" aria-label="Course progress"><i style="width:${Math.round((readN / total) * 100)}%"></i></div>
+    </div>
+    ${next ? `<div class="panel next">
+      <div class="eyebrow">${status(next.id) === "new" ? "Next lesson" : "Review"} · ${lessonIndex(next.id) + 1} of ${total}</div>
+      <h3>${esc(next.title)}</h3>
+      <p>${esc(next.sub)}</p>
+      <div class="row">
+        <button class="btn primary" data-open="${next.id}">${status(next.id) === "new" ? "Start reading" : "Retake quiz"}</button>
+        ${resume && resume.id !== next.id ? `<button class="btn ghost" data-open="${resume.id}">Resume “${esc(resume.title)}”</button>` : ""}
+      </div>
+    </div>` : ""}
+    <div class="grid2">
+      <div class="panel">
+        <div class="eyebrow">Principle of the day</div>
+        <p class="principle">${esc(principle)}</p>
+      </div>
+      <div class="panel stack" style="gap:10px">
+        <div class="row"><div class="eyebrow">Today's practice</div><span class="spacer"></span><span class="chip ${todays.length ? "read" : ""}">${todays.length}/${PRACTICES.length}</span></div>
+        ${PRACTICES.slice(0, 3).map(pracRow).join("")}
+        <button class="linkish" data-go="practice" style="align-self:flex-start;font-size:13px">All practices →</button>
+      </div>
+    </div>
+    <div class="panel stack" style="gap:10px">
+      <div class="row"><div class="eyebrow">My copy of the book</div><span class="spacer"></span>${b.pages > 0 ? `<span class="chip amber">${bookPct}%</span>` : ""}</div>
+      <div class="book-row">
+        <label for="bk-page" class="note">Page</label>
+        <input type="number" id="bk-page" min="0" value="${b.page || ""}" placeholder="0">
+        <label for="bk-pages" class="note">of</label>
+        <input type="number" id="bk-pages" min="0" value="${b.pages || ""}" placeholder="total">
+        <input type="text" id="bk-where" value="${esc(b.where)}" placeholder="Chapter or section you're on">
+      </div>
+      ${b.pages > 0 ? `<div class="bar"><i style="width:${bookPct}%;background:var(--amber)"></i></div>` : `<p class="note" style="margin:0">Track how far you are in your own copy, alongside the lessons here.</p>`}
+    </div>
+  </div>`;
+}
+
+function pracRow(p) {
+  const on = (S.log[dayKey()] || []).includes(p.id);
+  return `<div class="prac">
+    <button class="check ${on ? "on" : ""}" data-prac="${p.id}" aria-pressed="${on}" aria-label="Mark ${esc(p.title)} done today">${on ? "✓" : ""}</button>
+    <div><h4>${esc(p.title)}</h4><p>${esc(p.desc)}</p></div>
+  </div>`;
+}
+
+function vLessons() {
+  const readN = LESSONS.filter((l) => status(l.id) !== "new").length;
+  return `
+  <h2 class="view-title">Lessons</h2>
+  <p class="lede">${LESSONS.length} short lessons in six parts. Read, take the two-question quiz, and write a reflection. ${readN} read so far.</p>
+  ${PARTS.map((p) => `<section class="part"><h3>${esc(p.title)}</h3>
+    ${LESSONS.filter((l) => l.part === p.id).map((l) => `
+      <button class="lesson-item" data-open="${l.id}">
+        <span class="num">${lessonIndex(l.id) + 1}</span>
+        <div><div class="t">${esc(l.title)}</div><div class="s">${esc(l.sub)}</div></div>
+        ${statusChip(l.id)}
+      </button>`).join("")}
+  </section>`).join("")}
+  <p class="note" style="margin-top:24px">These are plain-language study notes on the ideas in Vadim Zeland's <i>Reality Transurfing</i>, written for this app. They are not the book's text; read them alongside your own copy.</p>`;
+}
+
+function vLesson(l) {
+  const i = lessonIndex(l.id), prev = LESSONS[i - 1], next = LESSONS[i + 1];
+  const part = PARTS.find((p) => p.id === l.part);
+  const qs = S.quiz[l.id];
+  return `
+  <button class="back" data-go="lessons">← All lessons</button>
+  <article class="reader" style="margin-top:14px">
+    <div class="eyebrow" style="font-family:var(--ui)">Lesson ${i + 1} · ${esc(part.title)}</div>
+    <h2>${esc(l.title)}</h2>
+    ${l.body.map((p) => `<p>${esc(p)}</p>`).join("")}
+    <h4>Key ideas</h4>
+    <ul class="keys">${l.keys.map((k) => `<li>${esc(k)}</li>`).join("")}</ul>
+    <h4>Try it</h4>
+    <div class="practice-box">${esc(l.practice)}</div>
+    <h4>Check your understanding${qs ? ` · last score ${qs.score}/${qs.total}` : ""}</h4>
+    <div class="quiz" id="quiz">
+      ${l.quiz.map((q, qi) => `<div class="q" data-qi="${qi}"><p>${qi + 1}. ${esc(q.q)}</p><div class="opts">${q.o.map((o, oi) => `<button class="opt" data-oi="${oi}">${esc(o)}</button>`).join("")}</div><div class="explain" hidden></div></div>`).join("")}
+      <div class="row" id="quiz-result" hidden></div>
+    </div>
+    <h4>Reflect</h4>
+    <p style="font-family:var(--ui);font-size:15px;margin:0 0 8px">${esc(l.reflect)}</p>
+    <textarea id="reflect" placeholder="Write a few lines…">${esc(S.reflections[l.id] || "")}</textarea>
+    <div class="row" style="margin-top:8px;font-family:var(--ui)">
+      <button class="btn small" id="save-reflect">Save to journal</button>
+      <span class="note" id="reflect-note"></span>
+    </div>
+    <div class="lesson-nav">
+      ${prev ? `<button class="btn ghost" data-open="${prev.id}">← ${esc(prev.title)}</button>` : "<span></span>"}
+      ${S.read[l.id] ? `<span class="chip read" style="align-self:center">Read ${fmtDate(S.read[l.id])}</span>` : `<button class="btn primary" id="mark-read">Mark as read</button>`}
+      ${next ? `<button class="btn ghost" data-open="${next.id}">${esc(next.title)} →</button>` : "<span></span>"}
+    </div>
+  </article>`;
+}
+
+function heatmap() {
+  const weeks = 16, end = new Date(); end.setHours(0, 0, 0, 0);
+  // columns run Mon–Sun; the last column contains today
+  const s = new Date(end); s.setDate(s.getDate() - ((end.getDay() + 6) % 7) - (weeks - 1) * 7);
+  const cells = [];
+  for (let d = new Date(s); d <= end; d.setDate(d.getDate() + 1)) {
+    const k = dayKey(d), n = (S.log[k] || []).length;
+    const lvl = n === 0 ? 0 : n <= 2 ? 1 : n <= 4 ? 2 : 3;
+    cells.push(`<i data-l="${lvl}" class="${k === dayKey() ? "today" : ""}" title="${k}: ${n} practice${n === 1 ? "" : "s"}"></i>`);
+  }
+  return cells.join("");
+}
+
+function vPractice() {
+  const todays = S.log[dayKey()] || [];
+  const daysPracticed = Object.values(S.log).filter((a) => a && a.length).length;
+  const counts = {}; Object.values(S.log).forEach((a) => (a || []).forEach((id) => (counts[id] = (counts[id] || 0) + 1)));
+  return `
+  <h2 class="view-title">Practice</h2>
+  <p class="lede">Tick what you did today. The ideas only change things when they become habits.</p>
+  <div class="stack">
+    <div class="panel stack" style="gap:12px">
+      <div class="row"><div class="eyebrow">Last 16 weeks</div><span class="spacer"></span>
+        <div class="legend">less <i style="background:var(--heat-0)"></i><i style="background:var(--heat-1)"></i><i style="background:var(--heat-2)"></i><i style="background:var(--heat-3)"></i> more</div></div>
+      <div class="heat-wrap"><div class="heat">${heatmap()}</div></div>
+      <div class="note">${daysPracticed} day${daysPracticed === 1 ? "" : "s"} practised · ${streak()}-day streak</div>
+    </div>
+    <div class="panel stack">
+      <div class="row"><div class="eyebrow">Today · ${new Date().toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long" })}</div><span class="spacer"></span><span class="chip ${todays.length ? "read" : ""}">${todays.length}/${PRACTICES.length}</span></div>
+      ${PRACTICES.map((p) => pracRow(p).replace("</p></div>", `</p><p class="note" style="margin-top:2px">${counts[p.id] ? `Done ${counts[p.id]} time${counts[p.id] === 1 ? "" : "s"}` : "Not logged yet"}</p></div>`)).join("")}
+    </div>
+  </div>`;
+}
+
+function vJournal() {
+  const list = S.journal.filter((j) => !journalFilter || j.lesson === journalFilter).slice().sort((a, b) => b.ts - a.ts);
+  const used = [...new Set(S.journal.map((j) => j.lesson).filter(Boolean))];
+  return `
+  <h2 class="view-title">Journal</h2>
+  <p class="lede">Notes on where you were hooked, what went well and how the ideas are landing. Lesson reflections are saved here too.</p>
+  <div class="stack">
+    <div class="panel stack" style="gap:10px">
+      <label class="eyebrow" for="j-text">New entry</label>
+      <textarea id="j-text" placeholder="Where were you hooked today? What went well?"></textarea>
+      <div class="row">
+        <select id="j-lesson" aria-label="Link to a lesson"><option value="">No lesson</option>${LESSONS.map((l) => `<option value="${l.id}">${esc(l.title)}</option>`).join("")}</select>
+        <span class="spacer"></span>
+        <button class="btn primary" id="j-add">Add entry</button>
+      </div>
+    </div>
+    <div class="panel stack" style="gap:12px">
+      <div class="row"><div class="eyebrow">${S.journal.length} entr${S.journal.length === 1 ? "y" : "ies"}</div><span class="spacer"></span>
+        ${used.length ? `<select id="j-filter" aria-label="Filter by lesson"><option value="">All lessons</option>${used.map((id) => `<option value="${id}" ${id === journalFilter ? "selected" : ""}>${esc((lessonById(id) || {}).title || id)}</option>`).join("")}</select>` : ""}
+      </div>
+      ${list.length ? list.map((j) => `<div class="entry">
+        <div class="meta"><span>${fmtDate(j.ts)}</span>${j.lesson && lessonById(j.lesson) ? `<button class="linkish" data-open="${j.lesson}">${esc(lessonById(j.lesson).title)}</button>` : ""}<span class="spacer"></span><button class="linkish" data-del="${j.id}" style="color:var(--muted)">${pendingDelete === j.id ? "Tap again to delete" : "Delete"}</button></div>
+        <div class="body">${esc(j.text)}</div></div>`).join("") : `<p class="note" style="margin:0">No entries yet. Write your first one above, or save a reflection from a lesson.</p>`}
+    </div>
+  </div>`;
+}
+let pendingDelete = null;
+
+function vGlossary() {
+  const q = glossQ.trim().toLowerCase();
+  const items = GLOSSARY.filter(([t, d]) => !q || t.toLowerCase().includes(q) || d.toLowerCase().includes(q));
+  return `
+  <h2 class="view-title">Glossary</h2>
+  <p class="lede">The book's vocabulary in one place. Each term links to the lesson that covers it.</p>
+  <input type="search" id="gloss-q" placeholder="Search terms" value="${esc(glossQ)}" style="width:100%;margin-bottom:18px">
+  <div class="panel"><dl class="gloss" id="gloss-list">${items.map(([t, d, l]) => `<div><dt>${esc(t)}</dt><dd>${esc(d)} <button class="linkish" data-open="${l}">Lesson ${lessonIndex(l) + 1} →</button></dd></div>`).join("") || `<p class="note">No terms match “${esc(glossQ)}”.</p>`}</dl></div>`;
+}
+
+let resetArmed = false;
+function vSettings() {
+  return `
+  <h2 class="view-title">Your data</h2>
+  <p class="lede">${remote ? "Your progress is saved privately to your Claude account, so it follows you across devices. Only you can see it." : "Your progress is saved in this browser. Open this app from your Claude account to sync it across devices."}</p>
+  <div class="stack">
+    <div class="panel stack" style="gap:10px">
+      <div class="eyebrow">Back up</div>
+      <p class="note" style="margin:0">Copy your progress as text and keep it somewhere safe.</p>
+      <div class="row"><button class="btn" id="exp">Copy backup</button><span class="note" id="exp-note"></span></div>
+      <textarea id="exp-text" readonly hidden style="font-family:ui-monospace,monospace;font-size:12px;min-height:80px"></textarea>
+    </div>
+    <div class="panel stack" style="gap:10px">
+      <div class="eyebrow">Restore</div>
+      <p class="note" style="margin:0">Paste a backup below. It replaces your current progress.</p>
+      <textarea id="imp-text" placeholder="Paste backup text" style="font-family:ui-monospace,monospace;font-size:12px;min-height:80px"></textarea>
+      <div class="row"><button class="btn" id="imp">Restore backup</button><span class="note" id="imp-note"></span></div>
+    </div>
+    <div class="panel stack" style="gap:10px">
+      <div class="eyebrow">Start over</div>
+      <p class="note" style="margin:0">Clears lessons read, quiz scores, practice log and journal.</p>
+      <div class="row"><button class="btn" id="reset" style="${resetArmed ? "border-color:var(--bad);color:var(--bad)" : ""}">${resetArmed ? "Tap again to erase everything" : "Reset progress"}</button></div>
+    </div>
+  </div>`;
+}
+
+/* ------------------------------------------------------------------
+   Events
+------------------------------------------------------------------- */
+function bind() {
+  const m = $("#main");
+  m.querySelectorAll("[data-open]").forEach((b) => b.onclick = () => go("lessons", b.dataset.open));
+  m.querySelectorAll("[data-go]").forEach((b) => b.onclick = () => go(b.dataset.go));
+  m.querySelectorAll("[data-prac]").forEach((b) => b.onclick = () => {
+    const k = dayKey(), arr = S.log[k] ? S.log[k].slice() : [], id = b.dataset.prac;
+    const at = arr.indexOf(id); if (at >= 0) arr.splice(at, 1); else arr.push(id);
+    if (arr.length) S.log[k] = arr; else delete S.log[k];
+    save(); render();
+  });
+
+  // book tracker
+  ["bk-page", "bk-pages", "bk-where"].forEach((id) => {
+    const el = $("#" + id); if (!el) return;
+    el.onchange = () => {
+      S.book.page = Math.max(0, parseInt($("#bk-page").value, 10) || 0);
+      S.book.pages = Math.max(0, parseInt($("#bk-pages").value, 10) || 0);
+      S.book.where = $("#bk-where").value.slice(0, 200);
+      save(); render(); toast("Book progress saved");
+    };
+  });
+
+  // lesson
+  if (view === "lessons" && openLesson) {
+    const l = lessonById(openLesson);
+    const mr = $("#mark-read");
+    if (mr) mr.onclick = () => { S.read[l.id] = Date.now(); save(); render(); toast("Marked as read"); };
+    const answers = new Array(l.quiz.length).fill(null);
+    m.querySelectorAll(".q").forEach((qel) => {
+      const qi = +qel.dataset.qi, q = l.quiz[qi];
+      qel.querySelectorAll(".opt").forEach((o) => o.onclick = () => {
+        if (answers[qi] !== null) return;
+        const oi = +o.dataset.oi; answers[qi] = oi;
+        qel.querySelectorAll(".opt").forEach((x) => { x.disabled = true; if (+x.dataset.oi === q.a) x.classList.add("right"); });
+        if (oi !== q.a) o.classList.add("wrong");
+        const ex = qel.querySelector(".explain"); ex.textContent = (oi === q.a ? "Correct. " : "Not quite. ") + q.e; ex.hidden = false;
+        if (answers.every((a) => a !== null)) {
+          const score = answers.filter((a, i) => a === l.quiz[i].a).length, total = l.quiz.length;
+          const prev = S.quiz[l.id];
+          S.quiz[l.id] = { score: Math.max(score, prev ? prev.score : 0), total, ts: Date.now(), lastScore: score };
+          if (!S.read[l.id]) S.read[l.id] = Date.now();
+          save();
+          const r = $("#quiz-result"); r.hidden = false;
+          r.innerHTML = `<span class="chip ${score === total ? "mastered" : "read"}">${score}/${total}</span><span class="note">${score === total ? "Lesson mastered." : "Reread the key ideas and try again."}</span><span class="spacer"></span><button class="btn small" id="retry">Try again</button>`;
+          $("#retry").onclick = () => { render(); $("#quiz").scrollIntoView({ block: "start" }); };
+        }
+      });
+    });
+    const ta = $("#reflect");
+    let rt; ta.oninput = () => { clearTimeout(rt); rt = setTimeout(() => { S.reflections[l.id] = ta.value; save(); $("#reflect-note").textContent = "Draft saved"; }, 600); };
+    $("#save-reflect").onclick = () => {
+      const t = ta.value.trim(); if (!t) { $("#reflect-note").textContent = "Write something first."; return; }
+      S.journal.push({ id: "j" + Date.now().toString(36), ts: Date.now(), text: t, lesson: l.id });
+      S.reflections[l.id] = ""; ta.value = ""; save();
+      $("#reflect-note").textContent = "Saved to your journal.";
+    };
+  }
+
+  // journal
+  const add = $("#j-add");
+  if (add) add.onclick = () => {
+    const t = $("#j-text").value.trim(); if (!t) { toast("Write something first"); return; }
+    S.journal.push({ id: "j" + Date.now().toString(36), ts: Date.now(), text: t.slice(0, 5000), lesson: $("#j-lesson").value || null });
+    save(); render(); toast("Entry added");
+  };
+  const jf = $("#j-filter"); if (jf) jf.onchange = () => { journalFilter = jf.value; render(); };
+  m.querySelectorAll("[data-del]").forEach((b) => b.onclick = () => {
+    const id = b.dataset.del;
+    if (pendingDelete !== id) { pendingDelete = id; render(); return; }
+    S.journal = S.journal.filter((j) => j.id !== id); pendingDelete = null; save(); render(); toast("Entry deleted");
+  });
+
+  // glossary
+  const gq = $("#gloss-q");
+  if (gq) gq.oninput = () => { glossQ = gq.value; const pos = gq.selectionStart; render(); const n = $("#gloss-q"); n.focus(); n.setSelectionRange(pos, pos); };
+
+  // data
+  const exp = $("#exp");
+  if (exp) exp.onclick = () => {
+    const txt = JSON.stringify(S); const box = $("#exp-text"); box.value = txt;
+    navigator.clipboard.writeText(txt).then(() => { $("#exp-note").textContent = "Copied to clipboard."; }, () => { box.hidden = false; box.select(); $("#exp-note").textContent = "Copy the selected text below."; });
+  };
+  const imp = $("#imp");
+  if (imp) imp.onclick = () => {
+    try { const x = JSON.parse($("#imp-text").value); if (!x || typeof x !== "object" || !x.read) throw 0; S = normalize(x); save(); toast("Backup restored"); go("today"); }
+    catch { $("#imp-note").textContent = "That text isn't a valid backup. Paste the full text from Copy backup."; }
+  };
+  const rs = $("#reset");
+  if (rs) rs.onclick = () => {
+    if (!resetArmed) { resetArmed = true; render(); return; }
+    resetArmed = false; S = blank(); save(); toast("Progress reset"); go("today");
+  };
+}
+
+document.getElementById("tabs").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-view]"); if (!b) return;
+  pendingDelete = null; resetArmed = false; go(b.dataset.view);
+});
+
+/* boot */
+S = normalize(lsRead());
+const h = (location.hash || "").slice(1);
+if (VIEWS.includes(h)) view = h;
+render();
+connect();
+</script>
