@@ -29,6 +29,6 @@ The weekly summaries and quizzes are study notes written for this app.
 - **Journal** and backup, restore and reset cover all books. Everything saves automatically. The streak counts activity in any book.
 - Progress is stored in `localStorage` when opened directly in a browser, and privately in your Claude account when opened as a claude.ai artifact.
 
-The look is inspired by the Cybercore aesthetic: neon on black, a HUD grid with scanlines, cut-corner panels and terminal-style controls, with a different neon for each book.
+The look is a calm pond: light pink and light green, water lilies in the background, Dancing Script for headings and controls with Lora for reading, and buttons and chips outlined like circuit-board traces with solder pads. Hover effects and script reading text are optional, under Data → Look.
 
 Open `index.html` in any browser; there is no build step.
