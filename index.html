@@ -149,22 +149,54 @@ dl.gloss dd .linkish { font-family: var(--ui); }
   .stat b { font-size: 25px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+/* It Works: the little red book gets a brick-red accent */
+:root[data-book="itworks"] { --accent: #b3372b; --accent-soft: #f6e1dd; --heat-1: #eebdb5; --heat-2: #d9776a; --heat-3: #b3372b; }
+@media (prefers-color-scheme: dark) { :root[data-book="itworks"]:not([data-theme="light"]) { --accent: #ec8478; --accent-soft: #3d1f1b; --on-accent: #2a0b07; --heat-1: #5a2a24; --heat-2: #a14e43; --heat-3: #ec8478; } }
+:root[data-book="itworks"][data-theme="dark"] { --accent: #ec8478; --accent-soft: #3d1f1b; --on-accent: #2a0b07; --heat-1: #5a2a24; --heat-2: #a14e43; --heat-3: #ec8478; }
+.books { display: flex; gap: 6px; flex-wrap: wrap; }
+.books button { border: 1px solid var(--line); background: var(--surface); color: var(--muted); border-radius: 999px; padding: 5px 13px; font: 600 13px var(--ui); cursor: pointer; }
+.books button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.app-name { font-family: var(--display); font-size: 15px; color: var(--muted); }
+.stat b small { font-size: 16px; color: var(--muted); }
+.slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.slot { display: flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid var(--line); background: var(--surface); border-radius: var(--r); padding: 10px 6px; font-weight: 600; cursor: pointer; }
+.slot.on { border-color: var(--accent); color: var(--accent); }
+.slot .check { width: 22px; height: 22px; font-size: 12px; }
+.mini-list { margin: 0; padding-left: 22px; font-family: var(--read); font-size: 17px; display: flex; flex-direction: column; gap: 4px; }
+.mini-list small, .wants small { display: block; font-family: var(--ui); font-size: 13px; color: var(--muted); }
+ol.wants, ul.wants { list-style: none; margin: 0; padding: 0; }
+.wants li { display: grid; grid-template-columns: 28px 1fr auto; gap: 10px; align-items: start; padding: 12px 0; border-top: 1px solid var(--line); }
+.wants li:first-child { border-top: 0; }
+.wants.got li { grid-template-columns: 1fr; }
+.w-rank { font-family: var(--display); font-size: 18px; color: var(--accent); font-variant-numeric: tabular-nums; line-height: 1.4; }
+.w-main { min-width: 0; }
+.w-text { font-family: var(--read); font-size: 17px; overflow-wrap: anywhere; }
+.wants li.editing { grid-template-columns: 28px 1fr; }
+.wants li.editing input { width: 100%; }
+.w-acts { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.icon { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 14px; }
+.icon[disabled] { opacity: .35; cursor: default; }
+.thanks { font-family: var(--read); font-style: italic; margin: 4px 0; }
+.wants .meta { margin-top: 2px; }
+#w-text, #w-detail { width: 100%; }
+.book-text blockquote { margin: 0 0 1em; padding: 4px 0 4px 18px; border-left: 3px solid var(--accent); font-style: italic; }
+.book-text .sep { text-align: center; color: var(--muted); letter-spacing: .4em; margin: 6px 0 22px; font-size: 13px; }
+.book-text h3.sub { font-family: var(--ui); font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin: 28px 0 12px; }
+.book-text ol.rules { margin: 0 0 1.2em; padding: 16px 16px 16px 40px; background: var(--accent-soft); border-radius: var(--r); font-weight: 600; display: flex; flex-direction: column; gap: 8px; }
+.book-text .sign { font-style: italic; color: var(--muted); }
+@media (max-width: 480px) { .wants li { grid-template-columns: 24px 1fr; } .w-acts { grid-column: 2; justify-content: flex-start; } }
 </style>
 
 <header class="top">
   <div class="top-inner">
     <div class="brand">
-      <h1>Transurfing Path</h1>
+      <div class="books" id="books" role="group" aria-label="Book">
+        <button data-book="transurfing" aria-pressed="true">Reality Transurfing</button>
+        <button data-book="itworks" aria-pressed="false">It Works</button>
+      </div>
       <span class="sync" id="sync">Saved in this browser</span>
     </div>
-    <nav class="tabs" id="tabs" aria-label="Sections">
-      <button data-view="today">Today</button>
-      <button data-view="lessons">Lessons</button>
-      <button data-view="practice">Practice</button>
-      <button data-view="journal">Journal</button>
-      <button data-view="glossary">Glossary</button>
-      <button data-view="settings">Data</button>
-    </nav>
+    <nav class="tabs" id="tabs" aria-label="Sections"></nav>
   </div>
 </header>
 <main class="wrap" id="main"></main>
@@ -621,18 +653,269 @@ const PRINCIPLES = [
 ];
 
 /* ------------------------------------------------------------------
+   It Works (R. H. Jarrett, 1926) and The Magic Story (F. V. R. Dey,
+   1900). Both original texts are in the public domain; the reading
+   text below is the original wording. Lessons are study notes.
+------------------------------------------------------------------- */
+const IW_TEXT = [{"id": "iw-foreword", "title": "Foreword", "src": "itworks", "blocks": [{"t": "p", "x": "Before this book even had a title, the author sent the manuscript to a friend for an opinion to see what others thought. The friend returned it with a very simple notation, “It Works.” Thus, this small booklet was born of experience and results."}, {"t": "p", "x": "RHJ was highly successful and widely known for his generosity and helpful spirit. He gave full credit for all that he accomplished in mastering circumstances, accumulating wealth and winning friends by quietly adopting the simple, powerful truth which he shared in his work. Here is an easy, open road to a larger, happier life. The author preferred that his name be omitted, knowing that the greatest good comes from helping others without expecting praise."}, {"t": "sign", "x": "—Publisher"}, {"t": "sep"}, {"t": "p", "x": "A concise, definite, resultful plan with rules, explanations and suggestions for bettering your condition in life."}, {"t": "q", "x": "If you KNOW what you WANT you can HAVE IT"}]}, {"id": "iw-secret", "title": "What Is the Real Secret of Obtaining Desirable Possessions?", "src": "itworks", "blocks": [{"t": "p", "x": "ARE some people born under a lucky star or other charm which enables them to have all that which seems so desirable, and if not, what is the cause of the difference in conditions under which men live?"}, {"t": "p", "x": "Many years ago, feeling that there must be a logical answer to this question, I decided to find out, if possible, what it was. I found the answer to my own satisfaction, and for years, have given the information to others who have used it successfully."}, {"t": "p", "x": "From a scientific, psychological or theological viewpoint, some of the following statements may be interpreted as incorrect, but nevertheless, the plan has brought the results desired to those who have followed the simple instructions, and it is my sincere belief that I am now presenting it in a way which will bring happiness and possessions to many more."}, {"t": "sep"}, {"t": "p", "x": "“IF wishes were horses, beggars would ride,” is the attitude taken by the average man and woman in regard to possessions. They are not aware of a power so near that it is overlooked; so simple in operation that it is difficult to conceive; and so sure in results that it is not made use of consciously, or recognized as the cause of failure or success."}, {"t": "sep"}, {"t": "p", "x": "“GEE, I wish that were mine,” is the outburst of Jimmy, the office boy, as a new red roadster goes by; and Florence, the telephone operator, expresses the same thought regarding a ring in the jeweler’s window; while poor old Jones, the bookkeeper, during the Sunday stroll, replies to his wife, “Yes, dear, it would be nice to have a home like that, but it is out of the question. We will have to continue to rent.” Landem, the salesman, protests that he does all the work, gets the short end of the money and will some day quit his job and find a real one, and President Bondum, in his private sanctorum, voices a bitter tirade against the annual attack of hay-fever."}, {"t": "p", "x": "At home it is much the same. Last evening, father declared that daughter Mabel was headed straight for disaster, and today, mother’s allowance problem and other trying affairs fade into insignificance as she exclaims, “This is the last straw. Robert’s school teacher wants to see me this afternoon. His reports are terrible, I know, but I’m late for Bridge now. She’ll have to wait until tomorrow.” So goes the endless stream of expressions like these from millions of people in all classes who give no thought to what they really want, and who are getting all they are entitled to or expect."}, {"t": "p", "x": "If you are one of these millions of thoughtless talkers or wishers and would like a decided change from your present condition, you can have it; but first of all you must know what you want and this is no easy task. When you can train your objective mind (the mind you use every day) to decide definitely upon the things or conditions you desire, you will have taken your first big step in accomplishing or securing what you know you want."}, {"t": "p", "x": "To get what you want is no more mysterious or uncertain than the radio waves all around you. Tune in correctly and you get a perfect result, but to do this, it is, of course, necessary to know something of your equipment and have a plan of operation."}, {"t": "p", "x": "You have within you a mighty power, anxious and willing to serve you, a power capable of giving you that which you earnestly desire. This power is described by Thomson Jay Hudson, Ph.D., LL.D., author of “The Law of Psychic Phenomena,” as your subjective mind. Other learned writers use different names and terms, but all agree that it is omnipotent. Therefore, I call this Power “Emmanuel” (God in us)."}, {"t": "p", "x": "Regardless of the name of this Great Power, or the conscious admission of a God, the Power is capable and willing to carry to a complete and perfect conclusion every earnest desire of your objective mind, but you must be really in earnest about what you want."}, {"t": "p", "x": "Occasional wishing or half-hearted wanting does not form a perfect connection or communication with your omnipotent power. You must be in earnest, sincerely and truthfully desiring certain conditions or things— mental, physical or spiritual."}, {"t": "p", "x": "Your objective mind and will are so vacillating that you usually only WISH for things and the wonderful, capable power within you does not function."}, {"t": "p", "x": "Most wishes are simply vocal expressions. Jimmy, the office boy, gave no thought of possessing the red roadster. Landem, the salesman, was not thinking of any other job or even thinking at all. President Bondum knew he had hay fever and was expecting it. Father’s business was quite likely successful, and mother no doubt brought home first prize from the Bridge party that day, but they had no fixed idea of what they really wanted their children to accomplish and were actually helping to bring about the unhappy conditions which existed."}, {"t": "p", "x": "If you are in earnest about changing your present condition, here is a concise, definite, resultful plan, with rules, explanations and suggestions."}]}, {"id": "iw-plan", "title": "The Plan", "src": "itworks", "blocks": [{"t": "p", "x": "WRITE down on paper in order of their importance the things and conditions you really want. Do not be afraid of wanting too much. Go the limit in writing down your wants. Change the list daily, adding to or taking from it, until you have it about right. Do not be discouraged on account of changes, as this is natural. There will always be changes and additions with accomplishments and increasing desires."}, {"t": "h", "x": "Three Positive Rules Of Accomplishment"}, {"t": "ol", "items": ["Read the list of what you want three times each day: morning, noon and night.", "Think of what you want as often as possible.", "Do not talk to any one about your plan except to the Great Power within you which will unfold to your Objective Mind the method of accomplishment."]}, {"t": "p", "x": "It is obvious that you cannot acquire faith at the start. Some of your desires, from all practical reasoning, may seem positively unattainable, but, nevertheless, write them down on your list in their proper place of importance to you."}, {"t": "p", "x": "There is no need to analyze how this Power within you is going to accomplish your desires. Such a procedure is as unnecessary as trying to figure out why a grain of corn placed in fertile soil shoots up a green stalk, blossoms and produces an ear of corn containing hundreds of grains, each capable of doing what the one grain did. If you will follow this definite plan and carry out the three simple rules, the method of accomplishment will unfold quite as mysteriously as the ear of corn appears on the stalk, and in most cases much sooner than you expect."}, {"t": "p", "x": "When new desires, deserving position at or about the top of your list, come to you, then you may rest assured you are progressing correctly."}, {"t": "p", "x": "Removing from your list items which at first you thought you wanted, is another sure indication of progress."}, {"t": "p", "x": "It is natural to be skeptical and have doubts, distrust and questionings, but when these thoughts arise, get out your list. Read it over; or if you have it memorized, talk to your inner self about your desires until the doubts that interfere with your progress are gone. Remember, nothing can prevent your having that which you earnestly desire. Others have these things. Why not you?"}, {"t": "p", "x": "The Omnipotent Power within you does not enter into any controversial argument. It is waiting and willing to serve when you are ready, but your objective mind is so susceptible to suggestion that it is almost impossible to make any satisfactory progress when surrounded by skeptics. Therefore, choose your friends carefully and associate with people who now have some of the things you really want, but do not discuss your method of accomplishment with them."}, {"t": "p", "x": "Put down on your list of wants such material things as money, home, automobile, or whatever it may be, but do not stop there. Be more definite. If you want an automobile, decide what kind, style, price, color, and all the other details, including when you want it. If you want a home, plan the structure, grounds and furnishings. Decide on location and cost. If you want money, write down the amount. If you want to break a record in your business, put it down. It may be a sales record. If so, write out the total, the date required, then the number of items you must sell to make it, also list your prospects and put after each name the sum expected. This may seem very foolish at first, but you can never realize your desires if you do not know positively and in detail what you want and when you want it. If you cannot decide this, you are not in earnest. You must be definite, and when you are, results will be surprising and almost unbelievable."}, {"t": "p", "x": "A natural and ancient enemy will no doubt appear when you get your first taste of accomplishment. This enemy is Discredit, in form of such thoughts as: “It can’t be possible; it just happened to be. What a remarkable coincidence!”"}, {"t": "p", "x": "When such thoughts occur give thanks and assert credit to your Omnipotent Power for the accomplishment. By doing this, you gain assurance and more accomplishment, and in time, prove to yourself that there is a law, which actually works—at all times—when you are in tune with it."}, {"t": "p", "x": "Sincere and earnest thanks cannot be given without gratitude and it is impossible to be thankful and grateful without being happy. Therefore, when you are thanking your greatest and best friend, your Omnipotent Power, for the gifts received, do so with all your soul, and let it be reflected in your face. The Power and what it does is beyond understanding. Do not try to understand it, but accept the accomplishment with thankfulness, happiness, and strengthened faith."}, {"t": "h", "x": "Caution"}, {"t": "p", "x": "It is possible to want and obtain that which will make you miserable; that which will wreck the happiness of others; that which will cause sickness and death; that which will rob you of eternal life. You can have what you want, but you must take all that goes with it: so in planning your wants, plan that which you are sure will give to you and your fellow man the greatest good here on earth; thus paving the way to that future hope beyond the pale of human understanding."}, {"t": "p", "x": "This method of securing what you want applies to everything you are capable of desiring and the scope being so great, it is suggested that your first list consist of only those things with which you are quite familiar, such as an amount of money or accomplishment, or the possession of material things. Such desires as these are more easily and quickly obtained than the discontinuance of fixed habits, the welfare of others, and the healing of mental or bodily ills."}, {"t": "p", "x": "Accomplish the lesser things first. Then take the next step, and when that is accomplished, you will seek the higher and really important objectives in life, but long before you reach this stage of your progress, many worthwhile desires will find their place on your list. One will be to help others as you have been helped. Great is the reward to those who help and give without thought of self as it is impossible to be unselfish without gain."}]}, {"id": "iw-conclusion", "title": "In Conclusion", "src": "itworks", "blocks": [{"t": "p", "x": "A short while ago, Dr. Emil Coué came to this country and showed thousands of people how to help themselves. Thousands of others spoofed at the idea, refused his assistance and are today where they were before his visit."}, {"t": "p", "x": "So with the statements and plan presented to you now. You can reject or accept. You can remain as you are or have anything you want. The choice is yours, but God grant that you may find in this short volume the inspiration to choose aright, follow the plan and thereby obtain, as so many others have, all things, whatever they may be, that you desire."}, {"t": "p", "x": "Read the entire book over again, and again, AND THEN AGAIN."}, {"t": "p", "x": "Memorize the three simple rules on pages thirteen and fourteen."}, {"t": "p", "x": "Test them now on what you want most this minute."}, {"t": "p", "x": "This book could have extended easily over 350 pages, but it has been deliberately shortened to make it as easy as possible for you to read, understand and use. Will you try it? Thousands of bettered lives will testify to the fact that It Works."}]}, {"id": "iw-letter", "title": "A Letter to You from the Author", "src": "itworks", "blocks": [{"t": "p", "x": "Dear Reader:"}, {"t": "p", "x": "The great possessions of life are all GIFTS mysteriously bestowed: sight, hearing, aspiration, love or life itself."}, {"t": "p", "x": "The same is true of ideas—the richest of them are given to us, as for instance, the powerful idea which this book has given you. What are you going to do with it? Are you surprised when I tell you the most profitable thing you can do is to give it away?"}, {"t": "p", "x": "You can do this in an easy and practical way by having this book sent to those you know who NEED IT. In this way, you can help in the distribution of this worthwhile effort to make the lives of others better and happier."}, {"t": "p", "x": "You know people who are standing still or who are worried and discouraged. This is your chance to HELP THEM HELP THEMSELVES. If you withhold this book from them you will lose the conscious satisfaction that comes from doing good. If you see that they get this book, then you put yourself in line with the Law of Life which says, “You get by giving,” and you may rightly expect prosperity and achievement."}, {"t": "p", "x": "At the very least you will have the inner sense of having done a good deed with no hope of being openly thanked and your reward will come secretly in added power and larger life."}, {"t": "sign", "x": "—The Author"}]}, {"id": "ms-preface", "title": "The Magic Story: Preface", "src": "magic", "blocks": [{"t": "p", "x": "THIS wonderful little story, written by Frederic Van Rensselaer Dey, first appeared in the December, 1900, and January, 1901, issues of SUCCESS MAGAZINE. It created an immediate sensation, and urgent requests were made for its reprint in book form. A small edition of a little silver-gray book was published to meet these requests, and this, the First Edition, has virtually disappeared from sight. The fact that the publishers of SUCCESS MAGAZINE are in almost daily receipt of requests for additional copies, is sufficient evidence of the value placed by the holders of the original edition upon the copies in their possession, and of their desire to bring it to the attention of their friends; and the demand has now become so insistent as to lead to the production of this, the Second Edition."}, {"t": "p", "x": "Mr. Dey has woven into this story, in a remarkably effective way, some of the fundamental principles of the “New Thought Movement” which is sweeping over this country, and it is safe to say that the application of these principles, as outlined in the “Magic Story,” will accomplish almost, if not quite, all that is herein claimed for them towards the up-building and development of a manly, self-reliant, success-compelling spirit."}]}, {"id": "ms-part1", "title": "The Magic Story: Part One", "src": "magic", "blocks": [{"t": "p", "x": "I WAS sitting alone in the café, and had just reached for the sugar preparatory to putting it into my coffee. Outside, the weather was hideous. Snow and sleet came swirling down, and the wind howled frightfully. Every time the outer door opened, a draft of unwelcome air penetrated the uttermost corners of the room. Still, I was comfortable. The snow and sleet and wind conveyed nothing to me except an abstract thanksgiving that I was where it could not affect me. While I dreamed and sipped my coffee, the door opened and closed, and admitted—Sturtevant."}, {"t": "p", "x": "Sturtevant was an undeniable failure, but, withal, an artist of more than ordinary talent. He had, however, fallen into the rut traveled by ne’er-dowells, and was out at the elbows as well as insolvent."}, {"t": "p", "x": "As I raised my eyes to Sturtevant’s, I was conscious of mild surprise at the change in his appearance. Yet he was not dressed differently. He wore the same threadbare coat in which he always appeared, and the old brown hat was the same. And yet there was something new and strange in his appearance. As he swished his hat around to relieve it of the burden of snow deposited by the howling nor’-wester, there was something new in the gesticulation. I could not remember when I had invited Sturtevant to dine with me, but involuntarily I beckoned to him. He nodded, and presently seated himself opposite to me. I asked him what he would have, and he, after scanning the bill of fare carelessly, ordered from it leisurely, and invited me to join him in coffee for two. I watched him in stupid wonder, but, as I had invited the obligation, I was prepared to pay for it, although I knew I hadn’t sufficient cash to settle the bill. Meanwhile, I noted the brightness of his usual lackluster eyes, and the healthful, hopeful glow upon his cheek, with increasing amazement."}, {"t": "p", "x": "“Have you lost a rich uncle?” I asked."}, {"t": "p", "x": "“No,” he replied, calmly, “but I have found my mascot.”"}, {"t": "p", "x": "“Brindle bull, or terrier?” I inquired."}, {"t": "p", "x": "“Currier,” said Sturtevant, at length, pausing with his coffee cup half way to his lips, “I see that I have surprised you. It is not strange, for I am a surprise to myself. I am a new man, a different man,—and the alteration has taken place in the last few hours. You have seen me come into this place ‘broke’ many a time, when you have turned away, so that I would think you did not see me. I knew why you did that. It was not because you did not want to pay for a dinner, but because you did not have the money to do it. Is that your check? Let me have it. Thank you. I haven’t any money with me tonight, but I,—well, this is my treat.”"}, {"t": "p", "x": "He called the waiter to him, and, with an inimitable flourish, signed his name on the backs of the two checks, and waved him away. After that he was silent a moment while he looked into my eyes, smiling at the astonishment which I in vain strove to conceal."}, {"t": "p", "x": "“Do you know an artist who possesses more talent than I?” he asked, presently. “No. Do you happen to know anything in the line of my profession that I could not accomplish, if I applied myself to it? No. You have been a reporter on the dailies for—how many?—seven or eight years. Do you remember when I ever had any credit until to-night? No. Was I refused just now? You have seen for yourself. To-morrow my new career begins. Within a month I shall have a bank account. Why? Because I have discovered the secret of success.”"}, {"t": "p", "x": "“Yes,” he continued, when I did not reply, “my fortune is made. I have been reading a strange story, and, since reading it, I feel that my fortune is assured. It will make your fortune, too. All you have to do is to read it. You have no idea what it will do for you. Nothing is impossible after you know that story. It makes everything as plain as A, B, C. The very instant you grasp its true meaning, success is certain. This morning I was a hopeless, aimless bit of garbage in the metropolitan ash can; to-night I wouldn’t change places with a millionaire. That sounds foolish, but it is true. The millionaire has spent his enthusiasm; mine is all at hand.”"}, {"t": "p", "x": "“You amaze me,” I said, wondering if he had been drinking absinthe. “Won’t you tell me the story? I should like to hear it.”"}, {"t": "p", "x": "“Certainly. I mean to tell it to the whole world. It is really remarkable that it should have been written and should remain in print so long, with never a soul to appreciate it until now. This morning I was starving. I hadn’t any credit, nor a place to get a meal. I was seriously meditating suicide. I had gone to three of the papers for which I had done work, and had been handed back all that I had submitted. I had to choose quickly between death by suicide and death slowly by starvation. Then I found the story and read it. You can hardly imagine the transformation. Why, my dear boy, everything changed at once,—and there you are.”"}, {"t": "p", "x": "“But what is the story, Sturtevant?”"}, {"t": "p", "x": "“Wait; let me finish. I took those same old drawings to other editors, and every one of them was accepted at once.”"}, {"t": "p", "x": "“Can the story do for others what it has done for you? For example, would it be of assistance to me?” I asked."}, {"t": "p", "x": "“Help you? why not? Listen and I will tell it to you, although, really, you should read it. Still, I will tell it as best I can. It is like this: you see,———”"}, {"t": "p", "x": "The waiter interrupted us at that moment. He informed Sturtevant that he was wanted at the telephone, and, with a word of apology, the artist left the table. Five minutes later I saw him rush out into the sleet and wind and disappear. Within the recollection of the frequenters of that café, Sturtevant had never before been called out by telephone. That, of itself, was substantial proof of a change in his circumstances."}, {"t": "p", "x": "One night, on the street, I encountered Avery, a former college chum, then a reporter on one of the evening papers. It was about a month after my memorable interview with Sturtevant, which, by that time, was almost forgotten."}, {"t": "p", "x": "“Hello, old chap,” he said; “how’s the world using you? Still on space?”"}, {"t": "p", "x": "“Yes,” I replied, bitterly, “with prospects of being on the town, shortly. But you look as if things were coming your way. Tell me all about it.”"}, {"t": "p", "x": "“Things have been coming my way, for a fact, and it is all remarkable, when all is said. You know Sturtevant, don’t you? It’s all due to him. I was plumb down on my luck,—thinking of the morgue and all that,—looking for you, in fact, with the idea that you would lend me enough to pay my room rent, when I met Sturtevant. He told me a story, and, really, old man, it is the most remarkable story you ever heard; it made a new man of me. Within twenty-four hours I was on my feet, and I’ve hardly known a care or a trouble since.”"}, {"t": "p", "x": "Avery’s statement, uttered calmly, and with the air of one who had merely pronounced an axiom, recalled to my mind the conversation with Sturtevant in the café that stormy night, nearly a month before."}, {"t": "p", "x": "“It must be a remarkable story,” I said, incredulously. “Sturtevant mentioned it to me once. I have not seen him since. Where is he now?”"}, {"t": "p", "x": "“He has been making war sketches in Cuba, at two hundred a week; he’s just returned. It is a fact that everybody that has heard that story has done well since. There are Cosgrove and Phillips,—friends of mine,—you don’t know them. One’s a real estate agent; the other a broker’s clerk. Sturtevant told them the story, and they have experienced the same results that I have; and they are not the only ones, either.”"}, {"t": "p", "x": "“Do you know the story?” I asked. “Will you try its effect on me?”"}, {"t": "p", "x": "“Certainly; with the greatest pleasure in the world. I would like to have it printed in big black type, and posted on the elevated stations throughout New York. It certainly would do a lot of good, and it’s as simple as A, B, C; like living on a farm. Excuse me a minute, will you? I see Danforth over there. Back in a minute, old chap.”"}, {"t": "p", "x": "He nodded and smiled,—and was gone. I saw him join the man whom he had designated as Danforth. My attention was distracted for a moment, and, when I looked again, both had disappeared."}, {"t": "p", "x": "If the truth be told, I was hungry. My pocket at that moment contained exactly five cents; just enough to pay my fare up-town, but insufficient also to stand the expense of filling my stomach. There was a “night owl” wagon in the neighborhood, where I had frequently “stood up” the purveyor of midnight dainties, and to him I applied. He was leaving the wagon as I was on the point of entering it, and I accosted him."}, {"t": "p", "x": "“I’m broke again,” I said, with extreme cordiality. “You’ll have to trust me once more. Some ham and eggs, I think, will do for the present.”"}, {"t": "p", "x": "He coughed, hesitated a moment, and then re-entered the wagon with me."}, {"t": "p", "x": "“Mr. Currier is good for anything he orders,” he said to the man in charge; “one of my old customers. This is Mr. Bryan, Mr. Currier. He will take good care of you, and ‘stand for’ you, just the same as I would. The fact is, I have sold out. I’ve just turned over the outfit to Bryan. By the way, isn’t Mr. Sturtevant a friend of yours?”"}, {"t": "p", "x": "I nodded. I couldn’t have spoken if I had tried."}, {"t": "p", "x": "“Well,” continued the ex-“night owl” man, “he came here one night, about a month ago, and told me the most wonderful story I ever heard. I’ve just bought a place in Eighth Avenue, where I am going to run a regular restaurant—near Twenty-third Street. Come and see me.”"}, {"t": "p", "x": "He was out of the wagon, and the sliding door had been banged shut before I could stop him; so I ate my ham and eggs in silence, and resolved that I would hear that story before I slept. In fact, I began to regard it with superstition. If it had made so many fortunes, surely it should be capable of making mine."}, {"t": "p", "x": "The certainty that the wonderful story—I began to regard it as magic,— was in the air, possessed me. As I started to walk homeward, fingering the solitary nickel in my pocket and contemplating the certainty of riding down town in the morning, I experienced the sensation of something stealthily pursuing me, as if Fate were treading along behind me, yet never overtaking, and I was conscious that I was possessed with or by the story. When I reached Union Square, I examined my address book for the home of Sturtevant. It was not recorded there. Then I remembered the café in University place, and, although the hour was late, it occurred to me that he might be there."}, {"t": "p", "x": "He was! In a far corner of the room, surrounded by a group of acquaintances, I saw him. He discovered me at the same instant, and motioned to me to join them at the table. There was no chance for the story, however. There were half a dozen around the table, and I was the farthest removed from Sturtevant. But I kept my eyes upon him, and bided my time, determined that, when he rose to depart, I would go with him. A silence, suggestive of respectful awe, had fallen upon the party when I took my seat. Every one seemed to be thinking, and the attention of all was fixed upon Sturtevant. The cause was apparent. He had been telling the story. I had entered the café just too late to hear it. On my right, when I took my seat, was a doctor; on my left a lawyer. Facing me on the other side was a novelist with whom I had some acquaintance. The others were artists and newspaper men."}, {"t": "p", "x": "“It’s too bad, Mr. Currier,” remarked the doctor; “you should have come a little sooner. Sturtevant has been telling us a story; it is quite wonderful, really. I say, Sturtevant, won’t you tell that story again, for the benefit of Mr. Currier?”"}, {"t": "p", "x": "“Why, yes. I believe that Currier has, somehow, failed to hear the magic story, although, as a matter of fact, I think he was the first one to whom I mentioned it at all. It was here, in this café, too,—at this very table. Do you remember what a wild night that was, Currier? Wasn’t I called to the telephone, or something like that? To be sure! I remember, now; interrupted just at the point when I was beginning the story. After that, I told it to three or four fellows, and it ‘braced them up,’ as it had me. It seems incredible that a mere story can have such a tonic effect upon the success of so many persons who are engaged in such widely different occupations, but that is what it has done. It is a kind of neverfailing remedy, like a cough mixture that is warranted to cure everything, from a cold in the head to galloping consumption. There was Parsons, for example. He is a broker, you know, and had been on the wrong side of the market for a month. He had utterly lost his grip, and was on the verge of failure. I happened to meet him at the time he was feeling the bluest, and, before we parted, something brought me around to the subject of the story, and I related it to him. It had the same effect upon him that it had on me, and has had upon everybody who has heard it, as far as I know. I think you will all agree with me, that it is not the story itself that performs the surgical operation on the minds of those who are familiar with it; it is the way it is told,—in print, I mean. The author has, somehow, produced a psychological effect which is indescribable. The reader is hypnotized. He receives a mental and moral tonic. Perhaps, doctor, you can give some scientific explanation of the influence exerted by the story. It is a sort of elixir manufactured out of words, eh?”"}, {"t": "p", "x": "From that the company entered upon a general discussion of theories. Now and then slight references were made to the story itself, and they were just sufficient to tantalize me,—the only one present who had not heard it."}, {"t": "p", "x": "At length, I left my chair, and, passing around the table, seized Sturtevant by one arm, and succeeded in drawing him away from the party."}, {"t": "p", "x": "“If you have any consideration for an old friend who is rapidly being driven mad by the existence of that confounded story, which Fate seems determined that I shall never hear, you will relate it to me now,” I said, savagely."}, {"t": "p", "x": "Sturtevant stared at me in mild surprise."}, {"t": "p", "x": "“All right,” he said. “The others will excuse me for a few moments, I think. Sit down here, and you shall have it. I found it pasted in an old scrapbook I purchased in Ann Street, for three cents; and there isn’t a thing about it by which one can get any idea in what publication it originally appeared, or who wrote it. When I discovered it, I began casually to read it, and in a moment I was interested. Before I left it, I had read it through many times, so that I could repeat it almost word for word. It affected me strangely,—as if I had come in contact with some strong personality. There seems to be in the story a personal element that applies to every one who reads it. Well, after I had read it several times, I began to think it over. I couldn’t stay in the house, so I seized my coat and hat and went out. I must have walked several miles, buoyantly, without realizing that I was the same man who, only a short time before, had been in the depths of despondency. That was the day I met you here,—you remember.”"}, {"t": "p", "x": "We were interrupted at that instant by a uniformed messenger, who handed Sturtevant a telegram. It was from his chief, and demanded his instant attendance at the office. The messenger had already been delayed an hour, and there was no help for it; he must go at once."}, {"t": "p", "x": "“Too bad!” said Sturtevant, rising and extending his hand. “Tell you what I’ll do, old chap. I’m not likely to be gone any more than an hour or two. You take my key and wait for me in my room. In the escritoire near the window you will find an old scrapbook, bound in rawhide. It was manufactured, I have no doubt, by the author of the magic story. Wait for me in my room until I return.”"}, {"t": "p", "x": "With that he went out, and I lost no time in taking advantage of the permission he had given me."}, {"t": "p", "x": "I found the book without difficulty. It was a quaint, home-made affair, covered, as Sturtevant had said, with rawhide, and bound with leather thongs. The pages formed an odd combination of yellow paper, vellum and home-made parchment. I found the story, curiously printed on the lastnamed material. It was quaint and strange. Evidently, the printer had “set” it under the supervision of the writer. The phraseology was an unusual combination of seventeenth and eighteenth century mannerisms, and the interpolation of Italics and capitals could have originated in no other brain than that of its author."}, {"t": "p", "x": "In reproducing the following story, the peculiarities of type, spelling, etc., are eliminated, but in other respects it remains unchanged."}]}, {"id": "ms-part2", "title": "The Magic Story: Part Two", "src": "magic", "blocks": [{"t": "p", "x": "Inasmuch as I have evolved from my experience the one great secret of success for all worldly undertakings, I deem it wise, now that the number of my days is nearly counted, to give to the generations that are to follow me the benefit of whatsoever knowledge I possess. I do not apologize for the manner of my expression, nor for lack of literary merit, the latter being, I wot, its own apology. Tools much heavier than the pen have been my portion, and, moreover, the weight of years has somewhat palsied hand and brain; nevertheless, the fact I can tell, and that I deem the meat within the nut. What mattereth it, in what manner the shell be broken, so that the meat be obtained and rendered useful? I doubt not that I shall use, in the telling, expressions that have clung to my memory since childhood; for, when men attain the number of my years, happenings of youth are like to be clearer to their perceptions than are events of recent date; nor doth it matter much how a thought is expressed, if it be wholesome and helpful, and findeth the understanding."}, {"t": "p", "x": "Much have I wearied my brain anent the question, how best to describe this recipe for success that I have discovered, and it seemeth advisable to give it as it came to me; that is, if I relate somewhat of the story of my life, the directions for agglomerating the substances, and supplying the seasoning for the accomplishment of the dish, will plainly be perceived. Happen they may; and that men may be born generations after I am dust, who will live to bless me for the words I write."}, {"t": "p", "x": "My father, then, was a seafaring man who, early in life, forsook his vocation, and settled on a plantation in the colony of Virginia, where, some years thereafter, I was born, which event took place in the year 1642; and that was over a hundred years ago. Better for my father had it been, had he hearkened to the wise advice of my mother, that he remain in the calling of his education; but he would not have it so, and the good vessel he captained was bartered for the land I spoke of. Here beginneth the first lesson to be acquired:—"}, {"t": "q", "x": "Man should not be blinded to whatsoever merit exists in the opportunity which he hath in hand, remembering that a thousand promises for the future should weigh as naught against the possession of a single piece of silver."}, {"t": "p", "x": "When I had achieved ten years, my mother’s soul took flight, and two years thereafter my worthy father followed her. I, being their only begotten, was left alone; howbeit, there were friends who, for a time, cared for me; that is to say, they offered me a home beneath their roof,—a thing which I took advantage of for the space of five months. From my father’s estate there came to me naught; but, in the wisdom that came with increasing years, I convinced myself that his friend, under whose roof I lingered for some time, had defrauded him, and therefore me."}, {"t": "p", "x": "Of the time from the age of twelve and a half until I was three and twenty, I will make no recital here, since that time hath naught to do with this tale; but some time after, having in my possession the sum of sixteen guineas, ten, which I had saved from the fruits of my labor, I took ship to Boston town, where I began work first as a cooper, and thereafter as a ship’s carpenter, although always after the craft was docked; for the sea was not amongst my desires."}, {"t": "p", "x": "Fortune will sometimes smile upon an intended victim because of pure perversity of temper. Such was one of my experiences. I prospered, and, at seven and twenty, owned the yard wherein, less than four years earlier, I had worked for hire. Fortune, howbeit, is a jade who must be coerced; she will not be coddled. Here beginneth the second lesson to be acquired:"}, {"t": "q", "x": "Fortune is ever elusive, and can only be retained by force. Deal with her tenderly and she will forsake you for a stronger man. [In that, methinks, she is not unlike other women of my knowledge.]"}, {"t": "p", "x": "About this time, Disaster (which is one of the heralds of broken spirits and lost resolve), paid me a visit. Fire ravaged my yards, leaving nothing in its blackened paths but debts, which I had not the coin wherewith to defray. I labored with my acquaintances, seeking assistance for a new start, but the fire that had burned my competence, seemed also to have consumed their sympathies. So it happened, within a short time, that not only had I lost all, but I was hopelessly indebted to others; and for that they cast me into prison. It is possible that I might have rallied from my losses but for this last indignity, which broke down my spirits so that I became utterly despondent. Upward of a year was I detained within the gaol; and, when I did come forth, it was not the same hopeful, happy man, content with his lot, and with confidence in the world and its people, who had entered there."}, {"t": "p", "x": "Life has many pathways, and of them by far the greater number lead downward. Some are precipitous, others are less abrupt; but ultimately, no matter at what inclination the angle may be fixed, they arrive at the same destination,—failure. And here beginneth the third lesson:"}, {"t": "q", "x": "Failure exists only in the grave. Man, being alive, hath not yet failed; always he may turn about and ascend by the same path be descended by; and there may be one that is less abrupt (albeit longer of achievement), and more adaptable to his condition."}, {"t": "p", "x": "When I came forth from prison, I was penniless. In all the world I possessed naught beyond the poor garments which covered me, and a walking stick which the turnkey had permitted me to retain, since it was worthless. Being a skilled workman, howbeit, I speedily found employment at good wages; but, having eaten of the fruit of worldly advantage, dissatisfaction possessed me. I became morose and sullen; whereat, to cheer my spirits, and for the sake of forgetting the losses I had sustained, I passed my evenings at the tavern. Not that I drank overmuch of liquor, except on occasion (for I have ever been somewhat abstemious), but that I could laugh, and sing, and parry wit and badinage with my ne’er-do-well companions; and here might be included the fourth lesson:"}, {"t": "q", "x": "Seek comrades among the industrious, for those who are idle will sap your energies from you."}, {"t": "p", "x": "It was my pleasure at that time to relate, upon slight provocation, the tale of my disasters, and to rail against the men whom I deemed to have wronged me, because they had seen fit not to come to my aid. Moreover, I found childish delight in filching from my employer, each day, a few moments of the time for which he paid me. Such a thing is less honest than downright theft."}, {"t": "p", "x": "This habit continued and grew upon me until the day dawned which found me not only without employment, but also without character, which meant that I could not hope to find work with any other employer in Boston town."}, {"t": "p", "x": "It was then that I regarded myself a failure. I can liken my condition at that time for naught more similar than that of a man who, descending the steep side of a mountain, loses his foothold. The farther he slides, the faster he goes. I have also heard this condition described by the word Ishmaelite, which I understand to be a man whose hand is against everybody, and who thinks that the hands of every other man are against him; and here beginneth the fifth lesson:"}, {"t": "q", "x": "The Ishmaelite and the leper are the same, since both are abominations in the sight of man,—albeit they differ much, in that the former may be restored to perfect health. The former is entirely the result of imagination; the latter has poison in his blood."}, {"t": "p", "x": "I will not discourse at length upon the gradual degeneration of my energies. It is not meet ever to dwell much upon misfortunes (which saying is also worthy of remembrance). It is enough if I add that the day came when I possessed naught wherewith to purchase food and raiment, and I found myself like unto a pauper, save at infrequent times when I could earn a few pence, or, mayhap, a shilling. Steady employment I could not secure, so I became emaciated in body, and naught but a skeleton in spirit."}, {"t": "p", "x": "My condition, then, was deplorable; not so much for the body, be it said, as for the mental part of me, which was sick unto death. In my imagination I deemed myself ostracised by the whole world, for I had sunk very low indeed; and here beginneth the sixth and final lesson to be acquired, (which cannot be told in one sentence, nor in one paragraph, but must needs be adapted from the remainder of this tale)."}, {"t": "p", "x": "Well do I remember my awakening, for it came in the night, when, in truth, I did awake from sleep. My bed was a pile of shavings in the rear of the cooper shop where once I had worked for hire; my roof was the pyramid of casks, underneath which I had established myself. The night was cold, and I was chilled, albeit, paradoxically, I had been dreaming of light and warmth and of the repletion of good things. You will say, when I relate the effect the vision had on me, that my mind was affected. So be it, for it is the hope that the minds of others might be likewise influenced which disposes me to undertake the labor of this writing. It was the dream which converted me to the belief—nay, to the knowledge,—that I was possessed of two identities; and it was my own better self that afforded me the assistance for which I had pleaded in vain from my acquaintances. I have heard this condition described by the word “double.” Nevertheless, that word does not comprehend my meaning. A double can be naught more than a double, neither half being possessed of individuality. But I will not philosophize, since philosophy is naught but a suit of garments for the decoration of a dummy figure."}, {"t": "p", "x": "Moreover, it was not the dream itself which affected me; it was the impression made by it, and the influence that it exerted over me, which accomplished my enfranchisement. In a word, then, I encouraged my other identity. After toiling through a tempest of snow and wind, I peered into a window and saw that other being. He was rosy with health; before him, on the hearth, blazed a fire of logs; there was conscious power and force in his demeanor; he was physically and mentally muscular. I rapped timidly upon the door, and he bade me enter. There was a not unkindly smile of derision in his eyes as he motioned me to a chair by the fire; but he uttered no word of welcome; and, when I had warmed myself, I went forth again into the tempest, burdened with the shame which the contrast between us had forced upon me. It was then that I awoke; and here cometh the strange part of my tale, for, when I did awake, I was not alone. There was a Presence with me; intangible to others, I discovered later, but real to me."}, {"t": "p", "x": "The Presence was in my likeness, yet was it strikingly unlike. The brow, not more lofty than my own, yet seemed more round and full; the eyes, clear, direct, and filled with purpose, glowed with enthusiasm and resolution; the lips, chin,—ay, the whole contour of face and figure was dominant and determined."}, {"t": "p", "x": "He was calm, steadfast, and self-reliant; I was cowering, filled with nervous trembling, and fearsome of intangible shadows. When the Presence turned away, I followed, and throughout the day I never lost sight of it, save when it disappeared for a time beyond some doorway where I dared not enter; at such places, I awaited its return with trepidation and awe, for I could not help wondering at the temerity of the Presence (so like myself, and yet so unlike), in daring to enter where my own feet feared to tread."}, {"t": "p", "x": "It seemed also as if purposely, I was led to the place and to the men where, and before whom I most dreaded to appear; to offices where once I had transacted business; to men with whom I had financial dealings. Throughout the day I pursued the Presence, and at evening saw it disappear beyond the portals of a hostelry famous for its cheer and good living. I sought the pyramid of casks and shavings."}, {"t": "p", "x": "Not again in my dreams that night did I encounter the Better Self (for that is what I have named it), albeit, when, perchance, I awakened from slumber, it was near to me, ever wearing that calm smile of kindly derision which could not be mistaken for pity, nor for condolence in any form. The contempt of it stung me sorely."}, {"t": "p", "x": "The second day was not unlike the first, being a repetition of its forerunner, and I was again doomed to wait outside during the visits which the Presence paid to places where I fain would have gone had I possessed the requisite courage. It is fear which deporteth a man’s soul from his body and rendereth it a thing to be despised. Many a time I essayed to address it but enunciation rattled in my throat, unintelligible; and the day closed like its predecessor."}, {"t": "p", "x": "This happened many days, one following another, until I ceased to count them; albeit, I discovered that constant association with the Presence was producing an effect upon me; and one night, when I awoke among the casks and discerned that he was present, I made bold to speak, albeit with marked timidity."}, {"t": "p", "x": "“Who are you?” I ventured to ask; and I was startled into an upright posture by the sound of my own voice; and the question seemed to give pleasure to my companion, so that I fancied there was less of derision in his smile when he responded."}, {"t": "p", "x": "“I am that I am,” was the reply. “I am he who you have been; I am he who you may be again; wherefore do you hesitate? I am he who you were, and whom you have cast out for other company. I am the man made in the image of God, who once possessed your body. Once we dwelt within it together, not in harmony, for that can never be, nor yet in unity, for that is impossible, but as tenants in common who rarely fought for full possession. Then, you were a puny thing, but you became selfish and exacting until I could no longer abide with you, wherefore I stepped out. There is a plusentity and a minus-entity in every human body that is born into the world. Whichever one of these is favored by the flesh becomes dominant; then is the other inclined to abandon its habitation, temporarily or for all time. I am the plus-entity of yourself; you are the minus-entity. I own all things; you possess naught. That body which we both inhabited is mine, but it is unclean, and I will not dwell within it. Cleanse it, and I will take possession.”"}, {"t": "p", "x": "“Why do you pursue me?” I next asked of the Presence."}, {"t": "p", "x": "“You have pursued me, not I you. You can exist without me for a time, but your path leads downward, and the end is death. Now that you approach the end, you debate if it be not politic that you should cleanse your house and invite me to enter. Step aside, then, from the brain and the will; cleanse them of your presence; only on that condition will I ever occupy them again.”"}, {"t": "p", "x": "“The brain hath lost its power,” I faltered. “The will is a weak thing, now; can you repair them?”"}, {"t": "p", "x": "“Listen!” said the Presence, and he towered over me while I cowered abjectly at his feet. “To the plus-entity of a man, all things are possible. The world belongs to him,—is his estate. He fears naught, dreads naught, stops at naught; he asks no privileges, but demands them; he dominates, and cannot cringe; his requests are orders; opposition flees at his approach; he levels mountains, fills in vales, and travels on an even plane where stumbling is unknown.”"}, {"t": "p", "x": "Thereafter, I slept again, and, when I awoke, I seemed to be in a different world. The sun was shining and I was conscious that birds twittered above my head. My body, yesterday trembling and uncertain, had become vigorous and filled with energy. I gazed upon the pyramid of casks in amazement that I had so long made use of it for an abiding place, and I was wonderingly conscious that I had passed my last night beneath its shelter."}, {"t": "p", "x": "The events of the night recurred to me, and I looked about me for the Presence. It was not visible, but anon I discovered, cowering in a far corner of my resting place, a puny, abject, shuddering figure, distorted of visage, deformed of shape, disheveled and unkempt of appearance. It tottered as it walked, for it approached me piteously; but I laughed aloud, mercilessly. Perchance I knew then that it was the minus-entity, and that the plus-entity was within me; albeit I did not then realize it. Moreover, I was in haste to get away; I had no time for philosophy. There was much for me to do,— much; strange it was that I had not thought of that yesterday. But yesterday was gone,—today was with me,—it had just begun."}, {"t": "p", "x": "As had once been my daily habit, I turned my steps in the direction of the tavern, where formerly I had partaken of my meals. I nodded cheerily as I entered, and smiled in recognition of returned salutations. Men who had ignored me for months bowed graciously when I passed them on the thoroughfare. I went to the washroom, and from there to the breakfast table; afterwards when I passed the taproom, I paused a moment and said to the landlord:"}, {"t": "p", "x": "“I will occupy the same room that I formerly used, if, perchance, you have it at disposal. If not, another will do as well, until I can obtain it.”"}, {"t": "p", "x": "Then I went out and hurried with all haste to the cooperage. There was a huge wain in the yard, and men were loading it with casks for shipment. I asked no questions, but, seizing barrels, began hurling them to the men who worked atop of the load. When this was finished, I entered the shop. There was a vacant bench; I recognized its disuse by the litter on its top. It was the same at which I had once worked. Stripping off my coat, I soon cleared it of impedimenta. In a moment more I was seated, with my foot on the vicelever, shaving staves."}, {"t": "p", "x": "It was an hour later when the master workman entered the room, and he paused in surprise at sight of me; already there was a goodly pile of neatly shaven staves beside me, for in those days I was an excellent workman; there was none better, but, alas! now, age hath deprived me of my skill. I replied to his unasked question with the brief, but comprehensive sentence: “I have returned to work, sir.” He nodded his head and passed on, viewing the work of other men, albeit anon he glanced askance in my direction."}, {"t": "p", "x": "Here endeth the sixth and last lesson to be acquired, although there is more to be said, since from that moment I was a successful man, and ere long possessed another shipyard, and had acquired a full competence of worldly goods."}, {"t": "p", "x": "I pray you who read, heed well the following admonitions, since upon them depend the word “success” and all that it implies:"}, {"t": "q", "x": "Whatsoever you desire of good is yours. You have but to stretch forth your hand and take it."}, {"t": "p", "x": "Learn that the consciousness of dominant power within you is the possession of all things attainable."}, {"t": "p", "x": "Have no fear of any sort or shape, for fear is an adjunct of the minusentity."}, {"t": "p", "x": "If you have skill, apply it; the world must profit by it, and, therefore, you."}, {"t": "p", "x": "Make a daily and nightly companion of your plus-entity; if you heed its advice, you cannot go wrong."}, {"t": "p", "x": "Remember, philosophy is an argument; the world, which is your property, is an accumulation of facts."}, {"t": "p", "x": "Go, therefore, and do that which is within you to do; take no heed of gestures which would beckon you aside; ask of no man permission to perform."}, {"t": "p", "x": "The minus-entity requests favors; the plus-entity grants them. Fortune waits upon every footstep you take; seize her, bind her, hold her, for she is yours; she belongs to you."}, {"t": "p", "x": "Start out now, with these admonitions in your mind. Stretch out your hand, and grasp the plus, which, maybe, you have never made use of, save in grave emergencies. Life is an emergency most grave."}, {"t": "p", "x": "Your plus-entity is beside you now; cleanse your brain, and strengthen your will. It will take possession. It waits upon you."}, {"t": "p", "x": "Start to-night; start now upon this new journey."}, {"t": "p", "x": "Be always on your guard. Whichever entity controls you, the other hovers at your side; beware lest the evil enter, even for a moment."}, {"t": "p", "x": "My task is done. I have written the recipe for “success.” If followed, it cannot fail. Wherein I may not be entirely comprehended, the plus-entity of whosoever reads will supply the deficiency; and upon that Better Self of mine, I place the burden of imparting to generations that are to come, the secret of this all-pervading good,—the secret of being what you have it within you to be."}]}];
+
+const IW_PARTS = [
+  { id: "iw1", title: "The idea" },
+  { id: "iw2", title: "The plan" },
+  { id: "iw3", title: "Keeping it going" },
+  { id: "iw4", title: "The Magic Story" },
+];
+
+const IW_LESSONS = [
+{
+  id: "iw-wishing", part: "iw1", title: "Wishing is not wanting",
+  sub: "Why most wishes never turn into anything",
+  body: [
+`Jarrett opens with a parade of ordinary people: an office boy admiring a car, a clerk who would like a house but says it is out of the question, a salesman who complains about his pay, parents who worry about their children. Each one voices a wish. None of them has decided anything.`,
+`His point is that a passing wish is only a remark. It costs nothing and it changes nothing. People with vague wishes, he says, get all they are entitled to or expect, which is usually more of the same.`,
+`The first step is therefore the hardest: know what you want. Not in a general way, but definitely enough that you could write it down and recognise it when it arrives. Everything else in the book rests on that decision.`
+  ],
+  keys: [
+    "A wish is a remark; a want is a decision.",
+    "Vague wishing leaves life as it is.",
+    "The first step is to know exactly what you want.",
+    "Be in earnest: sincere and truthful about your desire."
+  ],
+  practice: `Catch yourself wishing out loud today ("I wish I had…", "It would be nice if…"). Each time, ask: do I actually want this? If yes, note it for your list.`,
+  quiz: [
+    { q: "According to Jarrett, what is the first step?", o: ["Work harder", "Know what you want", "Tell your friends", "Wait for luck"], a: 1, e: "\"First of all you must know what you want and this is no easy task.\"" },
+    { q: "Why do the people in his opening examples stay where they are?", o: ["They lack talent", "They only wish and never decide", "They have bad luck", "They want too much"], a: 1, e: "Their wishes are simply vocal expressions with no fixed idea behind them." }
+  ],
+  reflect: "What do you say you wish for, but have never actually decided to have?"
+},
+{
+  id: "iw-power", part: "iw1", title: "The power within",
+  sub: "Objective mind, subjective mind and \"Emmanuel\"",
+  body: [
+`Jarrett describes two parts of you. The objective mind is the everyday, reasoning mind: it notices, decides and, in most people, vacillates. Beneath it is a far greater power, which he borrows from Thomson Jay Hudson's term "subjective mind" and also calls "Emmanuel", God in us.`,
+`You don't have to share his theology to use the idea. Read it as the deeper part of you that works on whatever you consistently hold in mind, finds openings, and brings ideas forward when you need them.`,
+`The catch is that this power responds to earnest desire, not to occasional wishing. When the objective mind keeps changing its mind, the deeper power has nothing definite to work with. His comparison is radio: tune in correctly and the result is clear.`
+  ],
+  keys: [
+    "The objective mind is your everyday, deciding mind.",
+    "The subjective mind is the deeper power that carries out earnest desires.",
+    "Half-hearted wanting gives it nothing to work with.",
+    "Tune in correctly, like a radio: a clear, steady signal."
+  ],
+  practice: `Spend two minutes writing down one thing you want, in a single clear sentence. Read it slowly and notice whether any part of you hesitates.`,
+  quiz: [
+    { q: "In Jarrett's terms, what is the objective mind?", o: ["The mind you use every day", "The deeper creative power", "Other people's opinions", "Your memory"], a: 0, e: "He calls it \"the mind you use every day\"." },
+    { q: "What does the deeper power need from you?", o: ["Occasional wishes", "Earnest, sincere desire", "Long explanations", "Public announcements"], a: 1, e: "\"You must be in earnest, sincerely and truthfully desiring certain conditions or things.\"" }
+  ],
+  reflect: "Which of your wants do you hold steadily, and which do you keep changing your mind about?"
+},
+{
+  id: "iw-list", part: "iw2", title: "Write the list",
+  sub: "In order of importance, without holding back",
+  body: [
+`The plan begins with a pen. Write down, in order of importance, the things and conditions you really want. Jarrett is emphatic: don't be afraid of wanting too much. Go the limit.`,
+`The list is not fixed. Change it daily, adding and removing, until it feels right. Changes are natural and expected; as some things arrive, new desires will appear.`,
+`Two signs tell you that you're on track. New desires that deserve a place near the top start to come to you. And you find yourself crossing off items you once thought you wanted. Both mean you are getting clearer.`
+  ],
+  keys: [
+    "Write your wants down, ranked by importance.",
+    "Don't be afraid of wanting too much.",
+    "Revise the list daily until it feels right.",
+    "New top desires and removed items are both signs of progress."
+  ],
+  practice: `Open My List and write at least five wants. Put them in order of importance. Tomorrow, revise the order or wording at least once.`,
+  quiz: [
+    { q: "How should the list be ordered?", o: ["Alphabetically", "By how easy each item is", "By importance to you", "By cost"], a: 2, e: "\"Write down on paper in order of their importance the things and conditions you really want.\"" },
+    { q: "What does removing an item from your list mean?", o: ["You failed", "Another sure sign of progress", "You should start over", "You wanted too much"], a: 1, e: "Jarrett calls it \"another sure indication of progress.\"" }
+  ],
+  reflect: "What would you put at the top of your list if you were sure no one would ever see it?"
+},
+{
+  id: "iw-rules", part: "iw2", title: "The three rules",
+  sub: "Read it, think of it, keep it to yourself",
+  body: [
+`The whole method fits in three rules. First, read your list three times a day: morning, noon and night. Second, think of what you want as often as possible. Third, don't talk about your plan to anyone, except to the Great Power within you.`,
+`The first two rules keep the want in front of you, so it stays definite and your attention keeps returning to it. The repetition is the point; a list you wrote once and forgot does nothing.`,
+`The third rule protects the plan. Your objective mind is very open to suggestion, and other people's scepticism leaks in easily. Talking also spends the energy of the want before it has turned into action. Keep it private and let it work.`
+  ],
+  keys: [
+    "Rule 1: read the list morning, noon and night.",
+    "Rule 2: think of what you want as often as possible.",
+    "Rule 3: tell no one about your plan.",
+    "Repetition keeps the want definite; silence protects it."
+  ],
+  practice: `Today, tick all three readings on My List: morning, noon and night. Set phone reminders if it helps.`,
+  quiz: [
+    { q: "How often should you read your list?", o: ["Once a week", "Whenever you remember", "Three times a day: morning, noon and night", "Only when you feel doubt"], a: 2, e: "That's the first of the three positive rules." },
+    { q: "Why keep the plan to yourself?", o: ["It's embarrassing", "Others' scepticism easily affects your suggestible objective mind", "It's a secret society rule", "To surprise people later"], a: 1, e: "\"Your objective mind is so susceptible to suggestion that it is almost impossible to make any satisfactory progress when surrounded by skeptics.\"" }
+  ],
+  reflect: "Who in your life would you be most tempted to tell about your list? What would their reaction do to you?"
+},
+{
+  id: "iw-definite", part: "iw2", title: "Be definite",
+  sub: "What kind, what colour, how much and by when",
+  body: [
+`"Money" or "a better job" is not yet a want. Jarrett asks for detail. If you want a car, decide the kind, style, price, colour and when you want it. If you want a home, plan the structure, the grounds, the location and the cost. If you want money, write the amount.`,
+`He gives a salesman's example: write the sales record you want to break, the date, how many items it takes, and list your prospects with the amount you expect from each. It may feel foolish, but if you can't decide the details, he says, you are not in earnest.`,
+`Detail does two things. It turns a mood into a target you can recognise, and it gives the mind something specific to work on during the day.`
+  ],
+  keys: [
+    "Name the details: kind, size, amount, place.",
+    "Add a date: when do you want it?",
+    "Break big targets into the numbers that make them up.",
+    "If you can't decide the details, you aren't yet in earnest."
+  ],
+  practice: `Pick the top item on your list. Add the details and a date in the "details" field. Make it specific enough that a stranger could recognise it.`,
+  quiz: [
+    { q: "What does Jarrett say if you cannot decide the details?", o: ["Pick something smaller", "You are not in earnest", "Ask a friend", "Wait a year"], a: 1, e: "\"If you cannot decide this, you are not in earnest.\"" },
+    { q: "Which want is closest to what the book asks for?", o: ["\"More money\"", "\"A nicer life\"", "\"$5,000 saved by 1 June for a deposit\"", "\"Something good to happen\""], a: 2, e: "It names the amount, the purpose and the date." }
+  ],
+  reflect: "Take your vaguest want and make it specific. What changed when you did?"
+},
+{
+  id: "iw-doubt", part: "iw3", title: "Doubt, discredit and thanks",
+  sub: "What to do when the old voice comes back",
+  body: [
+`Jarrett expects doubt. You can't have faith at the start, he admits, and some items will look impossible. Write them down anyway. When scepticism comes up, get out your list and read it over, or talk to your inner self about your desires until the doubt passes.`,
+`He also names an "ancient enemy" that shows up after the first success: Discredit. "It can't be possible; it just happened to be. What a remarkable coincidence!" Left alone, that voice explains away every result.`,
+`His answer is thanks. Give thanks and credit the power within for each accomplishment, sincerely, with your whole self, so it shows in your face. Gratitude makes you happy, builds assurance and, over time, proves to you that the law works.`
+  ],
+  keys: [
+    "Doubt is natural; answer it by rereading your list.",
+    "Choose your company: people who already have some of what you want.",
+    "Discredit calls every result a coincidence.",
+    "Answer it with sincere thanks for each result."
+  ],
+  practice: `When something on your list arrives, even partly, mark it as received on My List and write a sentence of thanks.`,
+  quiz: [
+    { q: "What is \"Discredit\" in the book?", o: ["A bad credit score", "The thought that a result was just coincidence", "A rival plan", "Losing your list"], a: 1, e: "It's the voice that says \"it just happened to be.\"" },
+    { q: "How does Jarrett suggest answering Discredit?", o: ["Ignore results", "Give thanks and credit the power within", "Tell everyone about it", "Start a new list"], a: 1, e: "\"Give thanks and assert credit to your Omnipotent Power for the accomplishment.\"" }
+  ],
+  reflect: "Think of something good that happened recently that you dismissed as luck. How would it feel to give thanks for it instead?"
+},
+{
+  id: "iw-caution", part: "iw3", title: "The caution",
+  sub: "Want what is good, start small, then give",
+  body: [
+`The book carries a warning. It is possible to want, and get, things that make you miserable or harm other people. You get what you want along with everything that comes with it. So plan for what will bring the greatest good to you and to others.`,
+`Jarrett suggests starting with familiar things: an amount of money, a particular achievement, a possession. These come more easily than breaking fixed habits, changing other people or healing illness. Accomplish the lesser things first, then take the next step.`,
+`As you go, he expects one new desire to appear on its own: to help others as you have been helped. He closes by saying that it is impossible to be unselfish without gain.`
+  ],
+  keys: [
+    "You get what you want and everything that comes with it.",
+    "Choose wants that do good for you and others.",
+    "Start with familiar, concrete things; build from there.",
+    "Helping others becomes part of the list."
+  ],
+  practice: `Review your list with one question per item: would this be good for me and for the people around me? Edit or remove anything that fails.`,
+  quiz: [
+    { q: "What does Jarrett suggest for a first list?", o: ["Your biggest life goal only", "Familiar things like an amount of money or a possession", "Changing other people", "Nothing material"], a: 1, e: "Familiar desires \"are more easily and quickly obtained.\"" },
+    { q: "What is the caution about?", o: ["Wanting too little", "Getting things that harm you or others", "Reading the list too often", "Telling people your plan"], a: 1, e: "\"It is possible to want and obtain that which will make you miserable.\"" }
+  ],
+  reflect: "Is there anything on your list you would regret getting? What would you replace it with?"
+},
+{
+  id: "iw-magic", part: "iw4", title: "The Magic Story",
+  sub: "The plus-entity, the minus-entity and the six lessons",
+  body: [
+`Bound with It Works is Frederic Van Rensselaer Dey's 1900 fable. A down-and-out artist, Sturtevant, suddenly carries himself like a success. He has read an old story, and everyone who reads it seems to change.`,
+`The story is the memoir of a seventeenth-century cooper who lost everything through waiting on promises, idleness and self-pity, and learned six lessons the hard way: value the opportunity in hand, hold fortune firmly, failure exists only in the grave, choose industrious company, and stop imagining that every hand is against you.`,
+`The turning point is meeting his two selves. The "minus-entity" is the fearful, begging, pitiable self. The "plus-entity" is the confident self that acts. He walks away from the first, goes straight back to his old workbench and starts work without asking anyone's permission. From that hour, he says, he was a successful man.`
+  ],
+  keys: [
+    "You have a plus-entity (confident, acting) and a minus-entity (fearful, asking).",
+    "Failure exists only in the grave; while alive you can turn about.",
+    "Don't trade the opportunity in hand for promises.",
+    "Act now; ask no one's permission to do what is yours to do."
+  ],
+  practice: `Name one thing your "minus-entity" has been putting off. Do the first piece of it today, without asking anyone whether you should.`,
+  quiz: [
+    { q: "What is the \"minus-entity\" in The Magic Story?", o: ["A tax", "The fearful, favour-asking self", "A rival tradesman", "The narrator's friend"], a: 1, e: "\"The minus-entity requests favors; the plus-entity grants them.\"" },
+    { q: "What does the cooper do right after his change?", o: ["Writes a book", "Goes back to his workbench and starts working", "Asks for a loan", "Leaves town"], a: 1, e: "He clears his old bench and starts shaving staves without asking." }
+  ],
+  reflect: "When does your minus-entity take over? What would your plus-entity do in that moment?"
+}
+];
+
+const IW_PRACTICES = [
+  { id: "iw-morning", title: "Morning reading", desc: "Read your list slowly when you start the day." },
+  { id: "iw-noon", title: "Noon reading", desc: "Read your list again around midday." },
+  { id: "iw-night", title: "Night reading", desc: "Read your list before you sleep." },
+  { id: "iw-think", title: "Thought of it often", desc: "Returned your mind to what you want whenever you could." },
+  { id: "iw-silent", title: "Kept it to myself", desc: "Didn't discuss the plan with anyone." },
+  { id: "iw-thanks", title: "Gave thanks", desc: "Gave sincere thanks for something received, large or small." },
+  { id: "iw-revise", title: "Revised my list", desc: "Added, removed, reworded or reordered something." },
+  { id: "iw-plus", title: "Acted from the plus-entity", desc: "Did one thing confidently without asking permission." },
+];
+
+const IW_GLOSSARY = [
+  ["Objective mind", "The mind you use every day: noticing, reasoning, deciding.", "iw-power"],
+  ["Subjective mind", "Hudson's term for the deeper power within that carries out earnest desires.", "iw-power"],
+  ["Emmanuel", "Jarrett's name for that power: \"God in us\".", "iw-power"],
+  ["The list", "Your wants written in order of importance and revised until they feel right.", "iw-list"],
+  ["The three rules", "Read the list morning, noon and night; think of it often; tell no one.", "iw-rules"],
+  ["Discredit", "The thought that a result was only coincidence.", "iw-doubt"],
+  ["The caution", "Want what is good for you and others; start with lesser, familiar things.", "iw-caution"],
+  ["Plus-entity", "In The Magic Story, the confident self that acts and grants favours.", "iw-magic"],
+  ["Minus-entity", "In The Magic Story, the fearful self that begs favours.", "iw-magic"],
+];
+
+const IW_PRINCIPLES = [
+  "If you KNOW what you WANT you can HAVE IT.",
+  "Do not be afraid of wanting too much.",
+  "Think of what you want as often as possible.",
+  "Removing from your list items which at first you thought you wanted, is another sure indication of progress.",
+  "Remember, nothing can prevent your having that which you earnestly desire.",
+  "You must be definite, and when you are, results will be surprising.",
+  "Accomplish the lesser things first. Then take the next step.",
+  "Test them now on what you want most this minute.",
+  "Failure exists only in the grave.",
+  "Seek comrades among the industrious.",
+  "Have no fear of any sort or shape, for fear is an adjunct of the minus-entity.",
+  "Start to-night; start now upon this new journey.",
+];
+
+/* ------------------------------------------------------------------
+   Book registry
+------------------------------------------------------------------- */
+const BOOKS = {
+  transurfing: {
+    id: "transurfing", title: "Reality Transurfing", author: "Vadim Zeland",
+    parts: PARTS, lessons: LESSONS, practices: PRACTICES, glossary: GLOSSARY, principles: PRINCIPLES,
+    tabs: ["today", "lessons", "practice", "journal", "glossary", "settings"],
+    note: `These are plain-language study notes on the ideas in Vadim Zeland's <i>Reality Transurfing</i>, written for this app. They are not the book's text; read them alongside your own copy.`,
+  },
+  itworks: {
+    id: "itworks", title: "It Works", author: "R. H. Jarrett",
+    parts: IW_PARTS, lessons: IW_LESSONS, practices: IW_PRACTICES, glossary: IW_GLOSSARY, principles: IW_PRINCIPLES,
+    text: IW_TEXT,
+    tabs: ["today", "read", "list", "lessons", "practice", "journal", "glossary", "settings"],
+    note: `Lessons are study notes. The full original text of <i>It Works</i> (1926) and <i>The Magic Story</i> (1900) is in the Read tab.`,
+  },
+};
+const TAB_LABEL = { today: "Today", read: "Read", list: "My List", lessons: "Lessons", practice: "Practice", journal: "Journal", glossary: "Glossary", settings: "Data" };
+const ALL_LESSONS = Object.values(BOOKS).flatMap((b) => b.lessons);
+
+/* ------------------------------------------------------------------
    State and storage. Progress lives in the viewer's private db doc when
    the page runs as a claude.ai artifact, and in localStorage otherwise.
 ------------------------------------------------------------------- */
 const LS_KEY = "transurfing-path-v1";
-const blank = () => ({ v: 1, read: {}, quiz: {}, log: {}, journal: [], reflections: {}, book: { title: "Reality Transurfing", page: 0, pages: 0, where: "" }, last: null, updated: 0 });
+const blank = () => ({ v: 2, bookId: "transurfing", read: {}, quiz: {}, log: {}, journal: [], reflections: {}, book: { title: "Reality Transurfing", page: 0, pages: 0, where: "" }, chRead: {}, list: [], last: null, lastBy: {}, lastCh: null, updated: 0 });
 let S = blank();
-let remote = null;      // db doc ref
+let remote = null;
 let saveTimer = null, saving = Promise.resolve();
 
 function lsRead() { try { const r = localStorage.getItem(LS_KEY); return r ? JSON.parse(r) : null; } catch { return null; } }
 function lsWrite() { try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch {} }
-function normalize(x) { const b = blank(); if (!x || typeof x !== "object") return b; return { ...b, ...x, book: { ...b.book, ...(x.book || {}) } }; }
+function normalize(x) {
+  const b = blank(); if (!x || typeof x !== "object") return b;
+  const n = { ...b, ...x, book: { ...b.book, ...(x.book || {}) } };
+  if (!BOOKS[n.bookId]) n.bookId = "transurfing";
+  if (!Array.isArray(n.list)) n.list = [];
+  if (!Array.isArray(n.journal)) n.journal = [];
+  return n;
+}
 
 function setSync(t) { document.getElementById("sync").textContent = t; }
 
@@ -662,7 +945,7 @@ async function connect() {
     const snap = await ref.get();
     if (snap.exists) {
       const theirs = normalize(snap.data());
-      if ((theirs.updated || 0) >= (S.updated || 0)) { S = theirs; lsWrite(); render(); }
+      if ((theirs.updated || 0) >= (S.updated || 0)) { S = theirs; lsWrite(); applyBook(); render(); }
       remote = ref;
       if ((S.updated || 0) > (theirs.updated || 0)) save(); else setSync("Saved to your account");
     } else {
@@ -678,8 +961,10 @@ async function connect() {
 const $ = (s, el = document) => el.querySelector(s);
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const dayKey = (d = new Date()) => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
-const lessonById = (id) => LESSONS.find((l) => l.id === id);
-const lessonIndex = (id) => LESSONS.findIndex((l) => l.id === id);
+let B = BOOKS.transurfing;
+const lessonById = (id) => ALL_LESSONS.find((l) => l.id === id);
+const lessonIndex = (id) => { for (const b of Object.values(BOOKS)) { const i = b.lessons.findIndex((l) => l.id === id); if (i >= 0) return i; } return -1; };
+const bookOfLesson = (id) => Object.values(BOOKS).find((b) => b.lessons.some((l) => l.id === id));
 function status(id) {
   const q = S.quiz[id];
   if (q && q.score === q.total) return "mastered";
@@ -693,6 +978,7 @@ function statusChip(id) {
 function activeDays() {
   const days = new Set(Object.keys(S.log).filter((k) => (S.log[k] || []).length));
   Object.values(S.read).forEach((t) => days.add(dayKey(new Date(t))));
+  Object.values(S.chRead).forEach((t) => days.add(dayKey(new Date(t))));
   S.journal.forEach((j) => days.add(dayKey(new Date(j.ts))));
   return days;
 }
@@ -705,39 +991,69 @@ function streak() {
   return n;
 }
 function fmtDate(ts) { return new Date(ts).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }); }
+const bookPracticeIds = () => new Set(B.practices.map((p) => p.id));
+const todaysFor = () => (S.log[dayKey()] || []).filter((id) => bookPracticeIds().has(id));
 let toastT;
 function toast(msg) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => (t.hidden = true), 1800); }
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 
 /* ------------------------------------------------------------------
    Views
 ------------------------------------------------------------------- */
-let view = "today", openLesson = null, glossQ = "", journalFilter = "";
-const VIEWS = ["today", "lessons", "practice", "journal", "glossary", "settings"];
+let view = "today", openLesson = null, openCh = null, glossQ = "", journalFilter = "", pendingDelete = null, resetArmed = false, thanking = null, editing = null;
 
-function go(v, lessonId) {
-  view = v; openLesson = lessonId || null;
-  if (lessonId) { S.last = lessonId; save(); }
+function applyBook() {
+  B = BOOKS[S.bookId] || BOOKS.transurfing;
+  document.documentElement.setAttribute("data-book", B.id);
+  document.querySelectorAll("#books button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.book === B.id)));
+  if (!B.tabs.includes(view)) view = "today";
+  $("#tabs").innerHTML = B.tabs.map((t) => `<button data-view="${t}">${TAB_LABEL[t]}</button>`).join("");
+}
+
+function go(v, opts = {}) {
+  view = v; openLesson = opts.lesson || null; openCh = opts.ch || null;
+  if (opts.lesson) { S.last = opts.lesson; S.lastBy[B.id] = opts.lesson; save(); }
+  if (opts.ch) { S.lastCh = opts.ch; save(); }
+  pendingDelete = null; resetArmed = false; thanking = null; editing = null;
   render();
   window.scrollTo(0, 0);
+}
+function openLessonAnyBook(id) {
+  const bk = bookOfLesson(id);
+  if (bk && bk.id !== B.id) { S.bookId = bk.id; applyBook(); }
+  go("lessons", { lesson: id });
 }
 
 function render() {
   document.querySelectorAll("#tabs button").forEach((b) => b.setAttribute("aria-current", b.dataset.view === view ? "page" : "false"));
   const m = $("#main");
   if (view === "lessons" && openLesson) m.innerHTML = vLesson(lessonById(openLesson));
-  else m.innerHTML = ({ today: vToday, lessons: vLessons, practice: vPractice, journal: vJournal, glossary: vGlossary, settings: vSettings })[view]();
+  else if (view === "read" && openCh) m.innerHTML = vChapter(openCh);
+  else m.innerHTML = ({ today: vToday, read: vRead, list: vList, lessons: vLessons, practice: vPractice, journal: vJournal, glossary: vGlossary, settings: vSettings })[view]();
   bind();
 }
 
-function vToday() {
-  const total = LESSONS.length;
-  const readN = LESSONS.filter((l) => status(l.id) !== "new").length;
-  const masteredN = LESSONS.filter((l) => status(l.id) === "mastered").length;
-  const next = LESSONS.find((l) => status(l.id) === "new") || LESSONS.find((l) => status(l.id) !== "mastered");
-  const resume = S.last && lessonById(S.last);
+function pracRow(p) {
+  const on = (S.log[dayKey()] || []).includes(p.id);
+  return `<div class="prac">
+    <button class="check ${on ? "on" : ""}" data-prac="${p.id}" aria-pressed="${on}" aria-label="Mark ${esc(p.title)} done today">${on ? "✓" : ""}</button>
+    <div><h4>${esc(p.title)}</h4><p>${esc(p.desc)}</p></div>
+  </div>`;
+}
+
+function principleOfDay() {
   const di = Math.floor((Date.now() - new Date(2026, 0, 1)) / 864e5);
-  const principle = PRINCIPLES[((di % PRINCIPLES.length) + PRINCIPLES.length) % PRINCIPLES.length];
-  const todays = S.log[dayKey()] || [];
+  return B.principles[((di % B.principles.length) + B.principles.length) % B.principles.length];
+}
+
+function vToday() {
+  const L = B.lessons, total = L.length;
+  const readN = L.filter((l) => status(l.id) !== "new").length;
+  const masteredN = L.filter((l) => status(l.id) === "mastered").length;
+  const next = L.find((l) => status(l.id) === "new") || L.find((l) => status(l.id) !== "mastered");
+  const resume = S.lastBy[B.id] && lessonById(S.lastBy[B.id]);
+  const todays = todaysFor();
+  if (B.id === "itworks") return vTodayIW({ readN, total, next });
   const b = S.book;
   const bookPct = b.pages > 0 ? Math.min(100, Math.round((b.page / b.pages) * 100)) : 0;
   const hello = readN === 0 ? "Start with the first lesson. Each one takes about five minutes." : readN === total ? "You've read every lesson. Keep the daily practice going." : "Pick up where you left off.";
@@ -747,7 +1063,7 @@ function vToday() {
   <div class="stack">
     <div class="panel stack">
       <div class="stats">
-        <div class="stat"><b>${readN}<small style="font-size:16px;color:var(--muted)">/${total}</small></b><span>lessons read</span></div>
+        <div class="stat"><b>${readN}<small>/${total}</small></b><span>lessons read</span></div>
         <div class="stat"><b>${masteredN}</b><span>quizzes aced</span></div>
         <div class="stat streak"><b>${streak()}</b><span>day streak</span></div>
       </div>
@@ -765,11 +1081,11 @@ function vToday() {
     <div class="grid2">
       <div class="panel">
         <div class="eyebrow">Principle of the day</div>
-        <p class="principle">${esc(principle)}</p>
+        <p class="principle">${esc(principleOfDay())}</p>
       </div>
       <div class="panel stack" style="gap:10px">
-        <div class="row"><div class="eyebrow">Today's practice</div><span class="spacer"></span><span class="chip ${todays.length ? "read" : ""}">${todays.length}/${PRACTICES.length}</span></div>
-        ${PRACTICES.slice(0, 3).map(pracRow).join("")}
+        <div class="row"><div class="eyebrow">Today's practice</div><span class="spacer"></span><span class="chip ${todays.length ? "read" : ""}">${todays.length}/${B.practices.length}</span></div>
+        ${B.practices.slice(0, 3).map(pracRow).join("")}
         <button class="linkish" data-go="practice" style="align-self:flex-start;font-size:13px">All practices →</button>
       </div>
     </div>
@@ -787,33 +1103,175 @@ function vToday() {
   </div>`;
 }
 
-function pracRow(p) {
-  const on = (S.log[dayKey()] || []).includes(p.id);
-  return `<div class="prac">
-    <button class="check ${on ? "on" : ""}" data-prac="${p.id}" aria-pressed="${on}" aria-label="Mark ${esc(p.title)} done today">${on ? "✓" : ""}</button>
-    <div><h4>${esc(p.title)}</h4><p>${esc(p.desc)}</p></div>
+function readingsRow() {
+  const today = S.log[dayKey()] || [];
+  const slots = [["iw-morning", "Morning"], ["iw-noon", "Noon"], ["iw-night", "Night"]];
+  return `<div class="slots">${slots.map(([id, label]) => {
+    const on = today.includes(id);
+    return `<button class="slot ${on ? "on" : ""}" data-prac="${id}" aria-pressed="${on}"><span class="check ${on ? "on" : ""}" aria-hidden="true">${on ? "✓" : ""}</span>${label}</button>`;
+  }).join("")}</div>`;
+}
+
+function vTodayIW({ readN, total, next }) {
+  const chs = B.text, chDone = chs.filter((c) => S.chRead[c.id]).length;
+  const open = S.list.filter((w) => !w.done);
+  const got = S.list.filter((w) => w.done).length;
+  const nextCh = chs.find((c) => !S.chRead[c.id]);
+  const lastCh = S.lastCh && chs.find((c) => c.id === S.lastCh);
+  const readingsDone = (S.log[dayKey()] || []).filter((id) => ["iw-morning", "iw-noon", "iw-night"].includes(id)).length;
+  return `
+  <h2 class="view-title">Today</h2>
+  <p class="lede">${S.list.length === 0 ? "Read the book (it's short), then write your list. Read the list morning, noon and night." : readingsDone === 3 ? "All three readings done today." : "Read your list three times today: morning, noon and night."}</p>
+  <div class="stack">
+    <div class="panel stack">
+      <div class="stats">
+        <div class="stat"><b>${chDone}<small>/${chs.length}</small></b><span>chapters read</span></div>
+        <div class="stat"><b>${got}<small>/${S.list.length}</small></b><span>wants received</span></div>
+        <div class="stat streak"><b>${streak()}</b><span>day streak</span></div>
+      </div>
+      <div class="bar"><i style="width:${Math.round((chDone / chs.length) * 100)}%"></i></div>
+    </div>
+    <div class="panel stack" style="gap:12px">
+      <div class="row"><div class="eyebrow">Today's readings</div><span class="spacer"></span><span class="chip ${readingsDone === 3 ? "mastered" : readingsDone ? "read" : ""}">${readingsDone}/3</span></div>
+      ${open.length ? `<ol class="mini-list">${open.slice(0, 5).map((w) => `<li><span>${esc(w.text)}</span>${w.detail ? `<small>${esc(w.detail)}</small>` : ""}</li>`).join("")}</ol>
+        ${open.length > 5 ? `<p class="note" style="margin:0">and ${open.length - 5} more on your list.</p>` : ""}` : `<p class="note" style="margin:0">Your list is empty. Write what you want, in order of importance.</p>`}
+      ${readingsRow()}
+      <button class="linkish" data-go="list" style="align-self:flex-start;font-size:13px">${S.list.length ? "Open my list →" : "Write my list →"}</button>
+    </div>
+    ${nextCh || lastCh ? `<div class="panel next">
+      <div class="eyebrow">${nextCh ? "Keep reading" : "Read it again"}</div>
+      <h3>${esc((nextCh || lastCh).title)}</h3>
+      <p>${nextCh ? `${chDone} of ${chs.length} chapters read.` : "Jarrett: \"Read the entire book over again, and again, AND THEN AGAIN.\""}</p>
+      <div class="row"><button class="btn primary" data-ch="${(nextCh || chs[0]).id}">${chDone ? "Continue" : "Start reading"}</button>
+      ${next ? `<button class="btn ghost" data-open="${next.id}">Lesson: ${esc(next.title)}</button>` : ""}</div>
+    </div>` : ""}
+    <div class="panel">
+      <div class="eyebrow">From the book</div>
+      <p class="principle">${esc(principleOfDay())}</p>
+    </div>
   </div>`;
 }
 
+function vRead() {
+  const groups = [["itworks", "It Works", "R. H. Jarrett, 1926"], ["magic", "The Magic Story", "Frederic Van Rensselaer Dey, 1900"]];
+  return `
+  <h2 class="view-title">Read</h2>
+  <p class="lede">The complete original text. It takes about twenty minutes. Jarrett asks you to read it "over again, and again, AND THEN AGAIN".</p>
+  ${groups.map(([src, title, by]) => `<section class="part"><h3>${title} <span class="note" style="font-family:var(--ui)">· ${by}</span></h3>
+    ${B.text.filter((c) => c.src === src).map((c) => {
+      const words = c.blocks.reduce((n, b) => n + (b.x || (b.items || []).join(" ")).split(/\s+/).length, 0);
+      return `<button class="lesson-item" data-ch="${c.id}">
+        <span class="num">${B.text.indexOf(c) + 1}</span>
+        <div><div class="t">${esc(c.title.replace("The Magic Story: ", ""))}</div><div class="s">${Math.max(1, Math.round(words / 230))} min read</div></div>
+        ${S.chRead[c.id] ? '<span class="chip read">Read</span>' : '<span class="chip">New</span>'}
+      </button>`; }).join("")}
+  </section>`).join("")}`;
+}
+
+function blockHTML(b) {
+  if (b.t === "p") return `<p>${esc(b.x)}</p>`;
+  if (b.t === "q") return `<blockquote>${esc(b.x)}</blockquote>`;
+  if (b.t === "h") return `<h3 class="sub">${esc(b.x)}</h3>`;
+  if (b.t === "sep") return `<div class="sep" aria-hidden="true">✦ ✦ ✦</div>`;
+  if (b.t === "sign") return `<p class="sign">${esc(b.x)}</p>`;
+  if (b.t === "ol") return `<ol class="rules">${b.items.map((i) => `<li>${esc(i)}</li>`).join("")}</ol>`;
+  return "";
+}
+
+function vChapter(id) {
+  const chs = B.text, i = chs.findIndex((c) => c.id === id), c = chs[i];
+  const prev = chs[i - 1], next = chs[i + 1];
+  return `
+  <button class="back" data-go="read">← All chapters</button>
+  <article class="reader book-text" style="margin-top:14px">
+    <div class="eyebrow" style="font-family:var(--ui)">${c.src === "magic" ? "The Magic Story · F. V. R. Dey" : "It Works · R. H. Jarrett"}</div>
+    <h2>${esc(c.title.replace("The Magic Story: ", ""))}</h2>
+    ${c.blocks.map(blockHTML).join("")}
+    <div class="lesson-nav">
+      ${prev ? `<button class="btn ghost" data-ch="${prev.id}">← ${esc(prev.title.replace("The Magic Story: ", ""))}</button>` : "<span></span>"}
+      ${S.chRead[c.id] ? `<span class="chip read" style="align-self:center">Read ${fmtDate(S.chRead[c.id])}</span>` : `<button class="btn primary" id="ch-read">Mark as read</button>`}
+      ${next ? `<button class="btn ghost" data-ch="${next.id}">${esc(next.title.replace("The Magic Story: ", ""))} →</button>` : `<button class="btn ghost" data-go="list">Write my list →</button>`}
+    </div>
+  </article>`;
+}
+
+function vList() {
+  const open = S.list.filter((w) => !w.done), done = S.list.filter((w) => w.done).sort((a, b) => b.done - a.done);
+  return `
+  <h2 class="view-title">My List</h2>
+  <p class="lede">Write what you want, in order of importance. Go the limit. Be definite: what, how much, by when. Change it daily until it's right. Only you can see this list.</p>
+  <div class="stack">
+    <div class="panel stack" style="gap:12px">
+      <div class="row"><div class="eyebrow">Read it three times today</div><span class="spacer"></span></div>
+      ${readingsRow()}
+    </div>
+    <div class="panel stack" style="gap:10px">
+      <label class="eyebrow" for="w-text">Add a want</label>
+      <input type="text" id="w-text" placeholder="What do you want?" maxlength="200">
+      <input type="text" id="w-detail" placeholder="Details: kind, amount, place, by when (optional)" maxlength="300">
+      <div class="row"><span class="note">New wants go to the bottom. Move them up to rank them.</span><span class="spacer"></span><button class="btn primary" id="w-add">Add to list</button></div>
+    </div>
+    <div class="panel stack" style="gap:0">
+      <div class="row" style="margin-bottom:8px"><div class="eyebrow">In order of importance</div><span class="spacer"></span><span class="note">${open.length} open</span></div>
+      ${open.length ? `<ol class="wants">${open.map((w, i) => wantRow(w, i, open.length)).join("")}</ol>` : `<p class="note" style="margin:0">Nothing here yet. "Do not be afraid of wanting too much."</p>`}
+    </div>
+    ${done.length ? `<div class="panel stack" style="gap:0">
+      <div class="row" style="margin-bottom:8px"><div class="eyebrow">Received, with thanks</div><span class="spacer"></span><span class="chip mastered">${done.length}</span></div>
+      <ul class="wants got">${done.map((w) => `<li>
+        <div class="w-main"><span class="w-text">${esc(w.text)}</span>${w.detail ? `<small>${esc(w.detail)}</small>` : ""}
+        ${w.thanks ? `<p class="thanks">“${esc(w.thanks)}”</p>` : ""}
+        <div class="meta note">Received ${fmtDate(w.done)} · <button class="linkish" data-undo="${w.id}">Move back to list</button></div></div>
+      </li>`).join("")}</ul>
+    </div>` : ""}
+  </div>`;
+}
+
+function wantRow(w, i, n) {
+  if (editing === w.id) return `<li class="editing">
+    <span class="w-rank">${i + 1}</span>
+    <div class="w-main stack" style="gap:8px">
+      <input type="text" id="e-text" value="${esc(w.text)}" maxlength="200" aria-label="Want">
+      <input type="text" id="e-detail" value="${esc(w.detail || "")}" maxlength="300" placeholder="Details" aria-label="Details">
+      <div class="row"><button class="btn small primary" data-save="${w.id}">Save</button><button class="btn small ghost" data-cancel="1">Cancel</button><span class="spacer"></span><button class="linkish" data-remove="${w.id}" style="color:var(--bad)">${pendingDelete === w.id ? "Tap again to remove" : "Remove"}</button></div>
+    </div></li>`;
+  if (thanking === w.id) return `<li class="editing">
+    <span class="w-rank">${i + 1}</span>
+    <div class="w-main stack" style="gap:8px">
+      <span class="w-text">${esc(w.text)}</span>
+      <label class="note" for="t-text">Give thanks. What arrived, and how?</label>
+      <textarea id="t-text" style="min-height:70px" placeholder="Thank you for…"></textarea>
+      <div class="row"><button class="btn small primary" data-received="${w.id}">Mark received</button><button class="btn small ghost" data-cancel="1">Cancel</button></div>
+    </div></li>`;
+  return `<li>
+    <span class="w-rank">${i + 1}</span>
+    <div class="w-main"><span class="w-text">${esc(w.text)}</span>${w.detail ? `<small>${esc(w.detail)}</small>` : ""}</div>
+    <div class="w-acts">
+      <button class="icon" data-up="${w.id}" ${i === 0 ? "disabled" : ""} aria-label="Move up">↑</button>
+      <button class="icon" data-down="${w.id}" ${i === n - 1 ? "disabled" : ""} aria-label="Move down">↓</button>
+      <button class="icon" data-edit="${w.id}" aria-label="Edit">✎</button>
+      <button class="btn small" data-thank="${w.id}">Received</button>
+    </div></li>`;
+}
+
 function vLessons() {
-  const readN = LESSONS.filter((l) => status(l.id) !== "new").length;
+  const readN = B.lessons.filter((l) => status(l.id) !== "new").length;
   return `
   <h2 class="view-title">Lessons</h2>
-  <p class="lede">${LESSONS.length} short lessons in six parts. Read, take the two-question quiz, and write a reflection. ${readN} read so far.</p>
-  ${PARTS.map((p) => `<section class="part"><h3>${esc(p.title)}</h3>
-    ${LESSONS.filter((l) => l.part === p.id).map((l) => `
+  <p class="lede">${B.lessons.length} short lessons in ${B.parts.length} parts. Read, take the two-question quiz, and write a reflection. ${readN} read so far.</p>
+  ${B.parts.map((p) => `<section class="part"><h3>${esc(p.title)}</h3>
+    ${B.lessons.filter((l) => l.part === p.id).map((l) => `
       <button class="lesson-item" data-open="${l.id}">
         <span class="num">${lessonIndex(l.id) + 1}</span>
         <div><div class="t">${esc(l.title)}</div><div class="s">${esc(l.sub)}</div></div>
         ${statusChip(l.id)}
       </button>`).join("")}
   </section>`).join("")}
-  <p class="note" style="margin-top:24px">These are plain-language study notes on the ideas in Vadim Zeland's <i>Reality Transurfing</i>, written for this app. They are not the book's text; read them alongside your own copy.</p>`;
+  <p class="note" style="margin-top:24px">${B.note}</p>`;
 }
 
 function vLesson(l) {
-  const i = lessonIndex(l.id), prev = LESSONS[i - 1], next = LESSONS[i + 1];
-  const part = PARTS.find((p) => p.id === l.part);
+  const L = B.lessons, i = lessonIndex(l.id), prev = L[i - 1], next = L[i + 1];
+  const part = B.parts.find((p) => p.id === l.part);
   const qs = S.quiz[l.id];
   return `
   <button class="back" data-go="lessons">← All lessons</button>
@@ -847,11 +1305,12 @@ function vLesson(l) {
 
 function heatmap() {
   const weeks = 16, end = new Date(); end.setHours(0, 0, 0, 0);
+  const ids = bookPracticeIds();
   // columns run Mon–Sun; the last column contains today
   const s = new Date(end); s.setDate(s.getDate() - ((end.getDay() + 6) % 7) - (weeks - 1) * 7);
   const cells = [];
   for (let d = new Date(s); d <= end; d.setDate(d.getDate() + 1)) {
-    const k = dayKey(d), n = (S.log[k] || []).length;
+    const k = dayKey(d), n = (S.log[k] || []).filter((id) => ids.has(id)).length;
     const lvl = n === 0 ? 0 : n <= 2 ? 1 : n <= 4 ? 2 : 3;
     cells.push(`<i data-l="${lvl}" class="${k === dayKey() ? "today" : ""}" title="${k}: ${n} practice${n === 1 ? "" : "s"}"></i>`);
   }
@@ -859,8 +1318,9 @@ function heatmap() {
 }
 
 function vPractice() {
-  const todays = S.log[dayKey()] || [];
-  const daysPracticed = Object.values(S.log).filter((a) => a && a.length).length;
+  const ids = bookPracticeIds();
+  const todays = todaysFor();
+  const daysPracticed = Object.values(S.log).filter((a) => (a || []).some((id) => ids.has(id))).length;
   const counts = {}; Object.values(S.log).forEach((a) => (a || []).forEach((id) => (counts[id] = (counts[id] || 0) + 1)));
   return `
   <h2 class="view-title">Practice</h2>
@@ -870,11 +1330,11 @@ function vPractice() {
       <div class="row"><div class="eyebrow">Last 16 weeks</div><span class="spacer"></span>
         <div class="legend">less <i style="background:var(--heat-0)"></i><i style="background:var(--heat-1)"></i><i style="background:var(--heat-2)"></i><i style="background:var(--heat-3)"></i> more</div></div>
       <div class="heat-wrap"><div class="heat">${heatmap()}</div></div>
-      <div class="note">${daysPracticed} day${daysPracticed === 1 ? "" : "s"} practised · ${streak()}-day streak</div>
+      <div class="note">${daysPracticed} day${daysPracticed === 1 ? "" : "s"} practised · ${streak()}-day streak across all books</div>
     </div>
     <div class="panel stack">
-      <div class="row"><div class="eyebrow">Today · ${new Date().toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long" })}</div><span class="spacer"></span><span class="chip ${todays.length ? "read" : ""}">${todays.length}/${PRACTICES.length}</span></div>
-      ${PRACTICES.map((p) => pracRow(p).replace("</p></div>", `</p><p class="note" style="margin-top:2px">${counts[p.id] ? `Done ${counts[p.id]} time${counts[p.id] === 1 ? "" : "s"}` : "Not logged yet"}</p></div>`)).join("")}
+      <div class="row"><div class="eyebrow">Today · ${new Date().toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long" })}</div><span class="spacer"></span><span class="chip ${todays.length ? "read" : ""}">${todays.length}/${B.practices.length}</span></div>
+      ${B.practices.map((p) => pracRow(p).replace("</p></div>", `</p><p class="note" style="margin-top:2px">${counts[p.id] ? `Done ${counts[p.id]} time${counts[p.id] === 1 ? "" : "s"}` : "Not logged yet"}</p></div>`)).join("")}
     </div>
   </div>`;
 }
@@ -884,13 +1344,13 @@ function vJournal() {
   const used = [...new Set(S.journal.map((j) => j.lesson).filter(Boolean))];
   return `
   <h2 class="view-title">Journal</h2>
-  <p class="lede">Notes on where you were hooked, what went well and how the ideas are landing. Lesson reflections are saved here too.</p>
+  <p class="lede">Notes on how the ideas are landing. Shared across all your books; lesson reflections are saved here too.</p>
   <div class="stack">
     <div class="panel stack" style="gap:10px">
       <label class="eyebrow" for="j-text">New entry</label>
-      <textarea id="j-text" placeholder="Where were you hooked today? What went well?"></textarea>
+      <textarea id="j-text" placeholder="${B.id === "itworks" ? "What did you notice when you read your list today?" : "Where were you hooked today? What went well?"}"></textarea>
       <div class="row">
-        <select id="j-lesson" aria-label="Link to a lesson"><option value="">No lesson</option>${LESSONS.map((l) => `<option value="${l.id}">${esc(l.title)}</option>`).join("")}</select>
+        <select id="j-lesson" aria-label="Link to a lesson"><option value="">No lesson</option>${B.lessons.map((l) => `<option value="${l.id}">${esc(l.title)}</option>`).join("")}</select>
         <span class="spacer"></span>
         <button class="btn primary" id="j-add">Add entry</button>
       </div>
@@ -900,16 +1360,15 @@ function vJournal() {
         ${used.length ? `<select id="j-filter" aria-label="Filter by lesson"><option value="">All lessons</option>${used.map((id) => `<option value="${id}" ${id === journalFilter ? "selected" : ""}>${esc((lessonById(id) || {}).title || id)}</option>`).join("")}</select>` : ""}
       </div>
       ${list.length ? list.map((j) => `<div class="entry">
-        <div class="meta"><span>${fmtDate(j.ts)}</span>${j.lesson && lessonById(j.lesson) ? `<button class="linkish" data-open="${j.lesson}">${esc(lessonById(j.lesson).title)}</button>` : ""}<span class="spacer"></span><button class="linkish" data-del="${j.id}" style="color:var(--muted)">${pendingDelete === j.id ? "Tap again to delete" : "Delete"}</button></div>
+        <div class="meta"><span>${fmtDate(j.ts)}</span>${j.lesson && lessonById(j.lesson) ? `<button class="linkish" data-openany="${j.lesson}">${esc(bookOfLesson(j.lesson).title)} · ${esc(lessonById(j.lesson).title)}</button>` : ""}<span class="spacer"></span><button class="linkish" data-del="${j.id}" style="color:var(--muted)">${pendingDelete === j.id ? "Tap again to delete" : "Delete"}</button></div>
         <div class="body">${esc(j.text)}</div></div>`).join("") : `<p class="note" style="margin:0">No entries yet. Write your first one above, or save a reflection from a lesson.</p>`}
     </div>
   </div>`;
 }
-let pendingDelete = null;
 
 function vGlossary() {
   const q = glossQ.trim().toLowerCase();
-  const items = GLOSSARY.filter(([t, d]) => !q || t.toLowerCase().includes(q) || d.toLowerCase().includes(q));
+  const items = B.glossary.filter(([t, d]) => !q || t.toLowerCase().includes(q) || d.toLowerCase().includes(q));
   return `
   <h2 class="view-title">Glossary</h2>
   <p class="lede">The book's vocabulary in one place. Each term links to the lesson that covers it.</p>
@@ -917,15 +1376,14 @@ function vGlossary() {
   <div class="panel"><dl class="gloss" id="gloss-list">${items.map(([t, d, l]) => `<div><dt>${esc(t)}</dt><dd>${esc(d)} <button class="linkish" data-open="${l}">Lesson ${lessonIndex(l) + 1} →</button></dd></div>`).join("") || `<p class="note">No terms match “${esc(glossQ)}”.</p>`}</dl></div>`;
 }
 
-let resetArmed = false;
 function vSettings() {
   return `
   <h2 class="view-title">Your data</h2>
-  <p class="lede">${remote ? "Your progress is saved privately to your Claude account, so it follows you across devices. Only you can see it." : "Your progress is saved in this browser. Open this app from your Claude account to sync it across devices."}</p>
+  <p class="lede">${remote ? "Your progress for every book is saved privately to your Claude account, so it follows you across devices. Only you can see it." : "Your progress for every book is saved in this browser. Open this app from your Claude account to sync it across devices."}</p>
   <div class="stack">
     <div class="panel stack" style="gap:10px">
       <div class="eyebrow">Back up</div>
-      <p class="note" style="margin:0">Copy your progress as text and keep it somewhere safe.</p>
+      <p class="note" style="margin:0">Copy your progress (all books, your list and journal) as text and keep it somewhere safe.</p>
       <div class="row"><button class="btn" id="exp">Copy backup</button><span class="note" id="exp-note"></span></div>
       <textarea id="exp-text" readonly hidden style="font-family:ui-monospace,monospace;font-size:12px;min-height:80px"></textarea>
     </div>
@@ -937,7 +1395,7 @@ function vSettings() {
     </div>
     <div class="panel stack" style="gap:10px">
       <div class="eyebrow">Start over</div>
-      <p class="note" style="margin:0">Clears lessons read, quiz scores, practice log and journal.</p>
+      <p class="note" style="margin:0">Clears everything for every book: lessons, quizzes, chapters read, your list, practice log and journal.</p>
       <div class="row"><button class="btn" id="reset" style="${resetArmed ? "border-color:var(--bad);color:var(--bad)" : ""}">${resetArmed ? "Tap again to erase everything" : "Reset progress"}</button></div>
     </div>
   </div>`;
@@ -946,9 +1404,19 @@ function vSettings() {
 /* ------------------------------------------------------------------
    Events
 ------------------------------------------------------------------- */
+function moveWant(id, dir) {
+  const open = S.list.filter((w) => !w.done), i = open.findIndex((w) => w.id === id), j = i + dir;
+  if (i < 0 || j < 0 || j >= open.length) return;
+  [open[i], open[j]] = [open[j], open[i]];
+  S.list = [...open, ...S.list.filter((w) => w.done)];
+  save(); render();
+}
+
 function bind() {
   const m = $("#main");
-  m.querySelectorAll("[data-open]").forEach((b) => b.onclick = () => go("lessons", b.dataset.open));
+  m.querySelectorAll("[data-open]").forEach((b) => b.onclick = () => go("lessons", { lesson: b.dataset.open }));
+  m.querySelectorAll("[data-openany]").forEach((b) => b.onclick = () => openLessonAnyBook(b.dataset.openany));
+  m.querySelectorAll("[data-ch]").forEach((b) => b.onclick = () => go("read", { ch: b.dataset.ch }));
   m.querySelectorAll("[data-go]").forEach((b) => b.onclick = () => go(b.dataset.go));
   m.querySelectorAll("[data-prac]").forEach((b) => b.onclick = () => {
     const k = dayKey(), arr = S.log[k] ? S.log[k].slice() : [], id = b.dataset.prac;
@@ -966,6 +1434,49 @@ function bind() {
       S.book.where = $("#bk-where").value.slice(0, 200);
       save(); render(); toast("Book progress saved");
     };
+  });
+
+  // chapter
+  const cr = $("#ch-read");
+  if (cr) cr.onclick = () => { S.chRead[openCh] = Date.now(); save(); render(); toast("Chapter marked as read"); };
+
+  // list
+  const wa = $("#w-add");
+  if (wa) {
+    const add = () => {
+      const t = $("#w-text").value.trim(); if (!t) { toast("Write what you want first"); $("#w-text").focus(); return; }
+      S.list.splice(S.list.filter((w) => !w.done).length, 0, { id: "w" + uid(), text: t.slice(0, 200), detail: $("#w-detail").value.trim().slice(0, 300), added: Date.now(), done: 0, thanks: "" });
+      save(); render(); toast("Added to your list"); $("#w-text").focus();
+    };
+    wa.onclick = add;
+    ["w-text", "w-detail"].forEach((id) => $("#" + id).onkeydown = (e) => { if (e.key === "Enter") add(); });
+  }
+  m.querySelectorAll("[data-up]").forEach((b) => b.onclick = () => moveWant(b.dataset.up, -1));
+  m.querySelectorAll("[data-down]").forEach((b) => b.onclick = () => moveWant(b.dataset.down, 1));
+  m.querySelectorAll("[data-edit]").forEach((b) => b.onclick = () => { editing = b.dataset.edit; thanking = null; pendingDelete = null; render(); $("#e-text").focus(); });
+  m.querySelectorAll("[data-thank]").forEach((b) => b.onclick = () => { thanking = b.dataset.thank; editing = null; render(); $("#t-text").focus(); });
+  m.querySelectorAll("[data-cancel]").forEach((b) => b.onclick = () => { editing = thanking = pendingDelete = null; render(); });
+  m.querySelectorAll("[data-save]").forEach((b) => b.onclick = () => {
+    const w = S.list.find((x) => x.id === b.dataset.save), t = $("#e-text").value.trim();
+    if (!t) { toast("A want can't be empty"); return; }
+    w.text = t.slice(0, 200); w.detail = $("#e-detail").value.trim().slice(0, 300); editing = null; save(); render(); toast("Saved");
+  });
+  m.querySelectorAll("[data-remove]").forEach((b) => b.onclick = () => {
+    const id = b.dataset.remove;
+    if (pendingDelete !== id) { pendingDelete = id; render(); return; }
+    S.list = S.list.filter((w) => w.id !== id); pendingDelete = editing = null; save(); render(); toast("Removed. That's a sign of progress.");
+  });
+  m.querySelectorAll("[data-received]").forEach((b) => b.onclick = () => {
+    const w = S.list.find((x) => x.id === b.dataset.received);
+    w.done = Date.now(); w.thanks = $("#t-text").value.trim().slice(0, 1000); thanking = null;
+    const k = dayKey(), arr = S.log[k] ? S.log[k].slice() : [];
+    if (!arr.includes("iw-thanks")) { arr.push("iw-thanks"); S.log[k] = arr; }
+    save(); render(); toast("Received. Thank you.");
+  });
+  m.querySelectorAll("[data-undo]").forEach((b) => b.onclick = () => {
+    const w = S.list.find((x) => x.id === b.dataset.undo); w.done = 0;
+    S.list = [...S.list.filter((x) => !x.done), ...S.list.filter((x) => x.done)];
+    save(); render();
   });
 
   // lesson
@@ -998,7 +1509,7 @@ function bind() {
     let rt; ta.oninput = () => { clearTimeout(rt); rt = setTimeout(() => { S.reflections[l.id] = ta.value; save(); $("#reflect-note").textContent = "Draft saved"; }, 600); };
     $("#save-reflect").onclick = () => {
       const t = ta.value.trim(); if (!t) { $("#reflect-note").textContent = "Write something first."; return; }
-      S.journal.push({ id: "j" + Date.now().toString(36), ts: Date.now(), text: t, lesson: l.id });
+      S.journal.push({ id: "j" + uid(), ts: Date.now(), text: t, lesson: l.id });
       S.reflections[l.id] = ""; ta.value = ""; save();
       $("#reflect-note").textContent = "Saved to your journal.";
     };
@@ -1008,7 +1519,7 @@ function bind() {
   const add = $("#j-add");
   if (add) add.onclick = () => {
     const t = $("#j-text").value.trim(); if (!t) { toast("Write something first"); return; }
-    S.journal.push({ id: "j" + Date.now().toString(36), ts: Date.now(), text: t.slice(0, 5000), lesson: $("#j-lesson").value || null });
+    S.journal.push({ id: "j" + uid(), ts: Date.now(), text: t.slice(0, 5000), lesson: $("#j-lesson").value || null });
     save(); render(); toast("Entry added");
   };
   const jf = $("#j-filter"); if (jf) jf.onchange = () => { journalFilter = jf.value; render(); };
@@ -1030,25 +1541,31 @@ function bind() {
   };
   const imp = $("#imp");
   if (imp) imp.onclick = () => {
-    try { const x = JSON.parse($("#imp-text").value); if (!x || typeof x !== "object" || !x.read) throw 0; S = normalize(x); save(); toast("Backup restored"); go("today"); }
+    try { const x = JSON.parse($("#imp-text").value); if (!x || typeof x !== "object" || !x.read) throw 0; S = normalize(x); save(); applyBook(); toast("Backup restored"); go("today"); }
     catch { $("#imp-note").textContent = "That text isn't a valid backup. Paste the full text from Copy backup."; }
   };
   const rs = $("#reset");
   if (rs) rs.onclick = () => {
     if (!resetArmed) { resetArmed = true; render(); return; }
-    resetArmed = false; S = blank(); save(); toast("Progress reset"); go("today");
+    resetArmed = false; S = blank(); save(); applyBook(); toast("Progress reset"); go("today");
   };
 }
 
 document.getElementById("tabs").addEventListener("click", (e) => {
   const b = e.target.closest("button[data-view]"); if (!b) return;
-  pendingDelete = null; resetArmed = false; go(b.dataset.view);
+  go(b.dataset.view);
+});
+document.getElementById("books").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-book]"); if (!b || b.dataset.book === S.bookId) return;
+  S.bookId = b.dataset.book; save(); applyBook(); go(view);
 });
 
 /* boot */
 S = normalize(lsRead());
 const h = (location.hash || "").slice(1);
-if (VIEWS.includes(h)) view = h;
+if (BOOKS[h]) S.bookId = h;
+applyBook();
+if (B.tabs.includes(h)) view = h;
 render();
 connect();
 </script>
