@@ -32,3 +32,6 @@ The weekly summaries and quizzes are study notes written for this app.
 The look is a 1990s newspaper: newsprint paper, a blackletter masthead with a live dateline (volume, issue, date, section), heavy serif headlines, thick-thin rules and ruled columns, drop caps, small-caps kickers, boxed classified-ad buttons and a printed-listings calendar. Each book is a lettered section with its own spot colour: A blue, B red, C green. Hover effects are optional, under Data → Look.
 
 Open `index.html` in any browser; there is no build step.
+
+## Welcome page (`welcome.html`)
+A short, interactive front door to the practice: a live field of life-lines you can touch to choose one, a principle of the day, a pendulum that calms as you lower its importance, a mirror that returns your thought after a delay, and a "slide" maker that turns a want into a present-tense picture (kept in your browser, with a count of days you came back). It ends with a way into the 78-day course in `index.html`.

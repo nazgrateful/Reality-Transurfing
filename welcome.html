@@ -1,0 +1,473 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Choose Your Line</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column that opens on a live field of life-lines (the space of variations),
+   then four short hands-on chapters (principle, pendulum, mirror, slide) and a plain way in.
+   Dark-first: night water with sea-foam lines; dawn amber marks the line you chose. */
+:root {
+  --bg: #0b1615;
+  --bg-2: #10201f;
+  --fg: #e6efe9;
+  --muted: #92a8a1;
+  --line: #22403c;
+  --foam: #8fd8bf;
+  --dawn: #f2b37a;
+  --on-dawn: #2a1606;
+  --display: "Gloock", "Bodoni 72", Didot, Georgia, serif;
+  --read: "Newsreader", Georgia, "Times New Roman", serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
+  --bg: #eef3ef; --bg-2: #e2ebe5; --fg: #13221f; --muted: #556a64; --line: #c3d3cc;
+  --foam: #23806a; --dawn: #b4591b; --on-dawn: #fff6ee; color-scheme: light; } }
+:root[data-theme="light"] {
+  --bg: #eef3ef; --bg-2: #e2ebe5; --fg: #13221f; --muted: #556a64; --line: #c3d3cc;
+  --foam: #23806a; --dawn: #b4591b; --on-dawn: #fff6ee; color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 400 18px/1.6 var(--read); -webkit-font-smoothing: antialiased; }
+a { color: var(--foam); }
+:focus-visible { outline: 2px solid var(--dawn); outline-offset: 3px; border-radius: 4px; }
+.wrap { max-width: 1040px; margin: 0 auto; padding-inline: 20px; }
+.col { max-width: 640px; }
+.label { font: 600 12px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+h1, h2 { font-family: var(--display); font-weight: 400; text-wrap: balance; margin: 0; letter-spacing: -.01em; }
+h1 { font-size: clamp(40px, 7.4vw, 84px); line-height: 1.02; }
+h2 { font-size: clamp(30px, 4.4vw, 46px); line-height: 1.08; }
+p { margin: 0; }
+.lead { font-size: clamp(19px, 2.2vw, 22px); color: var(--muted); max-width: 34em; }
+em.dawn { font-style: italic; color: var(--dawn); }
+
+/* buttons */
+.btn { display: inline-flex; align-items: center; gap: 10px; font: 600 14px/1 var(--mono); letter-spacing: .04em; padding: 14px 20px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--fg); cursor: pointer; text-decoration: none; transition: border-color .2s, background .2s, transform .2s; }
+.btn:hover { border-color: var(--foam); }
+.btn:active { transform: translateY(1px); }
+.btn.dawn { background: var(--dawn); border-color: var(--dawn); color: var(--on-dawn); }
+.btn.dawn:hover { filter: brightness(1.06); }
+.btns { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* hero */
+.hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
+#field { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: crosshair; }
+.hero-inner { position: relative; padding-block: clamp(72px, 12vw, 140px) clamp(56px, 8vw, 96px); display: flex; flex-direction: column; gap: 26px; pointer-events: none; }
+.hero-inner .btns, .hero-inner a { pointer-events: auto; }
+.hero h1 { max-width: 13em; text-shadow: 0 2px 24px var(--bg); }
+.hero .lead { text-shadow: 0 1px 14px var(--bg); }
+.readout { display: flex; flex-wrap: wrap; gap: 8px 22px; font: 400 12px/1.4 var(--mono); color: var(--muted); }
+.readout b { color: var(--dawn); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* chapters */
+section.ch { padding-block: clamp(64px, 9vw, 112px); border-bottom: 1px solid var(--line); }
+.ch-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
+.ch-text { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.ch-text p { color: var(--muted); max-width: 32em; }
+.ch-text p strong { color: var(--fg); font-weight: 500; }
+@media (max-width: 760px) { .ch-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* principle */
+.principle { background: var(--bg-2); border: 1px solid var(--line); border-radius: 18px; padding: clamp(24px, 4vw, 40px); display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+.principle blockquote { margin: 0; font: 400 clamp(24px, 3vw, 32px)/1.3 var(--display); text-wrap: balance; transition: opacity .35s; }
+.principle .row { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+/* pendulum */
+.stage { background: var(--bg-2); border: 1px solid var(--line); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+#pend { width: 100%; aspect-ratio: 4 / 3; max-width: 100%; display: block; }
+.slider-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: center; }
+input[type="range"] { width: 100%; accent-color: var(--dawn); }
+.meter { font: 600 13px var(--mono); font-variant-numeric: tabular-nums; min-width: 4ch; text-align: right; }
+.pend-note { font-style: italic; color: var(--muted); min-height: 3.2em; }
+
+/* mirror */
+.mirror { position: relative; border-radius: 18px; border: 1px solid var(--line); min-height: 220px; padding: 28px; display: flex; flex-direction: column; justify-content: center; gap: 14px; overflow: hidden;
+  background: linear-gradient(160deg, var(--bg-2), var(--bg) 70%); }
+.mirror::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(115deg, transparent 30%, color-mix(in srgb, var(--fg) 7%, transparent) 45%, transparent 60%); }
+.mirror-text { font: 400 clamp(22px, 2.8vw, 28px)/1.3 var(--display); transition: transform .9s cubic-bezier(.6,0,.2,1), filter .9s, opacity .9s; overflow-wrap: anywhere; }
+.mirror-text.flipped { transform: scaleX(-1); filter: blur(3px); opacity: .45; }
+.mirror-cap { font: 400 13px/1.5 var(--mono); color: var(--muted); }
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field label { font: 600 12px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.field input, .field textarea { width: 100%; background: var(--bg-2); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; font: 400 18px/1.4 var(--read); color: var(--fg); resize: vertical; }
+.field input:focus, .field textarea:focus { border-color: var(--foam); outline: none; }
+
+/* slide */
+.slide-card { border-radius: 18px; padding: clamp(24px, 4vw, 36px); background: var(--dawn); color: var(--on-dawn); display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.slide-card .label { color: var(--on-dawn); opacity: .75; }
+.slide-card p.big { font: 400 clamp(24px, 3vw, 32px)/1.25 var(--display); overflow-wrap: anywhere; }
+.slide-card .btn { border-color: color-mix(in srgb, var(--on-dawn) 40%, transparent); color: var(--on-dawn); }
+.held { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.held li { display: grid; grid-template-columns: 9ch minmax(0, 1fr); gap: 14px; padding-block: 10px; border-top: 1px solid var(--line); font-size: 16px; }
+.held li span { font: 400 12px/1.9 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.days { font: 400 13px var(--mono); color: var(--muted); }
+.days b { color: var(--dawn); font-variant-numeric: tabular-nums; }
+
+/* begin */
+.steps { list-style: none; margin: 40px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); }
+.steps li { padding: 24px 24px 8px 0; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.steps li + li { padding-left: 24px; border-left: 1px solid var(--line); }
+.steps .n { font: 400 44px/1 var(--display); color: var(--dawn); }
+.steps h3 { margin: 0; font: 600 14px var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+.steps p { color: var(--muted); font-size: 16px; }
+@media (max-width: 760px) {
+  .steps { grid-template-columns: minmax(0, 1fr); }
+  .steps li, .steps li + li { padding: 22px 0 10px; border-left: 0; border-top: 1px solid var(--line); }
+  .steps li:first-child { border-top: 0; }
+}
+.begin-cta { margin-top: 44px; }
+footer { padding-block: 40px 56px; font: 400 13px/1.6 var(--mono); color: var(--muted); }
+footer .wrap { display: flex; flex-direction: column; gap: 8px; }
+
+.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 20px); opacity: 0; background: var(--fg); color: var(--bg); font: 600 13px var(--mono); padding: 10px 16px; border-radius: 999px; transition: .25s; pointer-events: none; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+@media (prefers-reduced-motion: reduce) { .mirror-text, .principle blockquote, .toast { transition: none; } }
+</style>
+
+<header class="hero">
+  <canvas id="field" aria-hidden="true"></canvas>
+  <div class="wrap hero-inner">
+    <span class="label">Reality Transurfing · a practice</span>
+    <h1>Somewhere, the version of your life you want <em class="dawn">already exists.</em></h1>
+    <p class="lead">Transurfing treats the future as a field of possible lines. You don't build the good one from scratch. You stop gripping, choose it, and move onto it. Touch the field to pick a line.</p>
+    <div class="btns">
+      <a class="btn dawn" href="#slide">Choose your line ↓</a>
+      <a class="btn" href="index.html">Open the 78-day course</a>
+    </div>
+    <div class="readout" aria-live="polite">
+      <span>Lines in view <b id="r-lines">48</b></span>
+      <span>Your line <b id="r-line">none yet</b></span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="ch" id="principle">
+    <div class="wrap ch-grid">
+      <div class="ch-text">
+        <span class="label">Today's principle</span>
+        <h2>One idea to carry through the day.</h2>
+        <p>A new principle each day, the same one all day. Come back tomorrow and it changes. <strong>Small, steady, and yours to test.</strong></p>
+      </div>
+      <div class="principle">
+        <span class="label" id="p-date">—</span>
+        <blockquote id="p-text">Want it without needing it. A desire held lightly moves; a desire clenched stalls.</blockquote>
+        <div class="row">
+          <span class="label" id="p-count">1 of 12</span>
+          <button class="btn" id="p-next" type="button">Another principle</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ch" id="pendulum">
+    <div class="wrap ch-grid">
+      <div class="stage">
+        <canvas id="pend" aria-label="A pendulum that swings harder the more importance you give it"></canvas>
+        <div class="slider-row">
+          <label class="label" for="importance">Importance</label>
+          <input id="importance" type="range" min="0" max="100" value="85">
+          <span class="meter" id="imp-val">85%</span>
+        </div>
+        <p class="pend-note" id="pend-note">It has you. Every swing pulls your attention back.</p>
+      </div>
+      <div class="ch-text">
+        <span class="label">The pendulum</span>
+        <h2>What you fight, you feed.</h2>
+        <p>In Zeland's picture, a <strong>pendulum</strong> is any system that runs on people's attention: a feud, a feed, a fear. It swings on the energy you give it, for or against.</p>
+        <p>Drag the importance down, or let go, and watch the swing die out. Nothing was defeated. It just stopped getting fed.</p>
+        <div class="btns"><button class="btn dawn" id="let-go" type="button">Let go</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ch" id="mirror">
+    <div class="wrap ch-grid">
+      <div class="ch-text">
+        <span class="label">The mirror</span>
+        <h2>The world reflects what you hold, with a delay.</h2>
+        <p>The reflection always arrives late, so people give up on a thought just before it comes back. Type something you believe about your world and see it returned.</p>
+        <form class="field" id="mirror-form">
+          <label for="mirror-in">A thought about your world</label>
+          <input id="mirror-in" maxlength="140" value="Good things find me easily.">
+          <div class="btns"><button class="btn dawn" type="submit">Hold it up to the mirror</button></div>
+        </form>
+      </div>
+      <div class="mirror" aria-live="polite">
+        <p class="mirror-text" id="mirror-out">Good things find me easily.</p>
+        <p class="mirror-cap" id="mirror-cap">This is what comes back. Keep holding it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="ch" id="slide">
+    <div class="wrap ch-grid">
+      <div class="ch-text">
+        <span class="label">Your slide</span>
+        <h2>Picture it as already done.</h2>
+        <p>A <strong>slide</strong> is a short scene of your goal already reached, replayed the way you'd recall a memory. Write what you want. It comes back in the present tense, the way you'll hold it.</p>
+        <form class="field" id="slide-form">
+          <label for="slide-in">What do you want?</label>
+          <textarea id="slide-in" rows="2" maxlength="200">I want to wake up excited about my work.</textarea>
+          <div class="btns">
+            <button class="btn dawn" type="submit">Make it my slide</button>
+          </div>
+        </form>
+        <p class="days" id="days">You've come back on <b>1</b> day.</p>
+      </div>
+      <div class="stack" style="display:flex;flex-direction:column;gap:22px;min-width:0">
+        <div class="slide-card">
+          <span class="label" id="slide-date">Example slide</span>
+          <p class="big" id="slide-out">I wake up excited about my work.</p>
+          <div class="btns"><button class="btn" id="slide-copy" type="button">Copy</button></div>
+        </div>
+        <ul class="held" id="held" aria-label="Slides you've held"></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="ch" id="begin">
+    <div class="wrap">
+      <div class="col" style="display:flex;flex-direction:column;gap:18px">
+        <span class="label">Where to start</span>
+        <h2>Fifteen minutes a day for 78 days.</h2>
+        <p class="lead">The course gives you one principle a day, in order. Each day builds on the last, which is why the steps below are numbered.</p>
+      </div>
+      <ol class="steps">
+        <li><span class="n">1</span><h3>Read the day</h3><p>One principle in plain language, about three minutes.</p></li>
+        <li><span class="n">2</span><h3>Practise it</h3><p>A small exercise to try during the day, in real situations.</p></li>
+        <li><span class="n">3</span><h3>Note what moved</h3><p>A line in your journal. The streak and calendar show your progress.</p></li>
+      </ol>
+      <div class="btns begin-cta">
+        <a class="btn dawn" href="index.html">Start day one</a>
+        <a class="btn" href="#principle">Back to today's principle</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Ideas from <i>Reality Transurfing</i> by Vadim Zeland. The principles here are paraphrased study notes, not the book's text.</span>
+    <span>Your slides and visits stay in this browser only.</span>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = (id) => document.getElementById(id);
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem('cyl.' + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+    set(k, v) { try { localStorage.setItem('cyl.' + k, JSON.stringify(v)); } catch {} }
+  };
+  const toast = (msg) => { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('show'), 1800); };
+  let colors = {};
+  const readColors = () => { const cs = getComputedStyle(document.documentElement); ['--fg','--muted','--foam','--dawn','--line','--bg'].forEach(k => colors[k] = cs.getPropertyValue(k).trim()); };
+  readColors();
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', readColors);
+  new MutationObserver(readColors).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  /* ---------- Field of lines ---------- */
+  const field = $('field'), fx = field.getContext('2d');
+  const N = 48;
+  let W = 0, H = 0, dpr = 1, ptr = { x: -9999, y: -9999, on: false }, chosen = -1, glow = 0;
+  const phases = Array.from({ length: N }, (_, i) => (i * 2.399) % (Math.PI * 2));
+  function sizeField() {
+    dpr = Math.min(devicePixelRatio || 1, 2);
+    const r = field.getBoundingClientRect(); W = r.width; H = r.height;
+    field.width = W * dpr; field.height = H * dpr; fx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  const baseY = (i) => H * (0.06 + 0.9 * i / (N - 1));
+  function lineY(i, x, t) {
+    const b = baseY(i);
+    let y = b + Math.sin(x * 0.006 + t * 0.5 + phases[i]) * 9 + Math.sin(x * 0.0021 - t * 0.3 + i) * 14;
+    if (ptr.on) {
+      const dx = x - ptr.x, dy = b - ptr.y;
+      y += (ptr.y - b) * 0.45 * Math.exp(-(dx * dx) / (2 * 180 * 180)) * Math.exp(-(dy * dy) / (2 * 90 * 90));
+    }
+    if (i === chosen) y -= Math.sin(x * 0.004 + t) * 6 * glow;
+    return y;
+  }
+  function drawField(t) {
+    fx.clearRect(0, 0, W, H);
+    const step = Math.max(8, W / 120);
+    for (let i = 0; i < N; i++) {
+      const isC = i === chosen;
+      fx.beginPath();
+      for (let x = -10; x <= W + 10; x += step) { const y = lineY(i, x, t); x < 0 ? fx.moveTo(x, y) : fx.lineTo(x, y); }
+      fx.strokeStyle = isC ? colors['--dawn'] : colors['--foam'];
+      fx.globalAlpha = isC ? 1 : 0.13 + 0.12 * Math.sin(i * 0.7 + t * 0.4) ** 2;
+      fx.lineWidth = isC ? 2.4 : 1;
+      fx.stroke();
+    }
+    fx.globalAlpha = 1;
+  }
+  function choose(y) {
+    let best = 0, bd = Infinity;
+    for (let i = 0; i < N; i++) { const d = Math.abs(baseY(i) - y); if (d < bd) { bd = d; best = i; } }
+    chosen = best; glow = 1;
+    const id = (best + 1) * 7919 + Math.floor(Math.random() * 7919);
+    $('r-line').textContent = 'No. ' + id.toLocaleString('en-US');
+  }
+  field.addEventListener('pointermove', (e) => { const r = field.getBoundingClientRect(); ptr = { x: e.clientX - r.left, y: e.clientY - r.top, on: true }; if (reduce) drawField(0); });
+  field.addEventListener('pointerleave', () => { ptr.on = false; if (reduce) drawField(0); });
+  field.addEventListener('pointerdown', (e) => { const r = field.getBoundingClientRect(); choose(e.clientY - r.top); if (reduce) drawField(0); });
+  addEventListener('resize', () => { sizeField(); drawField(0); });
+  sizeField();
+  choose(H * 0.9);
+  $('r-lines').textContent = N;
+
+  /* ---------- Pendulum ---------- */
+  const pend = $('pend'), px = pend.getContext('2d');
+  let PW = 0, PH = 0, amp = 0.85, theta = 0, phase = 0;
+  function sizePend() {
+    const r = pend.getBoundingClientRect(); const d = Math.min(devicePixelRatio || 1, 2);
+    PW = r.width; PH = r.height; pend.width = PW * d; pend.height = PH * d; px.setTransform(d, 0, 0, d, 0, 0);
+  }
+  const notes = [
+    [70, 'It has you. Every swing pulls your attention back.'],
+    [40, 'Still swinging, but you can see it now, and that loosens it.'],
+    [10, 'Barely moving. You notice it, and it has nothing to hold.'],
+    [-1, 'Still. Your attention is your own again.']
+  ];
+  const impEl = $('importance');
+  function updateImp() {
+    const v = +impEl.value; $('imp-val').textContent = v + '%';
+    $('pend-note').textContent = notes.find(n => v > n[0])[1];
+  }
+  impEl.addEventListener('input', updateImp);
+  $('let-go').addEventListener('click', () => {
+    const start = +impEl.value, t0 = performance.now(), dur = reduce ? 1 : 1400;
+    (function step(now) {
+      const k = Math.min(1, (now - t0) / dur);
+      impEl.value = Math.round(start * (1 - k)); updateImp();
+      if (k < 1) requestAnimationFrame(step);
+    })(t0);
+  });
+  function drawPend() {
+    px.clearRect(0, 0, PW, PH);
+    const ox = PW / 2, oy = PH * 0.1, L = PH * 0.68;
+    const bx = ox + Math.sin(theta) * L, by = oy + Math.cos(theta) * L;
+    // arc of reach
+    px.strokeStyle = colors['--line']; px.lineWidth = 1; px.setLineDash([3, 5]);
+    px.beginPath(); px.arc(ox, oy, L, Math.PI / 2 - 1.0, Math.PI / 2 + 1.0); px.stroke(); px.setLineDash([]);
+    px.strokeStyle = colors['--muted']; px.lineWidth = 1.5;
+    px.beginPath(); px.moveTo(ox, oy); px.lineTo(bx, by); px.stroke();
+    px.fillStyle = colors['--muted']; px.beginPath(); px.arc(ox, oy, 4, 0, Math.PI * 2); px.fill();
+    const rr = 14 + amp * 16;
+    px.fillStyle = amp > 0.05 ? colors['--dawn'] : colors['--foam'];
+    px.beginPath(); px.arc(bx, by, rr, 0, Math.PI * 2); px.fill();
+  }
+  addEventListener('resize', () => { sizePend(); drawPend(); });
+  sizePend(); updateImp();
+
+  /* ---------- Main loop ---------- */
+  let last = performance.now();
+  function frame(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    const t = now / 1000;
+    glow = Math.max(0.35, glow - dt * 0.4);
+    drawField(t);
+    const target = (+impEl.value / 100) * 0.95;
+    amp += (target - amp) * Math.min(1, dt * 1.6);
+    phase += dt * 2.6;
+    theta = amp * Math.sin(phase);
+    drawPend();
+    requestAnimationFrame(frame);
+  }
+  if (reduce) { drawField(0); theta = 0; amp = +impEl.value / 100; drawPend(); impEl.addEventListener('input', () => { amp = +impEl.value / 100; theta = amp * 0.6; drawPend(); }); }
+  else requestAnimationFrame(frame);
+
+  /* ---------- Principles ---------- */
+  const P = [
+    'Want it without needing it. A desire held lightly moves; a desire clenched stalls.',
+    'Importance builds excess potential, and the world pushes back to level it. Lower the stakes and the path clears.',
+    'The world is a mirror with a delay. Hold the picture steady until the reflection catches up.',
+    'Pendulums run on your attention. Stop feeding what you don’t want and it loses its hold on you.',
+    'Don’t row against the current. Choose the direction, then let the current carry you there.',
+    'Intention is the decision to have. It is calmer than wanting and stronger than effort.',
+    'When plans go sideways, assume the better variant is working itself out. Watch what opens.',
+    'Your slide is the goal already reached. Replay it like something you remember.',
+    'Go through your own door. A goal that is truly yours makes you feel more alive just thinking about it.',
+    'Allow yourself to be yourself, and let others be themselves. Most friction disappears.',
+    'Be grateful in advance. Gratitude lowers importance and leaves room for the thing to arrive.',
+    'Settle the outcome in your mind, and leave the how open. The route is rarely the one you would plan.'
+  ];
+  const now = new Date();
+  const dayIndex = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 864e5);
+  let pi = dayIndex % P.length;
+  $('p-date').textContent = now.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+  function showP() { $('p-text').textContent = P[pi]; $('p-count').textContent = (pi + 1) + ' of ' + P.length; }
+  showP();
+  $('p-next').addEventListener('click', () => {
+    const q = $('p-text'); q.style.opacity = 0;
+    setTimeout(() => { pi = (pi + 1) % P.length; showP(); q.style.opacity = 1; }, reduce ? 0 : 300);
+  });
+
+  /* ---------- Mirror ---------- */
+  const heavy = /\b(can'?t|cannot|never|hate|hard|nobody|no one|fail|always go wrong|impossible|stuck|not enough|too late)\b/i;
+  $('mirror-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const txt = $('mirror-in').value.trim(); if (!txt) { $('mirror-in').focus(); return; }
+    const out = $('mirror-out'), cap = $('mirror-cap');
+    out.textContent = txt; out.classList.add('flipped'); cap.textContent = 'Reflecting…';
+    setTimeout(() => {
+      out.classList.remove('flipped');
+      cap.textContent = heavy.test(txt)
+        ? 'The mirror doesn’t argue. It returns this exactly. Rewrite it as what you want back?'
+        : 'This is what comes back. Keep holding it.';
+    }, reduce ? 200 : 1800);
+  });
+
+  /* ---------- Slide ---------- */
+  function toSlide(s) {
+    s = s.trim().replace(/\s+/g, ' ').replace(/[.!]+$/, '');
+    const rules = [
+      [/^i (really )?want to be /i, 'I am '], [/^i (really )?want to /i, 'I '], [/^i (really )?want /i, 'I have '],
+      [/^i(?:'d| would) like to /i, 'I '], [/^i(?:'d| would) like /i, 'I have '], [/^i wish i (had|was|were|could) /i, (m, v) => ({ had: 'I have ', was: 'I am ', were: 'I am ', could: 'I can ' })[v.toLowerCase()]],
+      [/^i(?:'ll| will) be /i, 'I am '], [/^i(?:'ll| will) /i, 'I '], [/^i hope (to )?/i, 'I '], [/^to /i, 'I ']
+    ];
+    for (const [re, rep] of rules) if (re.test(s)) { s = s.replace(re, rep); break; }
+    s = s.replace(/\bmy\b/gi, 'my');
+    return s.charAt(0).toUpperCase() + s.slice(1) + '.';
+  }
+  const fmt = (d) => new Date(d).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  function renderHeld() {
+    const list = store.get('slides', []); const ul = $('held'); ul.innerHTML = '';
+    list.slice(0, 5).forEach(s => {
+      const li = document.createElement('li');
+      const sp = document.createElement('span'); sp.textContent = fmt(s.d);
+      const tx = document.createElement('div'); tx.textContent = s.t;
+      li.append(sp, tx); ul.append(li);
+    });
+    if (list[0]) { $('slide-out').textContent = list[0].t; $('slide-date').textContent = 'Held since ' + fmt(list[0].d); }
+  }
+  $('slide-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const v = $('slide-in').value; if (!v.trim()) { $('slide-in').focus(); return; }
+    const t = toSlide(v);
+    const list = store.get('slides', []).filter(s => s.t !== t);
+    list.unshift({ t, d: Date.now() }); store.set('slides', list.slice(0, 20));
+    renderHeld(); toast('Slide saved in this browser');
+  });
+  $('slide-copy').addEventListener('click', () => {
+    const t = $('slide-out').textContent;
+    const fallback = () => { const r = document.createRange(); r.selectNodeContents($('slide-out')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); toast('Selected. Copy it from here'); };
+    try { navigator.clipboard.writeText(t).then(() => toast('Copied'), fallback); } catch { fallback(); }
+  });
+  renderHeld();
+
+  /* ---------- Days you came back ---------- */
+  const today = now.toISOString().slice(0, 10);
+  const visits = store.get('days', []);
+  if (!visits.includes(today)) { visits.push(today); store.set('days', visits.slice(-400)); }
+  const n = Math.max(1, visits.length);
+  $('days').innerHTML = 'You’ve come back on <b>' + n + '</b> ' + (n === 1 ? 'day. See you tomorrow.' : 'days.');
+})();
+</script>
