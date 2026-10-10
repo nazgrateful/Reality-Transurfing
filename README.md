@@ -24,8 +24,11 @@ The lessons and 78-day summaries are plain-language study notes written for this
 The weekly summaries and quizzes are study notes written for this app.
 
 ## Shared
-- **Reminders**: daily reminder times for each book's practices, exported as a calendar file (`.ics`) from the website version, with steps for letting them through Do Not Disturb.
+- **Calendar**: a month view of everything you practised, read or wrote in each book, with day details.
+- **Alarms**: daily times for each practice. *Alarm mode* rings a full-screen alarm while the app is open (app sound isn't silenced by Do Not Disturb); on Android the website can create real Clock alarms, which ring through Do Not Disturb even when the app is closed. Calendar (`.ics`) export too.
 - **Journal** and backup, restore and reset cover all books. Everything saves automatically. The streak counts activity in any book.
 - Progress is stored in `localStorage` when opened directly in a browser, and privately in your Claude account when opened as a claude.ai artifact.
+
+The look is inspired by the Cybercore aesthetic: neon on black, a HUD grid with scanlines, cut-corner panels and terminal-style controls, with a different neon for each book.
 
 Open `index.html` in any browser; there is no build step.
