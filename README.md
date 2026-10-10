@@ -29,6 +29,6 @@ The weekly summaries and quizzes are study notes written for this app.
 - **Journal** and backup, restore and reset cover all books. Everything saves automatically. The streak counts activity in any book.
 - Progress is stored in `localStorage` when opened directly in a browser, and privately in your Claude account when opened as a claude.ai artifact.
 
-The look is a calm pond: light pink and light green, water lilies in the background, Dancing Script for headings and controls with Lora for reading, and buttons and chips outlined like circuit-board traces with solder pads. Hover effects and script reading text are optional, under Data → Look.
+The look is a 1990s newspaper: newsprint paper, a blackletter masthead with a live dateline (volume, issue, date, section), heavy serif headlines, thick-thin rules and ruled columns, drop caps, small-caps kickers, boxed classified-ad buttons and a printed-listings calendar. Each book is a lettered section with its own spot colour: A blue, B red, C green. Hover effects are optional, under Data → Look.
 
 Open `index.html` in any browser; there is no build step.

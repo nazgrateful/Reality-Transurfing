@@ -3,7 +3,7 @@
 <title>Transurfing Path</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:wght@600;700;800&display=swap">
 <style>
 /* Layout: a narrow reading column under a quiet tab bar; tools (today, practice, journal) reuse the same column. Sea-glass neutrals, one teal accent, amber only for streaks. */
 :root {
@@ -251,251 +251,264 @@ ol.wants, ul.wants { list-style: none; margin: 0; padding: 0; }
 .steps > b { font-family: var(--ui); text-transform: uppercase; letter-spacing: .1em; font-weight: 400; color: var(--accent); }
 .steps ol { margin: 8px 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-family: var(--read); font-size: 15px; }
 .steps .note { margin: 6px 0 0; }
-/* ===== LILY CIRCUIT =====
-   Layout: a calm pond. Blush-to-mint water with water lilies drifting in the corners,
-   frosted petal-white panels, a legible script for headings and controls, and
-   buttons and chips outlined like circuit-board traces with solder pads and vias.
-   One deliberate light look. Hover effects are opt-in (Data → Look). */
+/* ===== THE MORNING EDITION =====
+   Layout: a 1990s broadsheet. Newsprint ground with grain, blackletter masthead and
+   dateline, heavy serif headlines, thick-thin rules, ruled columns, small-caps kickers.
+   Each book is a lettered section with its own spot colour (A blue, B red, C green),
+   used sparingly the way 90s papers coded sections. One deliberate light look. */
 :root, :root[data-theme], :root:not([data-theme="light"]) {
-  --bg: #fbf1f4;
-  --surface: rgba(255, 252, 253, 0.86);
-  --sunk: #eef6f0;
-  --ink: #3d2b35;
-  --muted: #7a6670;
-  --line: #ecc9d5;
-  --accent: #2f7a55;           /* deep leaf green: text-safe on blush */
-  --accent-soft: #e3f3e8;
-  --on-accent: #ffffff;
-  --pink: #c2527a;             /* rose: text-safe */
-  --pink-soft: #fde4ec;
-  --trace: #5aa77c;            /* circuit trace green */
-  --pad: #e9c46a;              /* solder-pad gold */
-  --board: #f4fbf6;            /* pale PCB */
-  --amber: #b5651d;
-  --amber-soft: #fbead6;
-  --good: #2f7a55;
-  --bad: #b8344f;
-  --heat-0: #f1e4e9; --heat-1: #cfe9d8; --heat-2: #8fcaa6; --heat-3: #3f9467;
-  --display: "Dancing Script", "Segoe Script", "Brush Script MT", cursive;
-  --read: "Lora", Georgia, "Times New Roman", serif;
-  --ui: "Lora", Georgia, serif;
-  --r: 14px;
+  --bg: #f2ede1;
+  --paper: #f7f3e8;
+  --surface: transparent;
+  --sunk: #e6dfcf;
+  --ink: #1a1816;
+  --muted: #5b554c;
+  --line: #1a1816;
+  --hair: #b7ad99;
+  --spot: #1f4e8c;
+  --accent: #1a1816;
+  --accent-soft: #e6dfcf;
+  --on-accent: #f7f3e8;
+  --pink: #1f4e8c;
+  --amber: #8a4b00;
+  --amber-soft: #efe2c9;
+  --good: #1f5a2e;
+  --bad: #a01c14;
+  --heat-0: #e3dccb; --heat-1: #b9b09d; --heat-2: #6e675b; --heat-3: #1a1816;
+  --display: "Playfair Display", "Times New Roman", Georgia, serif;
+  --read: "PT Serif", Georgia, "Times New Roman", serif;
+  --ui: "Libre Franklin", "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  --black: "UnifrakturMaguntia", "Old English Text MT", "Times New Roman", serif;
+  --r: 0px;
   color-scheme: light;
 }
-:root[data-book="itworks"], :root[data-book="itworks"][data-theme], :root[data-book="itworks"]:not([data-theme="light"]) {
-  --accent: #b03f69; --accent-soft: #fde4ec; --trace: #d77a9b; --board: #fff6f9; --line: #f0c6d4;
-  --heat-1: #f8d2df; --heat-2: #eb98b5; --heat-3: #c2527a;
-}
-:root[data-book="masterkey"], :root[data-book="masterkey"][data-theme], :root[data-book="masterkey"]:not([data-theme="light"]) {
-  --accent: #2e6f6a; --accent-soft: #e0f1ee; --trace: #5ea79e; --board: #f2faf8; --line: #cfe3df;
-  --heat-1: #d3ece7; --heat-2: #93cfc4; --heat-3: #3b8b81;
-}
-:root.script-body { --read: "Dancing Script", "Segoe Script", cursive; }
-:root.script-body .reader, :root.script-body .principle, :root.script-body textarea { font-size: 21px; line-height: 1.6; }
+:root[data-book="itworks"], :root[data-book="itworks"][data-theme], :root[data-book="itworks"]:not([data-theme="light"]) { --spot: #a8231b; --pink: #a8231b; }
+:root[data-book="masterkey"], :root[data-book="masterkey"][data-theme], :root[data-book="masterkey"]:not([data-theme="light"]) { --spot: #24603a; --pink: #24603a; }
 
-::selection { background: var(--pink-soft); color: var(--ink); }
+::selection { background: #f3e27a; color: var(--ink); }
 body {
   background-color: var(--bg);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 700 600%22%3E%3Cdefs%3E%3ClinearGradient id=%22p1%22 x1=%220%22 y1=%221%22 x2=%220%22 y2=%220%22%3E%3Cstop offset=%220%22 stop-color=%22%23f4b6c9%22/%3E%3Cstop offset=%221%22 stop-color=%22%23fde6ee%22/%3E%3C/linearGradient%3E%3ClinearGradient id=%22p2%22 x1=%220%22 y1=%221%22 x2=%220%22 y2=%220%22%3E%3Cstop offset=%220%22 stop-color=%22%23f7c9d7%22/%3E%3Cstop offset=%221%22 stop-color=%22%23fff4f8%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cellipse cx=%22470%22 cy=%22470%22 rx=%22120%22 ry=%2238%22 fill=%22none%22 stroke=%22%239fd4b4%22 stroke-width=%221.2%22 opacity=%220.38%22/%3E%3Cellipse cx=%22470%22 cy=%22470%22 rx=%22180%22 ry=%2258%22 fill=%22none%22 stroke=%22%239fd4b4%22 stroke-width=%221.2%22 opacity=%220.32%22/%3E%3Cellipse cx=%22470%22 cy=%22470%22 rx=%22252%22 ry=%2281%22 fill=%22none%22 stroke=%22%239fd4b4%22 stroke-width=%221.2%22 opacity=%220.25%22/%3E%3Cellipse cx=%22250%22 cy=%22540%22 rx=%2270%22 ry=%2222%22 fill=%22none%22 stroke=%22%239fd4b4%22 stroke-width=%221.2%22 opacity=%220.38%22/%3E%3Cellipse cx=%22250%22 cy=%22540%22 rx=%22105%22 ry=%2234%22 fill=%22none%22 stroke=%22%239fd4b4%22 stroke-width=%221.2%22 opacity=%220.32%22/%3E%3Cellipse cx=%22250%22 cy=%22540%22 rx=%22147%22 ry=%2247%22 fill=%22none%22 stroke=%22%239fd4b4%22 stroke-width=%221.2%22 opacity=%220.25%22/%3E%3Cg transform=%22translate(560 470) rotate(30)%22%3E%3Cpath d=%22M0 0 L120 0 A120 120 0 1 1 106.0 -56.3 Z%22 fill=%22%23bfe3c9%22/%3E%3Cpath d=%22M0 0 L103.7 37.8%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L68.0 87.0%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L11.5 109.8%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-48.4 99.2%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-93.6 58.5%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-110.4 0.0%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-93.6 -58.5%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-48.4 -99.2%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L11.5 -109.8%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L68.0 -87.0%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3C/g%3E%3Cg transform=%22translate(360 540) rotate(160)%22%3E%3Cpath d=%22M0 0 L90 0 A90 90 0 1 1 79.5 -42.3 Z%22 fill=%22%23a8d8b7%22/%3E%3Cpath d=%22M0 0 L77.8 28.3%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L51.0 65.2%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L8.7 82.3%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-36.3 74.4%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-70.2 43.9%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-82.8 0.0%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-70.2 -43.9%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-36.3 -74.4%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L8.7 -82.3%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L51.0 -65.2%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3C/g%3E%3Cg transform=%22translate(640 300) rotate(250)%22%3E%3Cpath d=%22M0 0 L70 0 A70 70 0 1 1 61.8 -32.9 Z%22 fill=%22%23bfe3c9%22/%3E%3Cpath d=%22M0 0 L60.5 22.0%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L39.6 50.7%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L6.7 64.0%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-28.2 57.9%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-54.6 34.1%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-64.4 0.0%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-54.6 -34.1%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-28.2 -57.9%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L6.7 -64.0%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L39.6 -50.7%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3C/g%3E%3Cg transform=%22translate(220 590) rotate(300)%22%3E%3Cpath d=%22M0 0 L60 0 A60 60 0 1 1 53.0 -28.2 Z%22 fill=%22%23bfe3c9%22/%3E%3Cpath d=%22M0 0 L51.9 18.9%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L34.0 43.5%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L5.8 54.9%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-24.2 49.6%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-46.8 29.3%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-55.2 0.0%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-46.8 -29.3%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-24.2 -49.6%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L5.8 -54.9%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L34.0 -43.5%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3C/g%3E%3Cg transform=%22translate(520 430) rotate(0) scale(1.9 1.178)%22%3E%3Cpath transform=%22rotate(0.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(36.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(72.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(108.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(144.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(180.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(216.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(252.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(288.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(324.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(14.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(59.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(104.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(149.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(194.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(239.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(284.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(329.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(28.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(88.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(148.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(208.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(268.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(328.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3C/g%3E%3Cg transform=%22translate(520 422.4)%22%3E%3Ccircle r=%227%22 fill=%22%23f6d77a%22/%3E%3Ccircle cx=%225.0%22 cy=%220.0%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%223.5%22 cy=%223.5%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%220.0%22 cy=%225.0%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%22-3.5%22 cy=%223.5%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%22-5.0%22 cy=%220.0%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%22-3.5%22 cy=%22-3.5%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%22-0.0%22 cy=%22-5.0%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%223.5%22 cy=%22-3.5%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3C/g%3E%3Cg transform=%22translate(330 520) rotate(10) scale(1.25 0.775)%22%3E%3Cpath transform=%22rotate(0.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(36.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(72.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(108.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(144.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(180.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(216.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(252.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(288.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(324.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(14.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(59.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(104.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(149.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(194.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(239.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(284.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(329.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(28.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(88.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(148.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(208.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(268.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(328.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3C/g%3E%3Cg transform=%22translate(330 515.0)%22%3E%3Ccircle r=%227%22 fill=%22%23f6d77a%22/%3E%3Ccircle cx=%225.0%22 cy=%220.0%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%223.5%22 cy=%223.5%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%220.0%22 cy=%225.0%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%22-3.5%22 cy=%223.5%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%22-5.0%22 cy=%220.0%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%22-3.5%22 cy=%22-3.5%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%22-0.0%22 cy=%22-5.0%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%223.5%22 cy=%22-3.5%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3C/g%3E%3Cg transform=%22translate(650 270) rotate(-8) scale(0.95 0.589)%22%3E%3Cpath transform=%22rotate(0.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(36.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(72.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(108.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(144.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(180.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(216.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(252.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(288.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(324.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(14.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(59.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(104.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(149.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(194.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(239.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(284.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(329.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(28.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(88.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(148.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(208.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(268.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(328.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3C/g%3E%3Cg transform=%22translate(650 266.2)%22%3E%3Ccircle r=%227%22 fill=%22%23f6d77a%22/%3E%3Ccircle cx=%225.0%22 cy=%220.0%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%223.5%22 cy=%223.5%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%220.0%22 cy=%225.0%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%22-3.5%22 cy=%223.5%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%22-5.0%22 cy=%220.0%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%22-3.5%22 cy=%22-3.5%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%22-0.0%22 cy=%22-5.0%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%223.5%22 cy=%22-3.5%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3C/g%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 500 420%22%3E%3Cdefs%3E%3ClinearGradient id=%22p1%22 x1=%220%22 y1=%221%22 x2=%220%22 y2=%220%22%3E%3Cstop offset=%220%22 stop-color=%22%23f4b6c9%22/%3E%3Cstop offset=%221%22 stop-color=%22%23fde6ee%22/%3E%3C/linearGradient%3E%3ClinearGradient id=%22p2%22 x1=%220%22 y1=%221%22 x2=%220%22 y2=%220%22%3E%3Cstop offset=%220%22 stop-color=%22%23f7c9d7%22/%3E%3Cstop offset=%221%22 stop-color=%22%23fff4f8%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cellipse cx=%22150%22 cy=%22130%22 rx=%2290%22 ry=%2229%22 fill=%22none%22 stroke=%22%239fd4b4%22 stroke-width=%221.2%22 opacity=%220.38%22/%3E%3Cellipse cx=%22150%22 cy=%22130%22 rx=%22135%22 ry=%2243%22 fill=%22none%22 stroke=%22%239fd4b4%22 stroke-width=%221.2%22 opacity=%220.32%22/%3E%3Cellipse cx=%22150%22 cy=%22130%22 rx=%22189%22 ry=%2260%22 fill=%22none%22 stroke=%22%239fd4b4%22 stroke-width=%221.2%22 opacity=%220.25%22/%3E%3Cg transform=%22translate(110 110) rotate(200)%22%3E%3Cpath d=%22M0 0 L95 0 A95 95 0 1 1 83.9 -44.6 Z%22 fill=%22%23a8d8b7%22/%3E%3Cpath d=%22M0 0 L82.1 29.9%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L53.8 68.9%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L9.1 86.9%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-38.3 78.6%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-74.1 46.3%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-87.4 0.0%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-74.1 -46.3%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-38.3 -78.6%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L9.1 -86.9%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L53.8 -68.9%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3C/g%3E%3Cg transform=%22translate(300 60) rotate(80)%22%3E%3Cpath d=%22M0 0 L60 0 A60 60 0 1 1 53.0 -28.2 Z%22 fill=%22%23bfe3c9%22/%3E%3Cpath d=%22M0 0 L51.9 18.9%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L34.0 43.5%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L5.8 54.9%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-24.2 49.6%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-46.8 29.3%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-55.2 0.0%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-46.8 -29.3%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-24.2 -49.6%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L5.8 -54.9%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L34.0 -43.5%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3C/g%3E%3Cg transform=%22translate(60 290) rotate(330)%22%3E%3Cpath d=%22M0 0 L55 0 A55 55 0 1 1 48.6 -25.8 Z%22 fill=%22%23bfe3c9%22/%3E%3Cpath d=%22M0 0 L47.5 17.3%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L31.2 39.9%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L5.3 50.3%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-22.2 45.5%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-42.9 26.8%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-50.6 0.0%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-42.9 -26.8%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L-22.2 -45.5%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L5.3 -50.3%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3Cpath d=%22M0 0 L31.2 -39.9%22 stroke=%22%237fbf95%22 stroke-width=%221.2%22 fill=%22none%22 opacity=%22.55%22/%3E%3C/g%3E%3Cg transform=%22translate(130 95) rotate(6) scale(1.4 0.868)%22%3E%3Cpath transform=%22rotate(0.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(36.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(72.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(108.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(144.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(180.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(216.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(252.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(288.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(324.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(14.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(59.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(104.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(149.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(194.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(239.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(284.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(329.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(28.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(88.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(148.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(208.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(268.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(328.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3C/g%3E%3Cg transform=%22translate(130 89.4)%22%3E%3Ccircle r=%227%22 fill=%22%23f6d77a%22/%3E%3Ccircle cx=%225.0%22 cy=%220.0%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%223.5%22 cy=%223.5%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%220.0%22 cy=%225.0%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%22-3.5%22 cy=%223.5%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%22-5.0%22 cy=%220.0%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%22-3.5%22 cy=%22-3.5%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%22-0.0%22 cy=%22-5.0%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%223.5%22 cy=%22-3.5%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3C/g%3E%3Cg transform=%22translate(300 50) rotate(-12) scale(0.85 0.527)%22%3E%3Cpath transform=%22rotate(0.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(36.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(72.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(108.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(144.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(180.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(216.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(252.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(288.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(324.0)%22 d=%22M0 0 C15 -16.099999999999998 9.0 -39.1 0 -46 C-9.0 -39.1 -15 -16.099999999999998 0 0Z%22 fill=%22url(%23p1)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(14.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(59.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(104.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(149.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(194.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(239.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(284.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(329.0)%22 d=%22M0 0 C12 -12.6 7.199999999999999 -30.599999999999998 0 -36 C-7.199999999999999 -30.599999999999998 -12 -12.6 0 0Z%22 fill=%22url(%23p2)%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(28.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(88.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(148.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(208.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(268.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3Cpath transform=%22rotate(328.0)%22 d=%22M0 0 C9 -8.399999999999999 5.3999999999999995 -20.4 0 -24 C-5.3999999999999995 -20.4 -9 -8.399999999999999 0 0Z%22 fill=%22%23fff2f6%22 stroke=%22%23e7a3b8%22 stroke-width=%22.6%22/%3E%3C/g%3E%3Cg transform=%22translate(300 46.6)%22%3E%3Ccircle r=%227%22 fill=%22%23f6d77a%22/%3E%3Ccircle cx=%225.0%22 cy=%220.0%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%223.5%22 cy=%223.5%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%220.0%22 cy=%225.0%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%22-3.5%22 cy=%223.5%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%22-5.0%22 cy=%220.0%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%22-3.5%22 cy=%22-3.5%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%22-0.0%22 cy=%22-5.0%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3Ccircle cx=%223.5%22 cy=%22-3.5%22 r=%221.6%22 fill=%22%23e8b84a%22/%3E%3C/g%3E%3C/svg%3E"),
-    radial-gradient(900px 520px at 85% 100%, rgba(186, 228, 200, 0.75), transparent 70%),
-    radial-gradient(800px 500px at 0% 0%, rgba(205, 236, 215, 0.6), transparent 70%),
-    linear-gradient(180deg, #fdf3f6 0%, #f6eef3 45%, #eef7f1 100%);
-  background-repeat: no-repeat;
-  background-size: min(760px, 95vw) auto, min(520px, 70vw) auto, auto, auto, auto;
-  background-position: right -60px bottom -40px, left -70px top 70px, 0 0, 0 0, 0 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .1 0 0 0 0 .09 0 0 0 0 .07 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse at 50% 0%, #f9f6ee 0%, transparent 70%),
+    linear-gradient(180deg, #f4efe4, #ece5d5);
   background-attachment: fixed;
   color: var(--ink); font-family: var(--read); font-size: 16px;
 }
 body::after { content: none; }
-a { color: var(--accent); }
-:focus-visible { outline: 2px solid var(--trace); outline-offset: 3px; box-shadow: none; }
+a { color: var(--ink); text-decoration-thickness: 1px; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; box-shadow: none; }
 
-/* header */
-header.top { background: rgba(253, 243, 246, 0.86); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); box-shadow: 0 6px 24px rgba(194, 82, 122, 0.08); }
-.logo { font-family: var(--display); font-weight: 700; font-size: 26px; letter-spacing: 0; color: var(--pink); text-shadow: none; text-transform: none; }
-.logo span { color: var(--accent); }
-.sync { font-family: var(--read); font-style: italic; text-transform: none; letter-spacing: 0; font-size: 12px; color: var(--muted); }
-.sync::before { width: 7px; height: 7px; border-radius: 50%; background: var(--trace); box-shadow: 0 0 0 2px var(--accent-soft); animation: none; }
-nav.tabs button { font: 600 19px var(--display); text-transform: none; letter-spacing: 0; color: var(--muted); padding: 6px 12px 9px; }
-nav.tabs button[aria-current="page"] { color: var(--accent); text-shadow: none; border-bottom: 0; box-shadow: none;
-  background: linear-gradient(var(--trace), var(--trace)) left 12px bottom 3px / calc(100% - 30px) 1.5px no-repeat,
-              radial-gradient(circle, var(--trace) 2.5px, transparent 3px) right 9px bottom -1px / 10px 10px no-repeat; }
+/* masthead (scrolls away) */
+.masthead { max-width: 960px; margin: 0 auto; padding-inline: 16px; padding-block: 18px 0; text-align: center; }
+.mast-ears { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; }
+.ear { font: 600 10px/1.3 var(--ui); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); border: 1px solid var(--ink); padding: 5px 7px; max-width: 150px; }
+.ear b { display: block; font: 800 12px var(--ui); color: var(--ink); }
+.ear.r { justify-self: end; text-align: right; }
+.ear.l { justify-self: start; text-align: left; }
+.mast-title { font-family: var(--black); font-weight: 400; font-size: clamp(34px, 7.4vw, 72px); line-height: 1; color: var(--ink); margin: 0; letter-spacing: .01em; }
+.dateline { margin-top: 10px; border-top: 3px solid var(--ink); border-bottom: 1px solid var(--ink); padding: 4px 2px; display: flex; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; font: 600 11px var(--ui); text-transform: uppercase; letter-spacing: .08em; }
+.dateline::before { content: ""; display: block; position: absolute; }
+.mast-motto { font: italic 13px var(--read); color: var(--muted); margin-top: 4px; }
 
-/* type */
-h2.view-title, .reader h2 { font-family: var(--display); font-weight: 700; text-transform: none; letter-spacing: 0; font-size: 44px; line-height: 1.1; color: var(--pink); text-shadow: none; }
-.reader h2 { font-size: 40px; }
-.h-sub { font-family: var(--read); font-style: italic; text-transform: none; letter-spacing: 0; color: var(--accent); font-size: 16px; }
-.lede { color: var(--muted); font-family: var(--read); font-size: 16px; }
-.eyebrow { font-family: var(--display); font-weight: 600; font-size: 19px; letter-spacing: 0; text-transform: none; color: var(--accent); }
-.eyebrow::before { content: none; }
-.part h3, .section-h, .next h3, .day-card h3, dl.gloss dt, .cal-title { font-family: var(--display); font-weight: 700; text-transform: none; letter-spacing: 0; }
-.part h3 { font-size: 26px; color: var(--accent); margin-top: 22px; }
-.section-h { font-size: 32px; color: var(--pink); }
-.next h3, .day-card h3 { font-size: 30px; line-height: 1.15; color: var(--ink); }
-.cal-title { font-size: 26px; color: var(--ink); }
-.principle { font-family: var(--read); font-style: italic; font-weight: 400; color: var(--ink); }
-.note { color: var(--muted); font-family: var(--read); font-size: 14px; }
-.stat b { font-family: var(--display); font-weight: 700; font-size: 40px; color: var(--accent); text-shadow: none; }
-.stat b small { color: var(--muted); }
-.stat span { font-family: var(--read); font-style: italic; text-transform: none; letter-spacing: 0; font-size: 13px; }
-.stat.streak b { color: var(--pink); text-shadow: none; }
-.reader { font-family: var(--read); font-size: 18px; color: var(--ink); }
-.reader h4, .book-text h3.sub { font-family: var(--display); font-weight: 700; font-size: 24px; letter-spacing: 0; text-transform: none; color: var(--accent); }
+/* sticky section bar */
+header.top { background: var(--paper); backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: 1px solid var(--ink); box-shadow: 0 3px 0 -2px var(--ink), 0 4px 10px rgba(40, 30, 10, .08); }
+.top-inner { max-width: 960px; padding-block: 8px 0; gap: 6px; }
+.logo { display: none; }
+.brand { justify-content: space-between; }
+.sync { font: 600 10px var(--ui); text-transform: uppercase; letter-spacing: .1em; color: var(--muted); display: inline-flex; gap: 6px; align-items: center; }
+.sync::before { content: "■"; font-size: 9px; color: var(--spot); width: auto; height: auto; background: none; box-shadow: none; animation: none; border-radius: 0; }
+.books { gap: 0; }
+.books button { border: 1px solid var(--ink); border-left-width: 0; border-radius: 0; clip-path: none; background: var(--paper); background-image: none; color: var(--ink); font: 700 12px var(--ui); text-transform: uppercase; letter-spacing: .06em; padding: 5px 12px; box-shadow: none; }
+.books button:first-child { border-left-width: 1px; }
+.books button b { display: inline-block; font: 900 13px var(--display); margin-right: 6px; color: var(--spot); }
+.books button[data-book="transurfing"] b { color: #1f4e8c; } .books button[data-book="itworks"] b { color: #a8231b; } .books button[data-book="masterkey"] b { color: #24603a; }
+.books button[aria-pressed="true"] { background: var(--spot); border-color: var(--spot); color: #fff; background-image: none; }
+.books button[aria-pressed="true"] b { color: #fff; }
+.books button::before, .books button::after { content: none; }
+nav.tabs { border-top: 1px solid var(--ink); gap: 0; }
+nav.tabs button { font: 700 12px var(--ui); text-transform: uppercase; letter-spacing: .1em; color: var(--muted); padding: 9px 12px; border-bottom: 0; background: none; box-shadow: none; text-shadow: none; }
+nav.tabs button + button { border-left: 1px solid var(--hair); }
+nav.tabs button[aria-current="page"] { color: #fff; background: var(--ink); text-shadow: none; box-shadow: none; }
+
+/* page */
+.wrap { max-width: 760px; }
+h2.view-title, .reader h2 { font-family: var(--display); font-weight: 900; font-size: 46px; line-height: 1.02; letter-spacing: -.01em; text-transform: none; color: var(--ink); text-shadow: none; margin-top: 22px; }
+h2.view-title { border-top: 1px solid var(--ink); padding-top: 12px; }
+h2.view-title::before { content: attr(data-kicker); }
+.reader h2 { font-size: 42px; }
+.h-sub { font: italic 400 19px var(--read); color: var(--muted); text-transform: none; letter-spacing: 0; margin-top: 8px; }
+.lede { font: italic 18px/1.45 var(--read); color: var(--muted); border-bottom: 3px double var(--ink); padding-bottom: 14px; }
+.eyebrow { font: 800 11px var(--ui); text-transform: uppercase; letter-spacing: .14em; color: var(--spot); }
+.eyebrow::before { content: "■ "; color: var(--spot); }
+.part h3, .section-h { font-family: var(--display); font-weight: 900; text-transform: none; letter-spacing: 0; color: var(--ink); border-top: 3px solid var(--ink); border-bottom: 1px solid var(--ink); padding: 6px 0 5px; }
+.part h3 { font-size: 22px; margin-top: 26px; }
+.section-h { font-size: 30px; margin-top: 30px; }
+.next h3, .day-card h3, dl.gloss dt, .cal-title { font-family: var(--display); font-weight: 900; text-transform: none; letter-spacing: 0; color: var(--ink); }
+.next h3, .day-card h3 { font-size: 30px; line-height: 1.08; }
+.cal-title { font-size: 24px; }
+.principle { font: italic 22px/1.35 var(--display); color: var(--ink); }
+.note { font: 13px var(--read); color: var(--muted); }
+.stat { border-left: 1px solid var(--hair); padding-left: 10px; }
+.stat:first-child { border-left: 0; padding-left: 0; }
+.stat b { font: 900 38px var(--display); color: var(--ink); text-shadow: none; }
+.stat b small { color: var(--muted); font-size: 18px; }
+.stat span { font: 700 10px var(--ui); text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
+.stat.streak b { color: var(--spot); text-shadow: none; }
+.reader { font: 18px/1.62 var(--read); color: var(--ink); max-width: 66ch; }
+.reader > p { text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
+.reader > h2 + p::first-letter, .book-text .letter + p::first-letter, .book-text h2 + p::first-letter { float: left; font: 900 64px/.82 var(--display); padding: 6px 8px 0 0; color: var(--ink); }
+.reader h4, .book-text h3.sub { font: 800 12px var(--ui); text-transform: uppercase; letter-spacing: .14em; color: var(--ink); border-top: 1px solid var(--ink); padding-top: 8px; }
 .reader h4::before, .book-text h3.sub::before { content: none; }
-.keys li::before { border-radius: 50%; width: 7px; height: 7px; background: var(--pink); box-shadow: 0 0 0 2px var(--pink-soft); }
-.book-text blockquote { border-left: 2px solid var(--pink); background: var(--pink-soft); border-radius: 0 10px 10px 0; }
-.book-text ol.rules { clip-path: none; border-radius: 12px; background: var(--accent-soft); border-left: 2px solid var(--trace); }
-.letter { color: var(--muted); border-bottom: 1px dashed var(--line); }
-.pn { font-family: var(--display); font-size: 16px; color: var(--pink); }
-.sep { color: var(--pink) !important; }
-.cite { font-family: var(--read); }
+.keys li { font-family: var(--read); }
+.keys li::before { border-radius: 0; width: 6px; height: 6px; background: var(--ink); box-shadow: none; }
+.book-text blockquote { border: 0; border-top: 3px solid var(--ink); border-bottom: 1px solid var(--ink); background: none; border-radius: 0; padding: 12px 6px; font: italic 22px/1.35 var(--display); text-align: center; }
+.book-text ol.rules { clip-path: none; border-radius: 0; background: none; border: 2px solid var(--ink); box-shadow: 4px 4px 0 var(--ink); }
+.letter { font-style: italic; color: var(--muted); border-bottom: 1px solid var(--ink); }
+.pn { font: 800 12px var(--ui); color: var(--spot); }
+.sep { color: var(--ink) !important; letter-spacing: 1em; }
+.cite { font: 700 12px var(--ui); text-transform: uppercase; letter-spacing: .1em; }
 
-/* surfaces */
-.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; clip-path: none; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); box-shadow: 0 8px 28px rgba(110, 60, 85, 0.07); }
-.panel::before { content: ""; position: absolute; top: 14px; left: -1px; width: 16px; height: 1.5px; background: var(--trace); box-shadow: none; }
-.panel::after { content: ""; position: absolute; top: 11px; left: 13px; width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid var(--trace); background: var(--board); }
-.practice-box { background: var(--accent-soft); border-radius: 12px; border-left: 0; position: relative; padding-left: 20px; }
-.practice-box::before { content: ""; position: absolute; left: 9px; top: 14px; bottom: 14px; width: 1.5px; background: var(--trace); }
-.practice-box b { font-family: var(--display); font-weight: 700; font-size: 20px; text-transform: none; letter-spacing: 0; color: var(--accent); }
-.lesson-item { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; clip-path: none; transition: none; }
-.lesson-item .num { font-family: var(--display); font-weight: 700; font-size: 24px; color: var(--pink); }
-.lesson-item .t { font-family: var(--read); font-weight: 600; }
-.lesson-item .s { font-family: var(--read); font-style: italic; font-size: 13px; }
-.week-cur { border-color: var(--trace) !important; box-shadow: inset 3px 0 0 var(--trace) !important; }
-.bar { border-radius: 99px; height: 7px; background: var(--pink-soft); border: 0; }
-.bar > i { border-radius: 99px; background: linear-gradient(90deg, #f0a3bc, var(--trace)); box-shadow: none; }
-.weeks i, .heat i, .legend i { border-radius: 3px; }
-.weeks i.done { box-shadow: none; background: var(--trace); }
-.weeks i.cur { outline-color: var(--pink); }
-.days78 button { border-radius: 8px; background: var(--surface); border: 1px solid var(--line); color: var(--muted); font-family: var(--read); }
-.days78 button.done { background: var(--accent-soft); color: var(--accent); border-color: var(--trace); }
-.days78 button.cur { border-color: var(--pink); color: var(--pink); box-shadow: 0 0 0 2px var(--pink-soft); }
-.days78 button.sel { outline: 2px solid var(--trace); outline-offset: 1px; }
-.clock { font-family: var(--display); font-weight: 700; color: var(--accent); text-shadow: none; font-size: 68px; }
+/* surfaces become ruled columns */
+.panel { background: var(--surface); border: 0; border-top: 3px solid var(--ink); border-radius: 0; clip-path: none; backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: none; padding: 12px 0 6px; }
+.panel::before { content: ""; position: absolute; top: 2px; left: 0; right: 0; height: 1px; background: var(--ink); width: auto; box-shadow: none; }
+.panel::after { content: none; }
+.grid2 { gap: 0 28px; position: relative; }
+@media (min-width: 560px) { .grid2 > .panel + .panel { position: relative; } .grid2 > .panel + .panel::after { content: ""; position: absolute; left: -14px; top: 14px; bottom: 0; width: 1px; background: var(--hair); border: 0; border-radius: 0; } }
+.practice-box { background: var(--paper); border: 1px solid var(--ink); border-radius: 0; padding: 12px 14px; box-shadow: 3px 3px 0 var(--ink); }
+.practice-box::before { content: none; }
+.practice-box b { font: 800 11px var(--ui); text-transform: uppercase; letter-spacing: .14em; color: var(--spot); }
+.lesson-item { background: none; border: 0; border-bottom: 1px dotted var(--ink); border-radius: 0; clip-path: none; padding: 10px 2px; transition: none; }
+.lesson-item .num { font: 900 24px var(--display); color: var(--spot); }
+.lesson-item .t { font: 700 17px var(--read); }
+.lesson-item .s { font: italic 14px var(--read); }
+.week-cur { border-color: var(--ink) !important; box-shadow: inset 4px 0 0 var(--spot) !important; padding-left: 12px !important; }
+.bar { height: 8px; border-radius: 0; background: var(--sunk); border: 1px solid var(--ink); }
+.bar > i { border-radius: 0; background: radial-gradient(circle, var(--ink) 1px, transparent 1.3px) 0 0 / 3px 3px, var(--hair); box-shadow: none; }
+.weeks i, .heat i, .legend i { border-radius: 0; }
+.weeks i { background: var(--sunk); border: 1px solid var(--hair); }
+.weeks i.done { background: var(--ink); box-shadow: none; }
+.weeks i.cur { outline: 2px solid var(--spot); }
+.days78 button { border-radius: 0; background: var(--paper); border: 1px solid var(--hair); color: var(--muted); font: 600 12px var(--ui); }
+.days78 button.done { background: var(--ink); color: #fff; border-color: var(--ink); }
+.days78 button.cur { border: 2px solid var(--spot); color: var(--spot); box-shadow: none; }
+.days78 button.sel { outline: 2px solid var(--ink); outline-offset: 1px; }
+.clock { font: 900 72px var(--display); color: var(--ink); text-shadow: none; }
 
-/* ===== circuit-board outlines: buttons ===== */
-.btn, .books button, .slot, .icon, .opt, .qa details, .cal-cell:not(.blank) {
-  position: relative; clip-path: none;
-  border: 1.5px solid var(--trace); border-radius: 7px;
-  background-color: var(--board);
-  background-image:
-    radial-gradient(circle, transparent 1.6px, var(--trace) 1.7px 2.9px, transparent 3px),
-    linear-gradient(var(--trace), var(--trace)),
-    radial-gradient(circle, transparent 1.6px, var(--trace) 1.7px 2.9px, transparent 3px),
-    linear-gradient(var(--trace), var(--trace));
-  background-size: 8px 8px, 10px 1px, 8px 8px, 10px 1px;
-  background-position: left 2px top 2px, left 9px top 5.5px, right 2px bottom 2px, right 9px bottom 5.5px;
-  background-repeat: no-repeat;
-  box-shadow: none;
-}
-.btn { font: 700 18px var(--display); text-transform: none; letter-spacing: 0; color: var(--accent); padding: 7px 20px 8px; }
-.btn::after { content: ""; position: absolute; right: -8px; top: 50%; width: 7px; height: 1.5px; background: var(--trace); }
-.btn::before { content: ""; position: absolute; right: -12px; top: calc(50% - 3px); width: 6px; height: 6px; border-radius: 50%; background: var(--pad); border: 1px solid var(--trace); }
-.btn.primary { background-color: var(--accent); color: var(--on-accent); border-color: var(--accent);
-  background-size: 8px 8px, 10px 1px, 8px 8px, 10px 1px;
-  background-position: left 2px top 2px, left 9px top 5.5px, right 2px bottom 2px, right 9px bottom 5.5px;
-  background-repeat: no-repeat;
-  background-image:
-    radial-gradient(circle, transparent 1.6px, var(--pad) 1.7px 2.9px, transparent 3px),
-    linear-gradient(var(--pad), var(--pad)),
-    radial-gradient(circle, transparent 1.6px, var(--pad) 1.7px 2.9px, transparent 3px),
-    linear-gradient(var(--pad), var(--pad)); }
-.btn.ghost { background-color: transparent; color: var(--ink); }
-.btn.small { font-size: 16px; padding: 4px 14px 5px; }
-.btn[disabled] { opacity: .45; }
-.books button { font: 700 17px var(--display); text-transform: none; letter-spacing: 0; color: var(--muted); padding: 3px 14px 5px; }
-.books button[aria-pressed="true"] { background-color: var(--pink); border-color: var(--pink); color: #fff; box-shadow: none;
-  background-size: 8px 8px, 10px 1px, 8px 8px, 10px 1px;
-  background-position: left 2px top 2px, left 9px top 5.5px, right 2px bottom 2px, right 9px bottom 5.5px;
-  background-repeat: no-repeat;
-  background-image:
-    radial-gradient(circle, transparent 1.6px, var(--pad) 1.7px 2.9px, transparent 3px), linear-gradient(var(--pad), var(--pad)),
-    radial-gradient(circle, transparent 1.6px, var(--pad) 1.7px 2.9px, transparent 3px), linear-gradient(var(--pad), var(--pad)); }
-.back, .linkish { font-family: var(--display); font-weight: 700; font-size: 18px; text-transform: none; letter-spacing: 0; color: var(--accent); }
-.howto summary { font-family: var(--display); font-weight: 700; font-size: 19px; text-transform: none; letter-spacing: 0; color: var(--accent); }
-.icon { background-image: none; color: var(--accent); font-size: 16px; }
-.slot { font: 700 18px var(--display); text-transform: none; letter-spacing: 0; color: var(--muted); }
-.slot.on { background-color: var(--accent-soft); color: var(--accent); box-shadow: none; }
-.opt { font-family: var(--read); border-radius: 10px; }
-.opt.right { border-color: var(--good); color: var(--good); background-color: var(--accent-soft); box-shadow: none; }
-.opt.wrong { border-color: var(--bad); color: var(--bad); background-color: #fdeaee; }
-.qa details { border-radius: 10px; }
-.qa details[open] { box-shadow: none; background-color: #fff; }
-.qa summary { font-family: var(--read); }
+/* buttons: boxed type like classified ads */
+.btn, .slot, .icon, .opt, .qa details, .cal-cell:not(.blank) { background-image: none; clip-path: none; box-shadow: none; }
+.btn::before, .btn::after { content: none; }
+.btn { border: 1.5px solid var(--ink); border-radius: 0; background-color: var(--paper); color: var(--ink); font: 800 12px var(--ui); text-transform: uppercase; letter-spacing: .12em; padding: 9px 16px; }
+.btn.primary { background-color: var(--ink); background-image: none; color: #fff; border-color: var(--ink); box-shadow: 3px 3px 0 var(--spot); }
+.btn.ghost { background-color: transparent; border-style: solid; border-color: var(--hair); color: var(--ink); }
+.btn.small { font-size: 11px; padding: 6px 11px; }
+.back, .linkish { font: 800 11px var(--ui); text-transform: uppercase; letter-spacing: .12em; color: var(--spot); text-decoration: underline; text-underline-offset: 3px; }
+.howto summary { font: 800 12px var(--ui); text-transform: uppercase; letter-spacing: .12em; color: var(--ink); }
+.icon { border: 1.5px solid var(--ink); border-radius: 0; background: var(--paper); color: var(--ink); }
+.slot { border: 1.5px solid var(--ink); border-radius: 0; background: var(--paper); font: 800 12px var(--ui); text-transform: uppercase; letter-spacing: .1em; color: var(--ink); }
+.slot.on { background: var(--ink); color: #fff; }
+.opt { border: 1px solid var(--ink); border-radius: 0; background: var(--paper); font: 16px var(--read); }
+.opt.right { border: 2px solid var(--good); color: var(--good); background: #e4ecd9; box-shadow: none; }
+.opt.wrong { border: 2px solid var(--bad); color: var(--bad); background: #f2dcd5; text-decoration: line-through; }
+.qa details { border: 0; border-bottom: 1px dotted var(--ink); border-radius: 0; background: none; padding: 10px 2px; }
+.qa details[open] { border-color: var(--ink); box-shadow: none; background: none; }
+.qa summary { font: 700 16px var(--read); }
 
-/* checks are solder pads */
-.check { border-radius: 50%; transform: none; border: 1.5px solid var(--trace); background: var(--board); font-size: 13px; color: var(--on-accent); box-shadow: inset 0 0 0 3px var(--board), inset 0 0 0 4.5px var(--line); }
-.check.on { background: var(--accent); border-color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent), 0 0 0 3px var(--accent-soft); }
-.check > *, .check { font-size: 13px; }
-.slot .check { font-size: 11px; }
+/* checks: ballot boxes */
+.check { border-radius: 0; transform: none; border: 1.5px solid var(--ink); background: var(--paper); box-shadow: none; color: #fff; font-size: 14px; }
+.check.on { background: var(--ink); border-color: var(--ink); box-shadow: none; }
+.slot .check { border-color: currentColor; }
+.slot.on .check { background: #fff; color: var(--ink); }
 
-/* ===== circuit-board outlines: chips are tiny components with gold pads ===== */
-.chip { position: relative; border: 1.3px solid var(--trace); border-radius: 4px; background-color: #fff;
-  background-image: linear-gradient(var(--pad), var(--pad)), linear-gradient(var(--pad), var(--pad));
-  background-size: 4px calc(100% - 6px), 4px calc(100% - 6px); background-position: left 2px center, right 2px center; background-repeat: no-repeat;
-  color: var(--accent); font: italic 13px var(--read); text-transform: none; letter-spacing: 0; padding: 1px 11px; }
-.chip::before, .chip::after { content: ""; position: absolute; top: 50%; width: 5px; height: 1.3px; background: var(--trace); margin: 0; opacity: 1; }
-.chip::before { left: -6px; } .chip::after { right: -6px; }
-.chip.read { background-color: var(--accent-soft); }
-.chip.mastered { background-color: var(--accent); color: #fff; border-color: var(--accent); box-shadow: none; }
-.chip.amber { color: var(--amber); border-color: #d9a06a; background-color: var(--amber-soft); }
-.day-chips { gap: 8px 14px; padding-inline: 6px; }
+/* chips: small boxed labels; mastered is reverse type */
+.chip { position: static; border: 1px solid var(--ink); border-radius: 0; background: var(--paper); background-image: none; color: var(--ink); font: 800 10px var(--ui); text-transform: uppercase; letter-spacing: .12em; padding: 2px 6px; }
+.chip::before, .chip::after { content: none; }
+.chip.read { background: radial-gradient(circle, rgba(26, 24, 22, .28) .9px, transparent 1.2px) 0 0 / 3px 3px, var(--paper); }
+.chip.mastered { background: var(--ink); color: #fff; border-color: var(--ink); box-shadow: none; }
+.chip.amber { background: var(--amber-soft); color: var(--amber); border-color: var(--amber); }
+.day-chips { gap: 6px; padding-inline: 0; }
+.day-chips .chip { padding: 4px 8px; font-size: 10px; }
 
-/* fields */
+/* fields: ruled forms */
 textarea, input[type="text"], input[type="number"], input[type="search"], input[type="time"], select, .rem input[type="time"] {
-  border-radius: 10px; background: #fffdfe; border: 1px solid var(--line); color: var(--ink); caret-color: var(--pink); font-family: var(--read); }
-textarea:focus, input:focus, select:focus { border-color: var(--trace); box-shadow: 0 0 0 3px var(--accent-soft); }
-::placeholder { color: #a8949e; font-style: italic; }
-.toast { border-radius: 99px; clip-path: none; background: var(--accent); color: #fff; font: 700 18px var(--display); text-transform: none; letter-spacing: 0; box-shadow: 0 8px 24px rgba(47, 122, 85, .25); }
-.w-rank { font-family: var(--display); font-size: 24px; color: var(--pink); }
-.entry { border-top: 1px dashed var(--line); }
-.entry .meta { font-family: var(--read); font-style: italic; }
-dl.gloss dt { font-size: 24px; color: var(--accent); }
+  border-radius: 0; background: #fbf8f0; border: 1px solid var(--ink); color: var(--ink); caret-color: var(--spot); font-family: var(--read); }
+textarea { background-image: repeating-linear-gradient(#fbf8f0 0 27px, #d9d1bf 27px 28px); line-height: 28px; }
+textarea:focus, input:focus, select:focus { outline: none; border-color: var(--ink); box-shadow: 3px 3px 0 var(--spot); }
+::placeholder { color: #8d8577; font-style: italic; }
+.toast { border-radius: 0; clip-path: none; background: var(--ink); color: #fff; font: 800 12px var(--ui); text-transform: uppercase; letter-spacing: .14em; box-shadow: 4px 4px 0 var(--spot); }
+.toast::before { content: "Bulletin · "; color: #f3e27a; }
+.w-rank { font: 900 26px var(--display); color: var(--spot); }
+.w-text { font: 17px var(--read); }
+.wants li { border-top: 1px dotted var(--ink); }
+.entry { border-top: 1px solid var(--hair); }
+.entry .meta { font: 700 10px var(--ui); text-transform: uppercase; letter-spacing: .1em; }
+.entry .body { font: 16px/1.55 var(--read); }
+dl.gloss { gap: 0; }
+dl.gloss > div { border-bottom: 1px dotted var(--ink); padding: 10px 0; }
+dl.gloss dt { font-size: 21px; }
+.mini-list { font-family: var(--read); }
 
-/* calendar, alarms */
-.cal-h { font-family: var(--display); font-weight: 700; font-size: 15px; text-transform: none; letter-spacing: 0; color: var(--muted); }
-.cal-cell:not(.blank) { color: var(--muted); font-family: var(--read); background-size: 7px 7px, 6px 1px, 7px 7px, 6px 1px; background-position: left 1px top 1px, left 7px top 4.5px, right 1px bottom 1px, right 7px bottom 4.5px; border-width: 1px; }
+/* calendar: printed listings grid */
+.cal-h { font: 800 10px var(--ui); text-transform: uppercase; letter-spacing: .1em; color: var(--ink); border-bottom: 2px solid var(--ink); }
+.cal-grid { gap: 0; border-left: 1px solid var(--hair); border-top: 1px solid var(--hair); }
+.cal-h { border-right: 1px solid var(--hair); }
+.cal-cell, .cal-cell:not(.blank) { border: 0; border-right: 1px solid var(--hair); border-bottom: 1px solid var(--hair); border-radius: 0; background: var(--paper); color: var(--muted); font: 600 13px var(--ui); align-items: flex-start; justify-content: flex-start; padding: 5px; }
+.cal-cell.blank { background: repeating-linear-gradient(45deg, transparent 0 4px, rgba(26, 24, 22, .07) 4px 5px); border-right: 1px solid var(--hair); border-bottom: 1px solid var(--hair); }
 .cal-cell.has { color: var(--ink); }
-.cal-cell.today { border-color: var(--pink); color: var(--pink); box-shadow: 0 0 0 2px var(--pink-soft); }
-.cal-cell.sel { outline: 2px solid var(--trace); background-color: var(--accent-soft); }
-.cal-time { font-family: var(--display); font-weight: 700; font-size: 18px; color: var(--accent); }
-.alarm-mode { border: 1.5px dashed var(--line); border-radius: 12px; }
-.alarm-mode.on { border-style: solid; border-color: var(--trace); box-shadow: none; background: var(--accent-soft); }
-.alarm-mode b, .stack > div > b, .steps > b { font-family: var(--display); font-weight: 700; font-size: 20px; text-transform: none; letter-spacing: 0; color: var(--accent); }
-.steps { border-left: 1.5px solid var(--trace); }
-#alarm-overlay { background: rgba(251, 241, 244, .94); }
-.alarm-time { font-family: var(--display); color: var(--pink); text-shadow: none; }
-.look-row { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line); }
-.look-row:first-of-type { border-top: 0; }
-.look-row input { width: 20px; height: 20px; accent-color: var(--accent); }
+.cal-cell.today { background: var(--ink); color: #fff; box-shadow: none; }
+.cal-cell.sel { outline: 2px solid var(--spot); outline-offset: -2px; background: var(--sunk); }
+.cal-cell.today.sel { background: var(--ink); }
+.cal-cell.today .cal-dots i { outline: 1px solid #fff; }
+.cal-dots i { border-radius: 0; }
+.cal-time { font: 800 12px var(--ui); color: var(--spot); }
+.alarm-mode { border: 1px dashed var(--ink); border-radius: 0; background: none; }
+.alarm-mode.on { border-style: solid; box-shadow: 3px 3px 0 var(--spot); background: var(--paper); }
+.alarm-mode b, .stack > div > b, .steps > b { font: 800 11px var(--ui); text-transform: uppercase; letter-spacing: .14em; color: var(--spot); }
+.steps { border-left: 3px double var(--ink); }
+.look-row { border-top: 1px dotted var(--ink); }
+#alarm-overlay { background: rgba(242, 237, 225, .97); }
+.alarm-box .eyebrow { font: 900 30px var(--display); text-transform: uppercase; letter-spacing: .02em; color: var(--spot); }
+.alarm-box .eyebrow::before { content: none; }
+.alarm-time { font: 900 clamp(64px, 20vw, 130px) var(--display); color: var(--ink); text-shadow: none; }
+.alarm-label { font: italic 22px var(--display); }
 
-/* ===== hover effects: only when switched on in Data → Look ===== */
-:root.hover-fx .btn:hover { background-color: var(--accent-soft); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(47, 122, 85, .16); }
-:root.hover-fx .btn.primary:hover { background-color: color-mix(in srgb, var(--accent) 88%, white); }
-:root.hover-fx .lesson-item { transition: transform .15s, box-shadow .15s, border-color .15s; }
-:root.hover-fx .lesson-item:hover { border-color: var(--trace); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(110, 60, 85, .12); }
-:root.hover-fx .opt:hover:not([disabled]), :root.hover-fx .days78 button:hover, :root.hover-fx .cal-cell:not(.blank):hover, :root.hover-fx .books button:hover, :root.hover-fx .icon:hover:not([disabled]) { border-color: var(--pink); background-color: var(--pink-soft); }
-:root.hover-fx nav.tabs button:hover, :root.hover-fx .back:hover, :root.hover-fx .linkish:hover { color: var(--pink); text-shadow: none; }
-:root.hover-fx .day-chips .chip:hover { border-color: var(--pink); color: var(--pink); }
+/* opt-in hover (Data → Look) */
+:root.hover-fx .btn:hover { background-color: var(--ink); color: #fff; transform: none; box-shadow: 3px 3px 0 var(--spot); }
+:root.hover-fx .lesson-item:hover { background: rgba(26, 24, 22, .05); transform: none; box-shadow: none; border-color: var(--ink); }
+:root.hover-fx .opt:hover:not([disabled]), :root.hover-fx .days78 button:hover, :root.hover-fx .cal-cell:not(.blank):hover, :root.hover-fx .icon:hover:not([disabled]) { background-color: var(--sunk); border-color: var(--ink); }
+:root.hover-fx .books button:hover { background-color: var(--sunk); }
+:root.hover-fx nav.tabs button:hover { color: var(--ink); background: var(--sunk); }
+:root.hover-fx .back:hover, :root.hover-fx .linkish:hover { color: var(--ink); }
 
-@media (max-width: 480px) {
+@media (max-width: 560px) {
+  .ear { display: none; }
+  .mast-ears { grid-template-columns: 1fr; }
+  .dateline { justify-content: center; font-size: 10px; }
   h2.view-title { font-size: 36px; }
   .reader h2 { font-size: 32px; }
-  .logo { font-size: 23px; }
-  .next h3, .day-card h3 { font-size: 26px; }
-  .clock { font-size: 56px; }
+  .reader > p { text-align: left; }
+  .next h3, .day-card h3 { font-size: 25px; }
+  .books button { font-size: 11px; padding: 5px 9px; }
+  .clock { font-size: 58px; }
 }
-@media (prefers-reduced-motion: reduce) { :root.hover-fx .btn:hover, :root.hover-fx .lesson-item:hover { transform: none; } }
 </style>
 
+<div class="masthead">
+  <div class="mast-ears">
+    <div class="ear l" id="ear-l"></div>
+    <h1 class="mast-title">The Transurfing Path</h1>
+    <div class="ear r" id="ear-r"></div>
+  </div>
+  <div class="dateline" id="dateline"></div>
+</div>
 <header class="top">
   <div class="top-inner">
     <div class="brand">
       <div class="logo" aria-hidden="true">Transurfing <span>Path</span></div>
       <div class="books" id="books" role="group" aria-label="Book">
-        <button data-book="transurfing" aria-pressed="true">Reality Transurfing</button>
-        <button data-book="itworks" aria-pressed="false">It Works</button>
-        <button data-book="masterkey" aria-pressed="false">The Master Key</button>
+        <button data-book="transurfing" aria-pressed="true"><b>A</b>Reality Transurfing</button>
+        <button data-book="itworks" aria-pressed="false"><b>B</b>It Works</button>
+        <button data-book="masterkey" aria-pressed="false"><b>C</b>The Master Key</button>
       </div>
       <span class="sync" id="sync">Saved in this browser</span>
     </div>
@@ -1707,7 +1720,6 @@ function applyBook() {
   B = BOOKS[S.bookId] || BOOKS.transurfing;
   document.documentElement.setAttribute("data-book", B.id);
   document.documentElement.classList.toggle("hover-fx", !!(S.look && S.look.hover));
-  document.documentElement.classList.toggle("script-body", !!(S.look && S.look.script));
   document.querySelectorAll("#books button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.book === B.id)));
   if (!B.tabs.includes(view)) view = "today";
   $("#tabs").innerHTML = B.tabs.map((t) => `<button data-view="${t}">${(B.labels || {})[t] || TAB_LABEL[t]}</button>`).join("");
@@ -1727,7 +1739,19 @@ function openLessonAnyBook(id) {
   go("lessons", { lesson: id });
 }
 
+function paintMasthead() {
+  const dl = $("#dateline"); if (!dl) return;
+  const first = Math.min(Date.now(), ...Object.keys(S.log).map((k) => new Date(k + "T12:00:00").getTime()), ...Object.values(S.read), ...Object.values(S.chRead));
+  const no = Math.max(1, Math.floor((Date.now() - first) / 864e5) + 1);
+  const sec = { transurfing: "A", itworks: "B", masterkey: "C" }[B.id];
+  const date = new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+  dl.innerHTML = `<span>Vol. I · No. ${no}</span><span>${esc(date)}</span><span>Section ${sec} · ${esc(B.title)}</span><span>Price: one practice</span>`;
+  const st = streak(), todays = todaysFor().length;
+  $("#ear-l").innerHTML = `<b>Today's forecast</b>${todays ? todays + " of " + B.practices.length + " practices done" : "Clear for practice"}`;
+  $("#ear-r").innerHTML = `<b>Streak report</b>${st} day${st === 1 ? "" : "s"} running`;
+}
 function render() {
+  paintMasthead();
   document.querySelectorAll("#tabs button").forEach((b) => b.setAttribute("aria-current", b.dataset.view === view ? "page" : "false"));
   const m = $("#main");
   if (view === "lessons" && openLesson) m.innerHTML = vLesson(lessonById(openLesson));
@@ -2095,7 +2119,6 @@ function vSettings() {
     <div class="panel stack" style="gap:6px">
       <div class="eyebrow">Look</div>
       <label class="look-row" for="look-hover"><span>Hover effects<br><span class="note">Buttons and cards lift and change colour when you point at them.</span></span><input type="checkbox" id="look-hover" ${S.look.hover ? "checked" : ""}></label>
-      <label class="look-row" for="look-script"><span>Script for reading text<br><span class="note">Use the script font for lessons and book text too, not just headings.</span></span><input type="checkbox" id="look-script" ${S.look.script ? "checked" : ""}></label>
     </div>
     <div class="panel stack" style="gap:10px">
       <div class="eyebrow">Saving</div>
@@ -2411,7 +2434,7 @@ function bindReminders() {
 }
 
 /* ===== Calendar and alarms ===== */
-const BOOK_DOT = { transurfing: "#3f9467", itworks: "#d4608a", masterkey: "#3b8b81" };
+const BOOK_DOT = { transurfing: "#1f4e8c", itworks: "#a8231b", masterkey: "#24603a" };
 const REM_PRACTICE = { "iw-m": "iw-morning", "iw-n": "iw-noon", "iw-e": "iw-night", "mk-s": "mk-sit", "rt-78": "rt-78" };
 const PRACTICE_INFO = {};
 Object.values(BOOKS).forEach((bk) => bk.practices.forEach((pr) => (PRACTICE_INFO[pr.id] = { book: bk.id, title: pr.title })));
@@ -2556,7 +2579,7 @@ function ring(r) {
   try { ALARM.audio.currentTime = 0; ALARM.audio.play().catch(() => {}); } catch {}
   try { navigator.vibrate && navigator.vibrate([600, 300, 600, 300, 600]); } catch {}
   const o = $("#alarm-overlay");
-  o.innerHTML = `<div class="alarm-box"><div class="eyebrow">Alarm</div><div class="alarm-time">${r.time}</div><div class="alarm-label">${esc(r.label)}</div>
+  o.innerHTML = `<div class="alarm-box"><div class="eyebrow">Extra! Extra!</div><div class="alarm-time">${r.time}</div><div class="alarm-label">${esc(r.label)}</div>
     <div class="row" style="justify-content:center"><button class="btn primary" id="al-done">Done · log it</button><button class="btn" id="al-snooze">Snooze 5 min</button><button class="btn ghost" id="al-dismiss">Dismiss</button></div></div>`;
   o.hidden = false;
   const stop = () => { try { ALARM.audio.pause(); } catch {} try { navigator.vibrate && navigator.vibrate(0); } catch {} o.hidden = true; ALARM.ringing = null; };
@@ -2741,9 +2764,9 @@ function bind() {
 
   // data
   if (view === "calendar") bindCalendar();
-  const lh = $("#look-hover"), ls = $("#look-script");
+  const lh = $("#look-hover");
   if (lh) lh.onchange = () => { S.look.hover = lh.checked; save(); applyBook(); render(); toast(lh.checked ? "Hover effects on" : "Hover effects off"); };
-  if (ls) ls.onchange = () => { S.look.script = ls.checked; save(); applyBook(); render(); };
+
   const exp = $("#exp");
   if (exp) exp.onclick = () => {
     const txt = JSON.stringify(S); const box = $("#exp-text"); box.value = txt;
