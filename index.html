@@ -185,6 +185,18 @@ ol.wants, ul.wants { list-style: none; margin: 0; padding: 0; }
 .book-text ol.rules { margin: 0 0 1.2em; padding: 16px 16px 16px 40px; background: var(--accent-soft); border-radius: var(--r); font-weight: 600; display: flex; flex-direction: column; gap: 8px; }
 .book-text .sign { font-style: italic; color: var(--muted); }
 @media (max-width: 480px) { .wants li { grid-template-columns: 24px 1fr; } .w-acts { grid-column: 2; justify-content: flex-start; } }
+/* The Master Key: antique brass accent */
+:root[data-book="masterkey"] { --accent: #84641a; --accent-soft: #f1e8d2; --heat-1: #e3d2a6; --heat-2: #bf9c4c; --heat-3: #84641a; }
+@media (prefers-color-scheme: dark) { :root[data-book="masterkey"]:not([data-theme="light"]) { --accent: #d8b25a; --accent-soft: #33291a; --on-accent: #1d1607; --heat-1: #4a3c1f; --heat-2: #8f7333; --heat-3: #d8b25a; } }
+:root[data-book="masterkey"][data-theme="dark"] { --accent: #d8b25a; --accent-soft: #33291a; --on-accent: #1d1607; --heat-1: #4a3c1f; --heat-2: #8f7333; --heat-3: #d8b25a; }
+.weeks { display: grid; grid-template-columns: repeat(24, 1fr); gap: 3px; }
+.weeks i { height: 10px; border-radius: 3px; background: var(--sunk); }
+.weeks i.done { background: var(--accent); }
+.weeks i.cur { outline: 1.5px solid var(--ink); outline-offset: 1px; }
+.timer { align-items: stretch; }
+.clock { font-family: var(--display); font-size: 56px; line-height: 1; text-align: center; font-variant-numeric: tabular-nums; letter-spacing: .02em; padding-block: 6px; }
+.practice-box b { font-family: var(--ui); }
+.week-cur { border-color: var(--accent) !important; box-shadow: inset 3px 0 0 var(--accent); }
 </style>
 
 <header class="top">
@@ -193,6 +205,7 @@ ol.wants, ul.wants { list-style: none; margin: 0; padding: 0; }
       <div class="books" id="books" role="group" aria-label="Book">
         <button data-book="transurfing" aria-pressed="true">Reality Transurfing</button>
         <button data-book="itworks" aria-pressed="false">It Works</button>
+        <button data-book="masterkey" aria-pressed="false">The Master Key</button>
       </div>
       <span class="sync" id="sync">Saved in this browser</span>
     </div>
@@ -876,6 +889,305 @@ const IW_PRINCIPLES = [
 ];
 
 /* ------------------------------------------------------------------
+   The Master Key System (Charles F. Haanel, 1912/1916). 24 weekly
+   parts. Study notes written for this app, not the original text.
+------------------------------------------------------------------- */
+const MK_PARTS = [
+  { id: "mk1", title: "Weeks 1–6 · The mind and its control" },
+  { id: "mk2", title: "Weeks 7–12 · Creating with thought" },
+  { id: "mk3", title: "Weeks 13–18 · Laws and growth" },
+  { id: "mk4", title: "Weeks 19–24 · Spirit, power and the whole" },
+];
+
+const MK_SIT = `Sit in the same room and the same chair at the same time each day. Sit upright and comfortable, not slouched.`;
+
+const MK_LESSONS = [
+{ id: "mk-01", part: "mk1", title: "The world within", sub: "Thought is the cause; outer life is the effect",
+  body: [
+`Haanel opens with his central claim: there is a world within (thought, feeling and power) and a world without (circumstances, possessions, relationships), and the outer world is a reflection of the inner one. Change the cause and the effect changes.`,
+`Most people try to fix effects directly. Haanel asks you to work on the cause instead, and to treat your own mind as the place where conditions start. The rest of the course is a training programme for that inner world, one week at a time.`],
+  keys: ["The world without reflects the world within.", "Thought is cause; conditions are effects.", "Inner work comes first.", "The course is meant to be taken slowly: one part per week."],
+  practice: `${MK_SIT} Sit perfectly still for 15 to 30 minutes. Don't fidget or move. The aim this week is physical control: a body that stays still when you tell it to. Repeat daily until you can do it easily.`,
+  quiz: [
+    { q: "What does Haanel say the outer world reflects?", o: ["Luck", "The world within", "Other people's choices", "Your income"], a: 1, e: "Circumstances are effects of inner causes: thought, feeling and attitude." },
+    { q: "What is the first week's exercise for?", o: ["Visualising wealth", "Physical control: sitting perfectly still", "Writing goals", "Breathing fast"], a: 1, e: "Week one trains the body to be still before training the mind." }],
+  reflect: "Pick one situation in your life. What inner pattern might it be reflecting?" },
+{ id: "mk-02", part: "mk1", title: "Conscious and subconscious", sub: "The watchman at the gate",
+  body: [
+`Haanel describes two levels of mind. The conscious mind reasons, chooses and directs attention. The subconscious mind runs habits, the body's automatic processes and much of what we call intuition, and it accepts what the conscious mind repeatedly gives it.`,
+`So the conscious mind has a job: to stand guard like a watchman at the gate, deciding which thoughts are allowed in. What gets in and is repeated becomes habit, and habit becomes character and circumstance.`],
+  keys: ["The conscious mind reasons and chooses.", "The subconscious runs habits and automatic processes.", "The subconscious accepts what is repeated to it.", "Guard the gate: choose what you let in."],
+  practice: `${MK_SIT} Sit still as last week, and now also inhibit all thought. Let thoughts come up and let them go without following them. Keep out worry and planning. Even a few seconds of quiet mind is progress.`,
+  quiz: [
+    { q: "What is the conscious mind's role in this lesson?", o: ["To run the heartbeat", "To guard what enters the subconscious", "To store memories only", "To dream"], a: 1, e: "It acts as the watchman at the gate." },
+    { q: "This week's exercise adds what to sitting still?", o: ["Counting money", "Inhibiting all thought", "Reading aloud", "Visualising a ship"], a: 1, e: "Week two moves from controlling the body to quieting the mind." }],
+  reflect: "What thoughts slip past your gate most often? When do they get in?" },
+{ id: "mk-03", part: "mk1", title: "The solar plexus", sub: "Radiating energy, and the problem of fear",
+  body: [
+`Haanel links the two levels of mind to two nervous systems: the cerebrospinal system, under conscious control, and the sympathetic system, which runs automatically and centres on the solar plexus. He calls the solar plexus the "sun" of the body, a centre that radiates energy outward.`,
+`When that centre radiates freely, he says, you feel vital and attract good conditions. Fear and tension contract it and cut off the flow. Whatever you make of the anatomy, the practical point is clear: chronic fear shrinks you, and relaxation lets your energy move.`],
+  keys: ["Two systems: conscious (cerebrospinal) and automatic (sympathetic).", "The solar plexus is the body's \"sun\".", "Fear contracts it; relaxation lets it radiate.", "Releasing tension is a skill you can practise."],
+  practice: `${MK_SIT} After a few minutes of stillness, relax completely. Let go of every muscle on purpose: face, jaw, shoulders, hands, belly. Notice where you hold tension and release it.`,
+  quiz: [
+    { q: "What does Haanel call the solar plexus?", o: ["The gatekeeper", "The sun of the body", "The master key", "The mental home"], a: 1, e: "It radiates energy outward, like a sun." },
+    { q: "What closes it down?", o: ["Relaxation", "Fear and tension", "Sleep", "Concentration"], a: 1, e: "Fear contracts it and stops the flow of energy." }],
+  reflect: "Where in your body do you hold fear? What happens when you consciously let it go?" },
+{ id: "mk-04", part: "mk1", title: "The \"I\"", sub: "You are not your body or your moods",
+  body: [
+`This part asks who is doing the thinking. Haanel's answer: the "I" is not the body, which is an instrument, and not the passing thoughts and moods either. It is the spiritual self that uses body and mind and can direct them.`,
+`Knowing this gives you leverage. If you are not your anger or your worry, you can set them down. Haanel ties this to will: the "I" can decide what to think, and thought combined with feeling is what makes things happen.`],
+  keys: ["The body is an instrument, not the self.", "Thoughts and moods pass; the \"I\" remains.", "The \"I\" can direct thought by will.", "Thought plus feeling is creative."],
+  practice: `${MK_SIT} Be still, quiet the mind and relax the body as before. Then let go of negative feeling: any anger, worry, jealousy, envy, sorrow or disappointment. Watch each one, recognise it isn't you, and release it.`,
+  quiz: [
+    { q: "According to this part, what is the \"I\"?", o: ["The physical body", "Your strongest emotion", "The spiritual self that directs body and mind", "Your reputation"], a: 2, e: "The body and mind are its instruments." },
+    { q: "What does this week's exercise ask you to let go of?", o: ["Your goals", "Negative emotions like worry, anger and envy", "Your breath", "Your list"], a: 1, e: "Having learned stillness and relaxation, you now release negative feeling." }],
+  reflect: "Which mood do you most often mistake for yourself?" },
+{ id: "mk-05", part: "mk1", title: "The mental home", sub: "You build it, thought by thought",
+  body: [
+`Haanel says most of our mental life runs below awareness, shaped by heredity, upbringing and surroundings. We live in a "mental home" we mostly didn't choose. The good news: it was built by thought, and it can be rebuilt the same way.`,
+`He compares it to an inheritance waiting to be claimed. The materials are your thoughts; the builder is attention. Each day you add something, so add deliberately: better habits of thought, better pictures, better company for your mind.`],
+  keys: ["Much of your mental life is inherited or absorbed.", "Your mental home was built by thought.", "It can be rebuilt by deliberate thinking.", "Claim your inheritance: the power to choose thought."],
+  practice: `${MK_SIT} After relaxing and quieting the mind, recall a pleasant scene from your past in as much detail as you can: place, light, sounds, people. Hold the picture steadily.`,
+  quiz: [
+    { q: "What builds the \"mental home\"?", o: ["Money", "Thought", "Luck", "Other people"], a: 1, e: "It was built by thought and can be rebuilt by thought." },
+    { q: "What shapes much of it before we choose?", o: ["Heredity and environment", "The solar plexus", "Visualisation", "Concentration"], a: 0, e: "We absorb much of our mental life before we can choose." }],
+  reflect: "Which room of your mental home would you rebuild first?" },
+{ id: "mk-06", part: "mk1", title: "Attention", sub: "The brain as an instrument, concentration as the skill",
+  body: [
+`The brain, Haanel says, is a remarkable instrument, and attention is how you use it. Scattered attention gets scattered results. Concentrated attention is the difference between an ordinary mind and a powerful one.`,
+`Concentration is not strain. It is steady interest held on one object long enough for the mind to work on it. Like any skill, it grows with daily practice, which is what this week's exercise trains.`],
+  keys: ["Attention is how you direct the mind.", "Concentration is the key mental skill.", "Concentration is steady interest, not strain.", "It improves with daily practice."],
+  practice: `${MK_SIT} Take a photograph of a friend. Study it closely: expression, eyes, clothes, background. Then put it away and recreate it in your mind in full detail. Repeat until the image is clear.`,
+  quiz: [
+    { q: "What does Haanel call the key to using the brain well?", o: ["Speed", "Attention or concentration", "Memory tricks", "Sleep"], a: 1, e: "Concentrated attention turns the brain into a powerful instrument." },
+    { q: "What is this week's exercise object?", o: ["A battleship", "A photograph of a friend", "A circle", "A flower"], a: 1, e: "You study the photo, then recreate it mentally." }],
+  reflect: "Where does your attention leak during the day?" },
+{ id: "mk-07", part: "mk2", title: "Visualisation", sub: "Idealisation, visualisation, materialisation",
+  body: [
+`Haanel describes creation in three steps. Idealisation: decide clearly what you want. Visualisation: see it in your mind, in detail, steadily, as an architect sees a building before it exists. Materialisation: the plan begins to take outward form.`,
+`The picture must be clear and held steadily. A vague or changing picture produces vague results. Build it a little at a time, adding detail each day, and trust the process instead of forcing it.`],
+  keys: ["Idealise: decide what you want.", "Visualise: see it clearly, like an architect's plan.", "Materialise: it takes form over time.", "Clarity and steadiness matter more than effort."],
+  practice: `${MK_SIT} Choose one thing you want. Picture it as clearly as you can, adding a little detail each day. Hold the picture steadily, without straining.`,
+  quiz: [
+    { q: "What are Haanel's three steps of creation?", o: ["Wish, wait, receive", "Idealisation, visualisation, materialisation", "Plan, work, rest", "Ask, tell, give"], a: 1, e: "Decide, picture, then let it take form." },
+    { q: "What analogy does he use for visualisation?", o: ["A gardener", "An architect's plan", "A ship's captain", "A sculptor's clay"], a: 1, e: "The architect sees the building before it is built." }],
+  reflect: "What would you build if you planned it as carefully as an architect?" },
+{ id: "mk-08", part: "mk2", title: "Imagination", sub: "Constructive imagination and the battleship",
+  body: [
+`Imagination, for Haanel, is the workshop of the mind. Daydreaming wastes it; constructive imagination uses it to form plans and see connections. It can be trained, and the training makes thought more vivid and more effective.`,
+`This week's exercise is his famous battleship: picture a warship in detail, then trace it back through everything that made it possible, down to the ore in the ground and the thought of whoever conceived it. Every great thing began as an idea.`],
+  keys: ["Imagination is the mind's workshop.", "Constructive imagination plans; daydreaming drifts.", "Every made thing began as a thought.", "Imagination grows with exercise."],
+  practice: `${MK_SIT} Picture a battleship: its size, steel, guns, crew. Then trace it back: the shipyard, the steel mill, the mine, the ore, the engineers, the first idea. Follow the chain as far as you can.`,
+  quiz: [
+    { q: "What is the battleship exercise meant to show?", o: ["That ships are big", "That every made thing traces back to thought", "How to join the navy", "That steel is strong"], a: 1, e: "You follow the ship back to its origin in an idea." },
+    { q: "Constructive imagination differs from daydreaming because it…", o: ["Is more fun", "Forms plans and connections with purpose", "Happens at night", "Avoids details"], a: 1, e: "It's directed toward building something." }],
+  reflect: "Trace one object near you back to the thought that started it." },
+{ id: "mk-09", part: "mk2", title: "Affirmation and truth", sub: "\"I am whole, perfect, strong…\"",
+  body: [
+`Haanel argues that the truth about you is that you are whole and capable, and that thinking in line with that truth is what produces health and harmony. He offers an affirmation to hold: "I am whole, perfect, strong, powerful, loving, harmonious and happy."`,
+`The affirmation is meant to be understood, not just repeated. Hold each word in mind until you feel what it means. Its job is to replace habits of thinking that contradict it.`],
+  keys: ["Think in line with the truth of your wholeness.", "The affirmation: whole, perfect, strong, powerful, loving, harmonious, happy.", "Understand it; don't just repeat it.", "It replaces contradicting habits of thought."],
+  practice: `${MK_SIT} Picture a seed planted in soil. Watch it sprout, root, rise, leaf and flower, in detail. Then hold the affirmation for a few minutes, word by word.`,
+  quiz: [
+    { q: "Which is Haanel's affirmation in this part?", o: ["\"Every day in every way…\"", "\"I am whole, perfect, strong, powerful, loving, harmonious and happy\"", "\"It works\"", "\"Fortune favours the bold\""], a: 1, e: "It names the qualities he says are already true of you." },
+    { q: "How should the affirmation be used?", o: ["Repeated fast", "Understood and felt, word by word", "Written once", "Said to others"], a: 1, e: "Meaning, not mechanical repetition, gives it power." }],
+  reflect: "Which word of the affirmation feels least true to you right now? Why?" },
+{ id: "mk-10", part: "mk2", title: "Abundance and cause", sub: "Nothing happens by chance",
+  body: [
+`Haanel treats abundance as natural: nature is lavish, and lack is a sign that something is blocking the flow, not a fixed law. He ties this to cause and effect: every condition has a cause, and nothing happens by chance.`,
+`If you don't like an effect, look for its cause in thought and action and change that. This week's exercise trains precise mental imagery, so the causes you set in motion are clear ones.`],
+  keys: ["Abundance is natural; lack signals a block.", "Every effect has a cause.", "Nothing happens by chance.", "Change effects by changing causes."],
+  practice: `${MK_SIT} Picture a straight line. Then build a square from four lines, then a circle, then other shapes. Hold each figure clearly before moving on.`,
+  quiz: [
+    { q: "How does Haanel view lack?", o: ["As the natural state", "As a sign the flow is blocked", "As a punishment", "As permanent"], a: 1, e: "Nature is lavish; lack means something is in the way." },
+    { q: "What does he say about chance?", o: ["Most things are chance", "Nothing happens by chance; every effect has a cause", "Chance can be trained", "Only good things are chance"], a: 1, e: "Cause and effect run everywhere." }],
+  reflect: "Pick one result you dislike. What cause in your thinking or action might be producing it?" },
+{ id: "mk-11", part: "mk2", title: "Believe that you receive", sub: "Inductive reasoning and the prayer of faith",
+  body: [
+`Haanel praises inductive reasoning: observing many cases and finding the law behind them. Applied to the mind, it points to a law of supply that responds to belief.`,
+`He quotes the gospel line, "whatsoever things ye desire, when ye pray, believe that ye receive them, and ye shall have them," and reads it as a statement of law: hold the thing as already yours in thought, and it tends to follow.`],
+  keys: ["Inductive reasoning finds laws from observed cases.", "Belief acts on the law of supply.", "Hold the desire as already received.", "Treat it as law, not wishful thinking."],
+  practice: `${MK_SIT} Concentrate on the words "Whatsoever things ye desire, when ye pray, believe that ye receive them, and ye shall have them." Consider what it would mean to hold your desire as already received.`,
+  quiz: [
+    { q: "What kind of reasoning does Haanel praise here?", o: ["Deductive", "Inductive", "Circular", "Emotional"], a: 1, e: "Observing cases and drawing out the law." },
+    { q: "How does he read \"believe that ye receive\"?", o: ["As poetry only", "As a statement of mental law", "As a warning", "As a historical note"], a: 1, e: "He treats it as describing how the law works." }],
+  reflect: "What would change in how you act today if you believed you had already received what you want?" },
+{ id: "mk-12", part: "mk2", title: "Concentration and love", sub: "The law of attraction",
+  body: [
+`Here Haanel names the law of attraction: thought attracts its object. He adds that thought charged with feeling, especially love, is far more powerful than cold thinking.`,
+`He returns to concentration as the way to use this: hold one purpose steadily, warmly and without scattering. A mind that keeps changing its object attracts nothing in particular.`],
+  keys: ["Thought attracts its object.", "Feeling, especially love, strengthens thought.", "Concentration focuses the attraction.", "Scattered aims attract nothing in particular."],
+  practice: `${MK_SIT} Relax and quiet the mind, then concentrate on your connection with the Universal Mind: the idea that the power you use is part of something larger. Hold that thought with warmth.`,
+  quiz: [
+    { q: "What does the law of attraction say in this part?", o: ["Opposites attract", "Thought attracts its object", "Money attracts money", "Nothing attracts"], a: 1, e: "Held thought draws its object toward it." },
+    { q: "What makes thought more powerful, according to Haanel?", o: ["Speed", "Feeling, especially love", "Volume", "Repetition alone"], a: 1, e: "Thought joined with feeling is creative." }],
+  reflect: "Which of your goals do you think about coldly? How would it feel to hold it with warmth?" },
+{ id: "mk-13", part: "mk3", title: "Dreamers and law", sub: "Ideals are practical",
+  body: [
+`Haanel defends dreamers. The people who changed the world first held a picture others called impractical. An ideal is not an escape; it's the pattern that action follows.`,
+`He also argues that results that look miraculous are simply laws we don't yet understand. The point is to understand the law well enough to use it on purpose.`],
+  keys: ["Ideals come before achievements.", "Great builders were first dreamers.", "\"Miracles\" are laws not yet understood.", "Understand the law to use it deliberately."],
+  practice: `${MK_SIT} Relax and quiet the mind, then concentrate on your ideal: the life you're building. Hold it as a practical plan, not a fantasy.`,
+  quiz: [
+    { q: "How does Haanel view dreamers?", o: ["As impractical", "As the source of every advance", "As lazy", "As dangerous"], a: 1, e: "Their ideals become the patterns others follow." },
+    { q: "What are results that look miraculous?", o: ["Accidents", "Laws not yet understood", "Fraud", "Rare luck"], a: 1, e: "They follow law, even when we don't see it." }],
+  reflect: "What ideal have you dismissed as impractical?" },
+{ id: "mk-14", part: "mk3", title: "Universal substance", sub: "Harmony with the whole",
+  body: [
+`Haanel describes one universal substance, which he also calls Universal Mind, present in everything. Individual mind is a point of contact with it. Through that contact, thought can act on conditions.`,
+`The practical lesson is harmony. Thinking in conflict with the whole (resentment, criticism, fear) blocks the contact. Harmonious thought opens it.`],
+  keys: ["One universal substance runs through everything.", "Your mind is a point of contact with it.", "Discordant thought blocks the contact.", "Harmonious thought opens it."],
+  practice: `${MK_SIT} Relax and quiet the mind, then concentrate on harmony: harmony in your body, your relationships, your work. Picture each in balance.`,
+  quiz: [
+    { q: "What is your mind, in this part's terms?", o: ["Separate from everything", "A point of contact with Universal Mind", "Only the brain", "An illusion"], a: 1, e: "Individual mind connects to the universal." },
+    { q: "What blocks the connection?", o: ["Harmony", "Discordant thought like resentment and fear", "Concentration", "Rest"], a: 1, e: "Conflict closes it; harmony opens it." }],
+  reflect: "Where in your life are you out of harmony? What thought keeps it that way?" },
+{ id: "mk-15", part: "mk3", title: "Laws of life and insight", sub: "Difficulties, words and understanding",
+  body: [
+`Haanel says difficulties are part of the law of growth: they show us where we're out of line, and overcoming them builds strength. They are not punishments.`,
+`He also points to the power of words. Words shape thought, so choose them with care. And he praises insight: understanding a situation from within, which lets you act correctly instead of reacting.`],
+  keys: ["Difficulties show where you're out of line.", "Overcoming them builds strength.", "Words shape thought; choose them carefully.", "Insight lets you act instead of react."],
+  practice: `${MK_SIT} Relax and quiet the mind, then concentrate on insight. Bring a current difficulty to mind and ask quietly what it is showing you.`,
+  quiz: [
+    { q: "How does Haanel see difficulties?", o: ["As punishments", "As part of the law of growth", "As random", "As permanent"], a: 1, e: "They show where to adjust, and build strength." },
+    { q: "Why choose words carefully?", o: ["To sound educated", "Because words shape thought", "To avoid arguments", "It doesn't matter"], a: 1, e: "Language moulds how you think." }],
+  reflect: "What is your current biggest difficulty trying to teach you?" },
+{ id: "mk-16", part: "mk3", title: "Cycles and wealth", sub: "Periodicity and the right use of money",
+  body: [
+`Haanel notes that life moves in cycles, often described as seven-year periods, and that knowing this helps you work with the season you're in rather than against it.`,
+`He treats wealth as a means, not an end. Money is useful for what it lets you do and give. Wanting it as an end in itself tends to bring anxiety; wanting it for a worthy ideal tends to bring it.`],
+  keys: ["Life moves in cycles.", "Work with your current season.", "Wealth is a means, not an end.", "A worthy ideal draws resources."],
+  practice: `${MK_SIT} Relax and quiet the mind, then concentrate on your ideal and on what wealth would let you do and give. Hold the purpose, not the money.`,
+  quiz: [
+    { q: "How does Haanel view wealth?", o: ["As the goal", "As a means to an ideal", "As evil", "As luck"], a: 1, e: "Money serves a purpose; it isn't the purpose." },
+    { q: "What does periodicity refer to?", o: ["Reading periodicals", "Life moving in cycles", "Daily routine", "Punctuation"], a: 1, e: "Life moves through recurring periods." }],
+  reflect: "If money were fully taken care of, what would you do with your next seven years?" },
+{ id: "mk-17", part: "mk3", title: "True concentration", sub: "Symbol and reality",
+  body: [
+`Haanel distinguishes the symbol from the reality: outward forms are symbols, and the reality behind them is spiritual. Chasing symbols without the reality leads nowhere.`,
+`He describes real concentration as so complete that you forget yourself in the object, the way an inventor or artist does. It isn't forcing; it is absorption, and absorption is where insight and results come from.`],
+  keys: ["Outer forms are symbols of inner reality.", "Seek the reality, not just the symbol.", "Real concentration is absorption, not strain.", "Self-forgetful focus brings insight."],
+  practice: `${MK_SIT} Relax and quiet the mind, then choose one thing you want and become absorbed in it, the way an artist loses themselves in work. Let self-consciousness fall away.`,
+  quiz: [
+    { q: "What is real concentration, in this part?", o: ["Forcing your mind", "Absorption so complete you forget yourself", "Thinking fast", "Multitasking"], a: 1, e: "It's absorption, like an inventor at work." },
+    { q: "What are outer forms, according to Haanel?", o: ["The only reality", "Symbols of an inner reality", "Illusions to ignore", "Unimportant"], a: 1, e: "Forms point to the reality behind them." }],
+  reflect: "When were you last so absorbed that you forgot yourself? What were you doing?" },
+{ id: "mk-18", part: "mk3", title: "The law of growth", sub: "Attention, interest and the individual",
+  body: [
+`Everything grows or decays; nothing stays still. Haanel says growth comes from taking in from the universal what the individual needs, and that attention and interest decide what we take in.`,
+`The individual is the universal expressing itself in a particular way. Your growth is that expression becoming fuller, and it depends on where you place your interest day after day.`],
+  keys: ["Everything grows or decays.", "Attention and interest direct growth.", "The individual expresses the universal.", "Steady interest compounds over time."],
+  practice: `${MK_SIT} Relax and quiet the mind, then concentrate on growth: picture yourself one year from now, grown in the direction you choose.`,
+  quiz: [
+    { q: "What directs growth, according to this part?", o: ["Luck", "Attention and interest", "Age", "Other people"], a: 1, e: "What you attend to is what you grow toward." },
+    { q: "What is the individual's relation to the universal?", o: ["Separate from it", "A particular expression of it", "Opposed to it", "Unrelated"], a: 1, e: "The individual expresses the universal in a particular form." }],
+  reflect: "Where has your interest been going this month? Is that where you want to grow?" },
+{ id: "mk-19", part: "mk4", title: "Fear and opposites", sub: "Two ends of one thing",
+  body: [
+`Haanel says opposites are two ends of one thing: heat and cold, light and dark, good and evil. Darkness is the absence of light; you don't fight it, you bring light. In the same way, fear is the absence of understanding and confidence.`,
+`Mind, he says, is the one reality behind both poles. When you understand that, you stop fighting conditions and start changing your position on the scale.`],
+  keys: ["Opposites are two ends of one thing.", "Darkness is absence of light; fear is absence of understanding.", "Don't fight the negative; bring the positive.", "Mind is the reality behind both poles."],
+  practice: `${MK_SIT} Relax and quiet the mind, then concentrate on one fear. Ask what its opposite would be, and hold that opposite instead.`,
+  quiz: [
+    { q: "How does Haanel see opposites?", o: ["As enemies", "As two ends of one thing", "As illusions", "As random"], a: 1, e: "Heat and cold are degrees of one thing." },
+    { q: "How do you deal with darkness, in his analogy?", o: ["Fight it", "Bring light", "Ignore it", "Measure it"], a: 1, e: "You don't fight darkness; you bring light." }],
+  reflect: "What fear would disappear if you brought more understanding to it?" },
+{ id: "mk-20", part: "mk4", title: "The spirit of things", sub: "Power is latent until used",
+  body: [
+`Haanel says the spirit of a thing is its reality. Power is everywhere, but it's latent until someone recognises it and uses it, the way electricity existed long before anyone switched on a light.`,
+`He quotes "In Him we live and move and have our being," reading it as a statement that we live within the universal power and can draw on it consciously. Breathing deeply, he suggests, is a simple way to feel that connection.`],
+  keys: ["The spirit of a thing is its reality.", "Power is latent until recognised and used.", "We live within the universal power.", "Conscious breathing helps you feel it."],
+  practice: `${MK_SIT} Relax, breathe slowly and deeply, then concentrate on "In Him we live and move and have our being." Consider what it would mean to live inside the power you're trying to use.`,
+  quiz: [
+    { q: "When does latent power become useful?", o: ["Never", "When it is recognised and used", "Only at night", "When others allow it"], a: 1, e: "Like electricity, it waits to be recognised." },
+    { q: "Which quotation is this week's focus?", o: ["\"Know thyself\"", "\"In Him we live and move and have our being\"", "\"It works\"", "\"Carpe diem\""], a: 1, e: "Haanel reads it as describing our relation to the universal." }],
+  reflect: "What power in your life is sitting unused because you haven't recognised it?" },
+{ id: "mk-21", part: "mk4", title: "Think big", sub: "Consciousness of power",
+  body: [
+`Haanel says the real secret of power is consciousness of power. People who achieve large things think in large terms; small thinking limits what can reach you.`,
+`He asks you to raise your sights: entertain big ideas, and hold them calmly. Truth, he says, is the foundation: thinking in line with truth is what makes power reliable.`],
+  keys: ["The secret of power is consciousness of power.", "Large results start with large thinking.", "Small thinking limits what can reach you.", "Truth makes power reliable."],
+  practice: `${MK_SIT} Relax and quiet the mind, then concentrate on "Ye shall know the truth, and the truth shall make you free." Then let your main goal grow bigger in your mind and notice how that feels.`,
+  quiz: [
+    { q: "What is the real secret of power, according to this part?", o: ["Money", "Consciousness of power", "Hard work alone", "Connections"], a: 1, e: "Awareness of power precedes its use." },
+    { q: "What does small thinking do?", o: ["Keeps you safe", "Limits what can reach you", "Saves energy", "Nothing"], a: 1, e: "Large results begin with large thinking." }],
+  reflect: "How would your goals look if you multiplied them by ten?" },
+{ id: "mk-22", part: "mk4", title: "Thought and health", sub: "Every cell responds",
+  body: [
+`Haanel argues that the body is constantly renewing itself, and that thought influences how. Fear, worry and anger leave their mark; calm, confident, loving thought supports health.`,
+`He doesn't ask you to ignore medicine. He asks you to stop poisoning the process with habitual negative thought, and to hold a steady picture of health.`],
+  keys: ["The body renews itself constantly.", "Thought influences that renewal.", "Negative habits of thought take a toll.", "Hold a steady picture of health."],
+  practice: `${MK_SIT} Relax and quiet the mind, then concentrate on health. Picture your body renewing itself, cell by cell, strong and well.`,
+  quiz: [
+    { q: "What does Haanel say influences the body's renewal?", o: ["Nothing", "Thought", "Only diet", "Only exercise"], a: 1, e: "He links habitual thought to the body's condition." },
+    { q: "Which kind of thought supports health, in this part?", o: ["Worry", "Calm, confident, loving thought", "Anger", "Criticism"], a: 1, e: "Negative thought takes a toll; positive thought supports." }],
+  reflect: "Which habitual thought do you suspect is costing your body the most?" },
+{ id: "mk-23", part: "mk4", title: "Money and service", sub: "The law of giving",
+  body: [
+`Haanel says money consciousness is a state of mind, and that money follows service. The more value you give, the more naturally it returns.`,
+`He describes a law of giving: to receive, give. Hoarding and fear block circulation; generosity keeps it moving. Give your best work, your attention and your help, and let the return follow.`],
+  keys: ["Money consciousness is a state of mind.", "Money follows service.", "To receive, give.", "Hoarding blocks the flow; giving keeps it moving."],
+  practice: `${MK_SIT} Relax and quiet the mind, then concentrate on service: what value you can give this week, and to whom. Then give it.`,
+  quiz: [
+    { q: "What does money follow, according to Haanel?", o: ["Luck", "Service", "Hoarding", "Inheritance"], a: 1, e: "The more value given, the more returns." },
+    { q: "What blocks the flow?", o: ["Generosity", "Hoarding and fear", "Service", "Gratitude"], a: 1, e: "Circulation requires giving." }],
+  reflect: "Where could you give more value this month?" },
+{ id: "mk-24", part: "mk4", title: "The master key", sub: "Putting the whole system together",
+  body: [
+`The last part draws the threads together. The master key, Haanel says, is understanding that the world within is the cause, that mind is one with the universal, and that thought held with feeling and concentration shapes conditions.`,
+`He ends by pointing you back to practice: knowledge is useless until applied. The 24 weeks are a foundation. Keep sitting, keep guarding the gate, keep holding your ideal, and keep giving.`],
+  keys: ["The world within is the cause.", "Mind is one with the universal.", "Thought plus feeling plus concentration shapes conditions.", "Knowledge only works when applied."],
+  practice: `${MK_SIT} Relax and quiet the mind, then review the whole course: stillness, letting go, the "I", visualisation, harmony, growth, power, service. Choose the one practice you'll keep daily from now on.`,
+  quiz: [
+    { q: "What is the master key, in summary?", o: ["A secret password", "Understanding that the world within is cause, and using it", "A book of spells", "Luck"], a: 1, e: "The whole system rests on the inner world as cause." },
+    { q: "What does Haanel say about knowledge?", o: ["It's enough by itself", "It's useless until applied", "It's dangerous", "It should be kept secret"], a: 1, e: "The system only works through practice." }],
+  reflect: "Looking back over all 24 weeks, which idea changed you most?" },
+];
+
+const MK_PRACTICES = [
+  { id: "mk-sit", title: "Daily sitting", desc: "Sat for 15–30 minutes in the same place and the same position." },
+  { id: "mk-exercise", title: "This week's exercise", desc: "Did the week's exercise during the sitting." },
+  { id: "mk-read", title: "Read this week's part", desc: "Read or reread the current part." },
+  { id: "mk-gate", title: "Guarded the gate", desc: "Caught a negative thought and refused to let it in." },
+  { id: "mk-affirm", title: "Held the affirmation", desc: "\"I am whole, perfect, strong, powerful, loving, harmonious and happy.\"" },
+  { id: "mk-give", title: "Gave something", desc: "Gave value, help or attention without expecting a return." },
+];
+
+const MK_GLOSSARY = [
+  ["World within", "Thought, feeling and power: the cause of outer conditions.", "mk-01"],
+  ["Conscious mind", "The reasoning, choosing mind; the watchman at the gate.", "mk-02"],
+  ["Subconscious mind", "The mind that runs habits and automatic processes and accepts what is repeated.", "mk-02"],
+  ["Solar plexus", "Haanel's \"sun of the body\", which radiates energy and is contracted by fear.", "mk-03"],
+  ["The \"I\"", "The spiritual self that directs body and mind.", "mk-04"],
+  ["Mental home", "The structure of habitual thought you live in, built by thought and rebuildable.", "mk-05"],
+  ["Concentration", "Steady, absorbed attention on one object.", "mk-06"],
+  ["Idealisation, visualisation, materialisation", "Decide, picture clearly, let it take form.", "mk-07"],
+  ["Constructive imagination", "Imagination used to plan and connect, not to drift.", "mk-08"],
+  ["Universal Mind", "The one substance or intelligence present in everything.", "mk-14"],
+  ["Law of attraction", "Thought, especially with feeling, attracts its object.", "mk-12"],
+  ["Law of growth", "Everything grows or decays; attention directs growth.", "mk-18"],
+  ["Periodicity", "Life moving in cycles, often described as seven-year periods.", "mk-16"],
+  ["Law of giving", "To receive, give; money follows service.", "mk-23"],
+];
+
+const MK_PRINCIPLES = [
+  "The world without reflects the world within.",
+  "Guard the gate: choose which thoughts you let in.",
+  "Be still first. Control of the body comes before control of the mind.",
+  "Let go of tension; fear contracts, relaxation radiates.",
+  "You are not your moods. The \"I\" can set them down.",
+  "Idealise, visualise, and let it materialise.",
+  "Every made thing began as a thought.",
+  "I am whole, perfect, strong, powerful, loving, harmonious and happy.",
+  "Nothing happens by chance; change the cause.",
+  "Hold it as already received.",
+  "Don't fight darkness. Bring light.",
+  "Think big: the secret of power is consciousness of power.",
+  "To receive, give.",
+  "Knowledge is only useful when applied.",
+];
+
+/* ------------------------------------------------------------------
    Book registry
 ------------------------------------------------------------------- */
 const BOOKS = {
@@ -892,6 +1204,14 @@ const BOOKS = {
     tabs: ["today", "read", "list", "lessons", "practice", "journal", "glossary", "settings"],
     note: `Lessons are study notes. The full original text of <i>It Works</i> (1926) and <i>The Magic Story</i> (1900) is in the Read tab.`,
   },
+  masterkey: {
+    id: "masterkey", title: "The Master Key System", author: "Charles F. Haanel",
+    parts: MK_PARTS, lessons: MK_LESSONS, practices: MK_PRACTICES, glossary: MK_GLOSSARY, principles: MK_PRINCIPLES,
+    tabs: ["today", "lessons", "practice", "journal", "glossary", "settings"],
+    labels: { lessons: "Weeks" }, unit: "Week", tryLabel: "This week's exercise",
+    lede: "24 parts, one per week, the way Haanel intended. Each has a reading, an exercise for your daily sitting, a quiz and a reflection.",
+    note: `These are plain-language study notes on Charles F. Haanel's <i>The Master Key System</i> (1912, 1916), written for this app. They are not the original text; read them alongside the book.`,
+  },
 };
 const TAB_LABEL = { today: "Today", read: "Read", list: "My List", lessons: "Lessons", practice: "Practice", journal: "Journal", glossary: "Glossary", settings: "Data" };
 const ALL_LESSONS = Object.values(BOOKS).flatMap((b) => b.lessons);
@@ -901,7 +1221,7 @@ const ALL_LESSONS = Object.values(BOOKS).flatMap((b) => b.lessons);
    the page runs as a claude.ai artifact, and in localStorage otherwise.
 ------------------------------------------------------------------- */
 const LS_KEY = "transurfing-path-v1";
-const blank = () => ({ v: 2, bookId: "transurfing", read: {}, quiz: {}, log: {}, journal: [], reflections: {}, book: { title: "Reality Transurfing", page: 0, pages: 0, where: "" }, chRead: {}, list: [], last: null, lastBy: {}, lastCh: null, updated: 0 });
+const blank = () => ({ v: 2, bookId: "transurfing", read: {}, quiz: {}, log: {}, journal: [], reflections: {}, book: { title: "Reality Transurfing", page: 0, pages: 0, where: "" }, chRead: {}, list: [], mk: { week: 1, started: 0, weekStart: 0, minutes: 0 }, last: null, lastBy: {}, lastCh: null, updated: 0 });
 let S = blank();
 let remote = null;
 let saveTimer = null, saving = Promise.resolve();
@@ -913,6 +1233,7 @@ function normalize(x) {
   const n = { ...b, ...x, book: { ...b.book, ...(x.book || {}) } };
   if (!BOOKS[n.bookId]) n.bookId = "transurfing";
   if (!Array.isArray(n.list)) n.list = [];
+  n.mk = { ...b.mk, ...(x.mk || {}) };
   if (!Array.isArray(n.journal)) n.journal = [];
   return n;
 }
@@ -1007,7 +1328,7 @@ function applyBook() {
   document.documentElement.setAttribute("data-book", B.id);
   document.querySelectorAll("#books button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.book === B.id)));
   if (!B.tabs.includes(view)) view = "today";
-  $("#tabs").innerHTML = B.tabs.map((t) => `<button data-view="${t}">${TAB_LABEL[t]}</button>`).join("");
+  $("#tabs").innerHTML = B.tabs.map((t) => `<button data-view="${t}">${(B.labels || {})[t] || TAB_LABEL[t]}</button>`).join("");
 }
 
 function go(v, opts = {}) {
@@ -1054,6 +1375,7 @@ function vToday() {
   const resume = S.lastBy[B.id] && lessonById(S.lastBy[B.id]);
   const todays = todaysFor();
   if (B.id === "itworks") return vTodayIW({ readN, total, next });
+  if (B.id === "masterkey") return vTodayMK({ readN, total });
   const b = S.book;
   const bookPct = b.pages > 0 ? Math.min(100, Math.round((b.page / b.pages) * 100)) : 0;
   const hello = readN === 0 ? "Start with the first lesson. Each one takes about five minutes." : readN === total ? "You've read every lesson. Keep the daily practice going." : "Pick up where you left off.";
@@ -1256,11 +1578,11 @@ function wantRow(w, i, n) {
 function vLessons() {
   const readN = B.lessons.filter((l) => status(l.id) !== "new").length;
   return `
-  <h2 class="view-title">Lessons</h2>
-  <p class="lede">${B.lessons.length} short lessons in ${B.parts.length} parts. Read, take the two-question quiz, and write a reflection. ${readN} read so far.</p>
+  <h2 class="view-title">${(B.labels || {}).lessons || "Lessons"}</h2>
+  <p class="lede">${B.lede || `${B.lessons.length} short lessons in ${B.parts.length} parts. Read, take the two-question quiz, and write a reflection.`} ${readN} read so far.</p>
   ${B.parts.map((p) => `<section class="part"><h3>${esc(p.title)}</h3>
     ${B.lessons.filter((l) => l.part === p.id).map((l) => `
-      <button class="lesson-item" data-open="${l.id}">
+      <button class="lesson-item ${B.id === "masterkey" && S.mk.started && lessonIndex(l.id) + 1 === mkWeek() ? "week-cur" : ""}" data-open="${l.id}">
         <span class="num">${lessonIndex(l.id) + 1}</span>
         <div><div class="t">${esc(l.title)}</div><div class="s">${esc(l.sub)}</div></div>
         ${statusChip(l.id)}
@@ -1274,14 +1596,14 @@ function vLesson(l) {
   const part = B.parts.find((p) => p.id === l.part);
   const qs = S.quiz[l.id];
   return `
-  <button class="back" data-go="lessons">← All lessons</button>
+  <button class="back" data-go="lessons">← All ${((B.labels || {}).lessons || "lessons").toLowerCase()}</button>
   <article class="reader" style="margin-top:14px">
-    <div class="eyebrow" style="font-family:var(--ui)">Lesson ${i + 1} · ${esc(part.title)}</div>
+    <div class="eyebrow" style="font-family:var(--ui)">${B.unit || "Lesson"} ${i + 1} · ${esc(part.title)}</div>
     <h2>${esc(l.title)}</h2>
     ${l.body.map((p) => `<p>${esc(p)}</p>`).join("")}
     <h4>Key ideas</h4>
     <ul class="keys">${l.keys.map((k) => `<li>${esc(k)}</li>`).join("")}</ul>
-    <h4>Try it</h4>
+    <h4>${B.tryLabel || "Try it"}</h4>
     <div class="practice-box">${esc(l.practice)}</div>
     <h4>Check your understanding${qs ? ` · last score ${qs.score}/${qs.total}` : ""}</h4>
     <div class="quiz" id="quiz">
@@ -1300,6 +1622,7 @@ function vLesson(l) {
       ${S.read[l.id] ? `<span class="chip read" style="align-self:center">Read ${fmtDate(S.read[l.id])}</span>` : `<button class="btn primary" id="mark-read">Mark as read</button>`}
       ${next ? `<button class="btn ghost" data-open="${next.id}">${esc(next.title)} →</button>` : "<span></span>"}
     </div>
+    ${B.id === "masterkey" && (!S.mk.started || mkWeek() !== i + 1) ? `<p class="note" style="font-family:var(--ui);margin-top:14px"><button class="linkish" data-setweek="${i + 1}" style="font-size:13px">Make this my current week</button></p>` : ""}
   </article>`;
 }
 
@@ -1412,8 +1735,117 @@ function moveWant(id, dir) {
   save(); render();
 }
 
+
+/* Master Key: weekly course and sitting timer */
+const mkWeek = () => Math.min(24, Math.max(1, S.mk.week || 1));
+const TIMER = { dur: 15 * 60, left: 15 * 60, running: false, endAt: 0, iv: null, lock: null, audio: null };
+const fmtClock = (s) => String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(Math.floor(s % 60)).padStart(2, "0");
+function timerTick() {
+  if (!TIMER.running) return;
+  TIMER.left = Math.max(0, Math.round((TIMER.endAt - Date.now()) / 1000));
+  const el = $("#timer-clock"); if (el) el.textContent = fmtClock(TIMER.left);
+  const bar = $("#timer-bar"); if (bar) bar.style.width = Math.round(100 * (1 - TIMER.left / TIMER.dur)) + "%";
+  if (TIMER.left <= 0) timerDone();
+}
+function chime() {
+  try {
+    const a = TIMER.audio; if (!a) return;
+    [0, 0.6].forEach((t, i) => {
+      const o = a.createOscillator(), g = a.createGain();
+      o.frequency.value = i ? 660 : 880; o.type = "sine";
+      g.gain.setValueAtTime(0.0001, a.currentTime + t); g.gain.exponentialRampToValueAtTime(0.25, a.currentTime + t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, a.currentTime + t + 1.8);
+      o.connect(g); g.connect(a.destination); o.start(a.currentTime + t); o.stop(a.currentTime + t + 2);
+    });
+  } catch {}
+}
+function releaseLock() { try { TIMER.lock && TIMER.lock.release(); } catch {} TIMER.lock = null; }
+function timerDone() {
+  clearInterval(TIMER.iv); TIMER.running = false; TIMER.left = TIMER.dur; releaseLock(); chime();
+  const k = dayKey(), arr = S.log[k] ? S.log[k].slice() : [];
+  if (!arr.includes("mk-sit")) { arr.push("mk-sit"); S.log[k] = arr; }
+  S.mk.minutes = (S.mk.minutes || 0) + Math.round(TIMER.dur / 60);
+  save(); toast("Sitting complete"); if (view === "today" && B.id === "masterkey") render();
+}
+function timerStart() {
+  try { TIMER.audio = TIMER.audio || new (window.AudioContext || window.webkitAudioContext)(); } catch {}
+  TIMER.running = true; TIMER.endAt = Date.now() + TIMER.left * 1000;
+  clearInterval(TIMER.iv); TIMER.iv = setInterval(timerTick, 500);
+  try { navigator.wakeLock && navigator.wakeLock.request("screen").then((l) => (TIMER.lock = l), () => {}); } catch {}
+  render();
+}
+function timerPause() { TIMER.left = Math.max(0, Math.round((TIMER.endAt - Date.now()) / 1000)); TIMER.running = false; clearInterval(TIMER.iv); releaseLock(); render(); }
+function timerReset() { TIMER.running = false; clearInterval(TIMER.iv); TIMER.left = TIMER.dur; releaseLock(); render(); }
+
+function vTodayMK({ readN, total }) {
+  const w = mkWeek(), l = B.lessons[w - 1];
+  const todays = todaysFor(), sat = (S.log[dayKey()] || []).includes("mk-sit");
+  const satDays = Object.values(S.log).filter((a) => (a || []).includes("mk-sit")).length;
+  const pct = Math.round(100 * (1 - TIMER.left / TIMER.dur));
+  return `
+  <h2 class="view-title">Today</h2>
+  <p class="lede">${S.mk.started ? `Week ${w} of 24. Haanel asks for one part per week: read it, then do its exercise in a daily sitting.` : "A 24-week course. Each week has one part to read and one exercise to practise in a daily sitting of 15 to 30 minutes."}</p>
+  <div class="stack">
+    <div class="panel stack">
+      <div class="stats">
+        <div class="stat"><b>${w}<small>/24</small></b><span>current week</span></div>
+        <div class="stat"><b>${satDays}</b><span>days sat</span></div>
+        <div class="stat streak"><b>${streak()}</b><span>day streak</span></div>
+      </div>
+      <div class="weeks" aria-label="Course progress">${B.lessons.map((x, i) => `<i class="${status(x.id) !== "new" ? "done" : ""} ${i + 1 === w ? "cur" : ""}" title="Week ${i + 1}: ${esc(x.title)}"></i>`).join("")}</div>
+    </div>
+    <div class="panel next">
+      <div class="eyebrow">This week · Week ${w}</div>
+      <h3>${esc(l.title)}</h3>
+      <p>${esc(l.sub)}</p>
+      <div class="practice-box" style="margin-bottom:14px"><b>Exercise</b>${esc(l.practice)}</div>
+      <div class="row">
+        ${S.mk.started ? `<button class="btn primary" data-open="${l.id}">${status(l.id) === "new" ? "Read week " + w : "Review week " + w}</button>
+          ${w < 24 ? `<button class="btn ghost" id="mk-next">Move to week ${w + 1}</button>` : ""}` : `<button class="btn primary" id="mk-begin">Begin week 1</button>`}
+      </div>
+      ${S.mk.started && w < 24 ? `<p class="note" style="margin:10px 0 0">Move on when the exercise feels steady, usually after seven days. Started ${fmtDate(S.mk.weekStart || S.mk.started)}.</p>` : ""}
+    </div>
+    <div class="panel stack timer">
+      <div class="row"><div class="eyebrow">Daily sitting</div><span class="spacer"></span><span class="chip ${sat ? "mastered" : ""}">${sat ? "Done today" : "Not yet today"}</span></div>
+      <div class="clock" id="timer-clock" aria-live="off">${fmtClock(TIMER.left)}</div>
+      <div class="bar"><i id="timer-bar" style="width:${pct}%"></i></div>
+      <div class="row" style="justify-content:center">
+        ${[15, 20, 30].map((m) => `<button class="btn small ${TIMER.dur === m * 60 ? "primary" : "ghost"}" data-dur="${m}" ${TIMER.running ? "disabled" : ""}>${m} min</button>`).join("")}
+      </div>
+      <div class="row" style="justify-content:center">
+        ${TIMER.running ? `<button class="btn" id="t-pause">Pause</button>` : `<button class="btn primary" id="t-start">${TIMER.left < TIMER.dur ? "Resume" : "Start sitting"}</button>`}
+        ${TIMER.left < TIMER.dur || TIMER.running ? `<button class="btn ghost" id="t-reset">Reset</button>` : ""}
+      </div>
+      <p class="note" style="margin:0;text-align:center">A soft chime plays at the end, and today's sitting is logged. Or tick it yourself in Practice.</p>
+    </div>
+    <div class="grid2">
+      <div class="panel">
+        <div class="eyebrow">Thought for today</div>
+        <p class="principle">${esc(principleOfDay())}</p>
+      </div>
+      <div class="panel stack" style="gap:10px">
+        <div class="row"><div class="eyebrow">Today's practice</div><span class="spacer"></span><span class="chip ${todays.length ? "read" : ""}">${todays.length}/${B.practices.length}</span></div>
+        ${B.practices.slice(1, 4).map(pracRow).join("")}
+        <button class="linkish" data-go="practice" style="align-self:flex-start;font-size:13px">All practices →</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function bindMK() {
+  const begin = $("#mk-begin");
+  if (begin) begin.onclick = () => { S.mk.started = Date.now(); S.mk.weekStart = Date.now(); S.mk.week = 1; save(); render(); toast("Week 1 begins"); };
+  const nx = $("#mk-next");
+  if (nx) nx.onclick = () => { S.mk.week = Math.min(24, mkWeek() + 1); S.mk.weekStart = Date.now(); save(); render(); toast("Week " + S.mk.week + " begins"); };
+  document.querySelectorAll("[data-dur]").forEach((b) => b.onclick = () => { TIMER.dur = TIMER.left = +b.dataset.dur * 60; render(); });
+  const st = $("#t-start"); if (st) st.onclick = timerStart;
+  const pa = $("#t-pause"); if (pa) pa.onclick = timerPause;
+  const rs = $("#t-reset"); if (rs) rs.onclick = timerReset;
+  document.querySelectorAll("[data-setweek]").forEach((b) => b.onclick = () => { S.mk.week = +b.dataset.setweek; S.mk.started = S.mk.started || Date.now(); S.mk.weekStart = Date.now(); save(); go("today"); toast("Now on week " + S.mk.week); });
+}
+
 function bind() {
   const m = $("#main");
+  if (B.id === "masterkey") bindMK();
   m.querySelectorAll("[data-open]").forEach((b) => b.onclick = () => go("lessons", { lesson: b.dataset.open }));
   m.querySelectorAll("[data-openany]").forEach((b) => b.onclick = () => openLessonAnyBook(b.dataset.openany));
   m.querySelectorAll("[data-ch]").forEach((b) => b.onclick = () => go("read", { ch: b.dataset.ch }));
