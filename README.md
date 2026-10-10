@@ -3,11 +3,10 @@
 **Transurfing Path** (`index.html`) is a single-file study app for three books. Switch between them with the buttons at the top.
 
 ## Reality Transurfing (Vadim Zeland)
-- **Lessons**: 18 short lessons in six parts, each with key ideas, an exercise, a two-question quiz and a reflection prompt.
+- **Lessons**: the 78-day course on top (one principle a day from *Transurfing in 78 Days*, with a summary, practice, notes and one-a-day pacing), then 18 core lessons that go deeper, each with key ideas, an exercise, a quiz and a reflection. Days and lessons link to each other.
 - **Practice**: eight daily practices with a 16-week heatmap and streak.
 - **Glossary**: searchable terms linked to their lessons.
 - **Book tracker**: page and chapter in your own copy.
-- **78 Days**: a day-by-day tracker for *Transurfing in 78 Days*, with a short summary and practice for each of the 78 principles, notes per day, and one-a-day pacing.
 
 The lessons and 78-day summaries are plain-language study notes written for this app, not the book's text.
 
