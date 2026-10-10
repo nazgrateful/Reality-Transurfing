@@ -25,7 +25,7 @@ The weekly summaries and quizzes are study notes written for this app.
 
 ## Shared
 - **Calendar**: a month view of everything you practised, read or wrote in each book, with day details.
-- **Alarms**: daily times for each practice. *Alarm mode* rings a full-screen alarm while the app is open (app sound isn't silenced by Do Not Disturb); on Android the website can create real Clock alarms, which ring through Do Not Disturb even when the app is closed. Calendar (`.ics`) export too.
+- **Alarms**: daily times for each practice, set up as real alarms in your phone's Clock app so they ring when the app is closed and through Do Not Disturb (one tap on Android, a copy-and-add checklist on iPhone, with a flag when a phone alarm no longer matches). An in-app alarm and a calendar (`.ics`) export are extras.
 - **Journal** and backup, restore and reset cover all books. Everything saves automatically. The streak counts activity in any book.
 - Progress is stored in `localStorage` when opened directly in a browser, and privately in your Claude account when opened as a claude.ai artifact.
 

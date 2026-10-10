@@ -434,6 +434,13 @@ dl.gloss dd { font-family: var(--read); }
 .alarm-label { font-family: var(--read); font-size: 20px; color: var(--ink); }
 @keyframes pulse { 50% { opacity: .55 } }
 @media (prefers-reduced-motion: reduce) { .alarm-time { animation: none; } }
+.rem2 { grid-template-columns: auto 1fr auto; row-gap: 8px; }
+.rem2 label { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.rem-acts { grid-column: 2 / -1; display: flex; flex-wrap: wrap; gap: 6px; }
+.steps { border-left: 2px solid var(--accent); padding: 4px 0 4px 14px; }
+.steps > b { font-family: var(--ui); text-transform: uppercase; letter-spacing: .1em; font-weight: 400; color: var(--accent); }
+.steps ol { margin: 8px 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-family: var(--read); font-size: 15px; }
+.steps .note { margin: 6px 0 0; }
 </style>
 
 <header class="top">
@@ -2335,8 +2342,9 @@ function buildICS() {
 }
 function bindReminders() {
   const setR = (id, patch) => { S.reminders = S.reminders || {}; S.reminders[id] = { ...(S.reminders[id] || {}), ...patch }; save(); };
-  document.querySelectorAll("[data-rem-on]").forEach((el) => el.onchange = () => setR(el.dataset.remOn, { on: el.checked }));
-  document.querySelectorAll("[data-rem-t]").forEach((el) => el.onchange = () => { if (/^\d\d:\d\d$/.test(el.value)) setR(el.dataset.remT, { time: el.value }); });
+  const keep = () => { const y = window.scrollY; render(); window.scrollTo(0, y); };
+  document.querySelectorAll("[data-rem-on]").forEach((el) => el.onchange = () => { setR(el.dataset.remOn, { on: el.checked }); keep(); });
+  document.querySelectorAll("[data-rem-t]").forEach((el) => el.onchange = () => { if (/^\d\d:\d\d$/.test(el.value)) { setR(el.dataset.remT, { time: el.value }); keep(); } });
   const b = $("#rem-ics");
   if (b) b.onclick = () => {
     if (!remList().some((r) => r.on)) { $("#rem-note").textContent = "Turn on at least one reminder first."; return; }
@@ -2393,7 +2401,7 @@ function vCalendar() {
   const monthCount = Object.keys(A).filter((k) => k.startsWith(y + "-" + String(mo + 1).padStart(2, "0"))).length;
   return `
   <h2 class="view-title">Calendar</h2>
-  <p class="lede">Every day you practised, read or wrote, across all three books. Below it are your daily alarms.</p>
+  <p class="lede">Every day you practised, read or wrote, across all three books. Below it are your daily alarms, which ring even when this app is closed.</p>
   <div class="stack">
     <div class="panel stack" style="gap:12px">
       <div class="row">
@@ -2414,29 +2422,59 @@ function vCalendar() {
   </div>`;
 }
 
+function phoneOS() { const u = navigator.userAgent; return /Android/i.test(u) ? "android" : /iPhone|iPad|iPod/i.test(u) || (/Macintosh/.test(u) && navigator.maxTouchPoints > 1) ? "ios" : "other"; }
+function phoneState(r) {
+  const set = (S.phoneAlarms || {})[r.id];
+  if (!set) return { cls: "", txt: "Not on phone" };
+  if (set !== r.time) return { cls: "amber", txt: "Phone says " + set };
+  return { cls: "mastered", txt: "On phone" };
+}
 function alarmPanel() {
-  const list = remList(), android = /Android/i.test(navigator.userAgent);
-  return `<div class="panel stack" style="gap:12px">
-      <div class="eyebrow">Alarms</div>
-      <div class="rem-list">${list.map((r) => `<div class="rem">
-        <input type="checkbox" id="rem-on-${r.id}" data-rem-on="${r.id}" ${r.on ? "checked" : ""} aria-label="Turn ${esc(r.label)} on or off">
-        <label for="rem-on-${r.id}">${esc(r.label)}</label>
+  const list = remList(), os = phoneOS(), on = list.filter((r) => r.on);
+  const setN = on.filter((r) => (S.phoneAlarms || {})[r.id] === r.time).length;
+  return `<div class="panel stack" style="gap:14px">
+      <div class="row"><div class="eyebrow">Alarms</div><span class="spacer"></span><span class="chip ${setN === on.length && on.length ? "mastered" : setN ? "amber" : ""}">${setN}/${on.length} on phone</span></div>
+      <p class="note" style="margin:0">These ring even when this app is closed and your phone is on Do Not Disturb, because they live in your phone's own Clock app. Phones only let the Clock app do that, so each alarm needs adding there once. After that it repeats every day without this app.</p>
+      <div class="rem-list">${list.map((r) => { const st = phoneState(r); return `<div class="rem rem2">
+        <input type="checkbox" id="rem-on-${r.id}" data-rem-on="${r.id}" ${r.on ? "checked" : ""} aria-label="Use ${esc(r.label)}">
+        <label for="rem-on-${r.id}">${esc(r.label)}<span class="chip ${st.cls}">${st.txt}</span></label>
         <input type="time" id="rem-t-${r.id}" data-rem-t="${r.id}" value="${r.time}" aria-label="${esc(r.label)} time">
-      </div>`).join("")}</div>
-      <div class="alarm-mode ${ALARM.armed ? "on" : ""}">
-        <div><b>Alarm mode</b><p class="note" style="margin:4px 0 0">${ALARM.armed ? `Armed. Keep this app open; it will ring at ${nextAlarmText()}. The screen stays awake.` : "Keep the app open (for example on a charger by your bed) and it rings a full-screen alarm at each time above. It plays as sound from the app, which Do Not Disturb doesn't silence."}</p></div>
-        <div class="row">${ALARM.armed ? `<button class="btn" id="alarm-off">Turn off</button>` : `<button class="btn primary" id="alarm-on">Start alarm mode</button>`}<button class="btn ghost small" id="alarm-test">Test sound</button></div>
-      </div>
-      ${!inArtifact() && android ? `<div class="stack" style="gap:8px"><div><b>Phone alarms (Android)</b><p class="note" style="margin:4px 0 0">Creates real alarms in your Clock app. They ring through Do Not Disturb even when this app is closed. Tap each one and confirm.</p></div>
-        <div class="row">${list.filter((r) => r.on).map((r) => `<a class="btn small" href="${androidAlarmURL(r)}">${esc(r.time)} · ${esc(r.label.split(" · ")[1] || r.label)}</a>`).join("")}</div></div>` : ""}
-      ${!inArtifact() ? `<div class="row"><button class="btn ghost small" id="rem-ics">Add to my phone calendar</button><span class="note" id="rem-note"></span></div>` : ""}
-      <details class="howto"><summary>How to make alarms ring through Do Not Disturb</summary>
-        <p>Phones don't let any website or app page switch off Do Not Disturb. Here's what does work:</p>
-        <p><b>1. Alarm mode (any phone):</b> leave this app open with the screen on. Turn your media volume up and keep the phone off silent mode. Do Not Disturb blocks notifications, not sound from an app that's open.</p>
-        <p><b>2. Clock alarms (always ring through Do Not Disturb, even when the app is closed):</b> on Android, use the Phone alarms buttons on the website version. On iPhone, open the Clock app and add one alarm per time above. Apple doesn't let websites create alarms.</p>
-        <p><b>3. Calendar alerts:</b> on iPhone, go to Settings → Focus → Do Not Disturb → Apps, add Calendar and turn on Time Sensitive. On Android, go to Settings → Notifications → Do Not Disturb and allow Alarms, Events and Reminders.</p>
+        ${r.on ? `<div class="rem-acts">
+          ${os === "android" ? `<a class="btn small primary" href="${androidAlarmURL(r)}">Create in Clock</a>` : `<button class="btn small" data-copy-alarm="${r.id}">Copy time and name</button>`}
+          <button class="btn small ghost" data-phone-set="${r.id}">${(S.phoneAlarms || {})[r.id] === r.time ? "Added ✓" : "I've added it"}</button>
+        </div>` : ""}
+      </div>`; }).join("")}</div>
+      ${os === "android" ? `<div class="steps"><b>Android</b><ol>
+          <li>Tap <b>Create in Clock</b>. Your Clock app opens with the time and name filled in.${inArtifact() ? " If nothing happens here, open the website version and tap it there." : ""}</li>
+          <li>Set it to repeat <b>every day</b> (tick all days) and save.</li>
+          <li>Come back and tap <b>I've added it</b>.</li></ol>
+          <p class="note">Clock alarms ring through Do Not Disturb by default. If yours doesn't, open Settings → Notifications → Do Not Disturb and allow <b>Alarms</b>.</p></div>`
+        : `<div class="steps"><b>${os === "ios" ? "iPhone" : "On your phone"}</b><ol>
+          <li>Tap <b>Copy time and name</b>.</li>
+          <li>Open the <b>Clock</b> app → <b>Alarms</b> → <b>+</b>. Set the time, then <b>Label</b> → paste.</li>
+          <li><b>Repeat</b> → tick every day → <b>Save</b>.</li>
+          <li>Come back and tap <b>I've added it</b>.</li></ol>
+          <p class="note">${os === "ios" ? "iPhone Clock alarms always ring through Do Not Disturb, Focus and silent mode. Apple doesn't let websites create alarms, so this one step has to be done in the Clock app." : "Phone Clock alarms ring through Do Not Disturb. Websites can't create them on iPhone; on Android, open this page on the phone for a one-tap button."}</p></div>`}
+      <p class="note" style="margin:0">If you change a time above, its chip turns yellow until you update the alarm in your Clock app and tap <b>I've added it</b> again.</p>
+      <details class="howto"><summary>Extra: in-app alarm and calendar</summary>
+        <div class="alarm-mode ${ALARM.armed ? "on" : ""}" style="margin-top:10px">
+          <div><b>In-app alarm</b><p class="note" style="margin:4px 0 0">${ALARM.armed ? `On. Rings at ${nextAlarmText()} while this app stays open.` : "Rings a full-screen alarm while this app is open, with a button to log the practice. Handy at a desk; use the Clock alarms above for everything else."}</p></div>
+          <div class="row">${ALARM.armed ? `<button class="btn" id="alarm-off">Turn off</button>` : `<button class="btn" id="alarm-on">Turn on</button>`}<button class="btn ghost small" id="alarm-test">Test sound</button></div>
+        </div>
+        ${!inArtifact() ? `<div class="row" style="margin-top:10px"><button class="btn ghost small" id="rem-ics">Add to my phone calendar</button><span class="note" id="rem-note"></span></div>` : ""}
       </details>
     </div>`;
+}
+function bindPhoneAlarms() {
+  document.querySelectorAll("[data-copy-alarm]").forEach((b) => b.onclick = () => {
+    const r = remList().find((x) => x.id === b.dataset.copyAlarm), txt = r.label;
+    const done = () => toast("Copied. Set " + r.time + " in Clock and paste the label");
+    navigator.clipboard.writeText(txt).then(done, () => toast("Set " + r.time + ", label: " + txt));
+  });
+  document.querySelectorAll("[data-phone-set]").forEach((b) => b.onclick = () => {
+    const r = remList().find((x) => x.id === b.dataset.phoneSet);
+    S.phoneAlarms = { ...(S.phoneAlarms || {}), [r.id]: r.time }; save(); const y = window.scrollY; render(); window.scrollTo(0, y); toast("Marked as on your phone");
+  });
 }
 function androidAlarmURL(r) {
   const [h, m] = r.time.split(":").map(Number);
@@ -2521,6 +2559,7 @@ function bindCalendar() {
   const off = $("#alarm-off"); if (off) off.onclick = () => { armAlarms(false); toast("Alarm mode off"); };
   const t = $("#alarm-test"); if (t) t.onclick = () => { unlockAudio(); ring({ id: "test", time: new Date().toTimeString().slice(0, 5), label: "Test alarm" }); };
   bindReminders();
+  bindPhoneAlarms();
 }
 
 function bind() {
