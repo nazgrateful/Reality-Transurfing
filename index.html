@@ -1585,7 +1585,7 @@ const BOOKS = {
   transurfing: {
     id: "transurfing", title: "Reality Transurfing", author: "Vadim Zeland",
     parts: PARTS, lessons: LESSONS, practices: PRACTICES, glossary: GLOSSARY, principles: PRINCIPLES,
-    tabs: ["today", "lessons", "practice", "journal", "glossary", "calendar", "settings"],
+    tabs: ["today", "t78", "lessons", "practice", "journal", "glossary", "calendar", "settings"],
     note: `The core lessons and the 78 daily summaries are plain-language study notes on Vadim Zeland's <i>Reality Transurfing</i> and <i>Transurfing in 78 Days</i>, written for this app. They are not the books' text; read each day's full principle in your own copy.`,
   },
   itworks: {
@@ -1604,7 +1604,7 @@ const BOOKS = {
     note: `The weekly notes and quizzes are written for this app. The complete original text of <i>The Master Key System</i> (1912, 1916), with Haanel's study questions, is in the Read tab.`,
   },
 };
-const TAB_LABEL = { today: "Today", read: "Read", list: "My List", lessons: "Lessons", practice: "Practice", journal: "Journal", glossary: "Glossary", calendar: "Calendar", settings: "Data" };
+const TAB_LABEL = { today: "Today", t78: "78 Days", read: "Read", list: "My List", lessons: "Lessons", practice: "Practice", journal: "Journal", glossary: "Glossary", calendar: "Calendar", settings: "Data" };
 const ALL_LESSONS = Object.values(BOOKS).flatMap((b) => b.lessons);
 
 /* ------------------------------------------------------------------
@@ -1757,7 +1757,7 @@ function render() {
   if (view === "lessons" && openLesson) m.innerHTML = vLesson(lessonById(openLesson));
   else if (view === "read" && B.id === "masterkey") m.innerHTML = openCh ? vPartMK(openCh) : vReadMK();
   else if (view === "read" && openCh) m.innerHTML = vChapter(openCh);
-  else m.innerHTML = ({ today: vToday, calendar: vCalendar, read: vRead, list: vList, lessons: vLessons, practice: vPractice, journal: vJournal, glossary: vGlossary, settings: vSettings })[view]();
+  else m.innerHTML = ({ today: vToday, t78: vT78, calendar: vCalendar, read: vRead, list: vList, lessons: vLessons, practice: vPractice, journal: vJournal, glossary: vGlossary, settings: vSettings })[view]();
   bind();
 }
 
@@ -1987,9 +1987,7 @@ function vLessons() {
   const readN = B.lessons.filter((l) => status(l.id) !== "new").length;
   return `
   <h2 class="view-title">${(B.labels || {}).lessons || "Lessons"}</h2>
-  ${B.id === "transurfing" ? `<p class="lede">Follow <i>Transurfing in 78 Days</i> one principle a day: read it in your copy each morning and practise it all day. The ${B.lessons.length} core lessons below go deeper into the ideas behind each day, with a quiz and a reflection. ${readN} lessons read.</p>
-  ${t78Section()}
-  <h3 class="section-h">Core lessons</h3>` : `<p class="lede">${B.lede || `${B.lessons.length} short lessons in ${B.parts.length} parts. Read, take the two-question quiz, and write a reflection.`} ${readN} read so far.</p>`}
+  <p class="lede">${B.lede || `${B.lessons.length} short lessons in ${B.parts.length} parts. Read, take the two-question quiz, and write a reflection.`} ${readN} read so far.</p>
   ${B.parts.map((p) => `<section class="part"><h3>${esc(p.title)}</h3>
     ${B.lessons.filter((l) => l.part === p.id).map((l) => `
       <button class="lesson-item ${B.id === "masterkey" && S.mk.started && lessonIndex(l.id) + 1 === mkWeek() ? "week-cur" : ""}" data-open="${l.id}">
@@ -2326,13 +2324,20 @@ function bindT78() {
     save(); toast("Saved to your journal");
   };
 }
+function vT78() {
+  return `
+  <h2 class="view-title">78 Days</h2>
+  <p class="lede">Zeland's course: each morning, read one principle in your copy of <i>Transurfing in 78 Days</i> and practise it for the rest of the day. Then move on to the next one tomorrow.</p>
+  ${t78Section()}
+  <p class="note" style="margin-top:16px">Each day here is my short summary and practice, written for this app. For the full principle and its interpretation, read that day in your own copy of the book.</p>`;
+}
 function t78Card() {
   const cur = t78Current(), d = T78[cur - 1], all = t78Done() === 78;
   return `<div class="panel next">
       <div class="eyebrow">78 Days · ${all ? "complete" : `day ${cur} of 78`}</div>
       <h3>${esc(d[1])}</h3>
       <p>${esc(d[3])}</p>
-      <div class="row"><button class="btn primary" data-go="lessons">${S.t78.done[cur] ? "Review" : t78Done() ? "Open today's principle" : "Start the 78-day course"}</button><span class="note">${t78Done()} of 78 done</span></div>
+      <div class="row"><button class="btn primary" data-go="t78">${S.t78.done[cur] ? "Review" : t78Done() ? "Open today's principle" : "Start the 78-day course"}</button><span class="note">${t78Done()} of 78 done</span></div>
     </div>`;
 }
 
@@ -2641,8 +2646,8 @@ function bindCalendar() {
 function bind() {
   const m = $("#main");
   if (B.id === "masterkey") { bindMK(); bindReadMK(); }
-  if (view === "lessons" && !openLesson && B.id === "transurfing") bindT78();
-  m.querySelectorAll("[data-day78]").forEach((b) => b.onclick = () => { go("lessons"); t78View = +b.dataset.day78; render(); const c = $("#course78"); if (c) c.scrollIntoView({ block: "start" }); });
+  if (view === "t78") bindT78();
+  m.querySelectorAll("[data-day78]").forEach((b) => b.onclick = () => { go("t78"); t78View = +b.dataset.day78; render(); });
   m.querySelectorAll("[data-open]").forEach((b) => b.onclick = () => go("lessons", { lesson: b.dataset.open }));
   m.querySelectorAll("[data-openany]").forEach((b) => b.onclick = () => openLessonAnyBook(b.dataset.openany));
   m.querySelectorAll("[data-ch]").forEach((b) => b.onclick = () => go("read", { ch: b.dataset.ch }));
