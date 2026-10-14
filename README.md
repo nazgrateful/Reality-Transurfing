@@ -25,6 +25,7 @@ The lessons and 78-day summaries are plain-language study notes written for this
 The weekly summaries and quizzes are study notes written for this app.
 
 ## Shared
+- **Past Editions**: every day's principle, quote and thought for all three books, newest first, 30 days at a time (up to a year back).
 - **Calendar**: a month view of everything you practised, read or wrote in each book, with day details.
 - **Alarms**: daily times for each practice, set up as real alarms in your phone's Clock app so they ring when the app is closed and through Do Not Disturb (one tap on Android, a copy-and-add checklist on iPhone, with a flag when a phone alarm no longer matches). An in-app alarm and a calendar (`.ics`) export are extras.
 - **Journal** and backup, restore and reset cover all books. Everything saves automatically. The streak counts activity in any book.

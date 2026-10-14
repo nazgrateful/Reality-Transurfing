@@ -491,6 +491,22 @@ dl.gloss dt { font-size: 21px; }
   .books button { font-size: 11px; padding: 5px 9px; }
   .clock { font-size: 58px; }
 }
+/* past editions */
+.editions { display: flex; flex-direction: column; gap: 22px; margin-top: 18px; }
+.edition { border-top: 3px solid var(--ink); padding-top: 2px; }
+.edition .ed-date { border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); display: flex; justify-content: space-between; gap: 6px 14px; flex-wrap: wrap; padding: 5px 0; font: 700 11px var(--ui); text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
+.edition .ed-date b { color: var(--ink); font-weight: 800; }
+.edition.today .ed-date span { color: #fff; background: var(--spot); padding: 0 6px; }
+.ed-items { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0 26px; }
+.ed-item { padding: 10px 0 4px; min-width: 0; }
+@media (min-width: 560px) { .ed-item + .ed-item { border-left: 1px solid var(--hair); padding-left: 14px; margin-left: -13px; } }
+@media (max-width: 559px) { .ed-item + .ed-item { border-top: 1px dotted var(--ink); } }
+.ed-item .eyebrow::before { content: none; }
+.ed-item .sec { display: inline-block; font: 900 13px var(--display); color: #fff; padding: 0 5px; margin-right: 6px; }
+.ed-item[data-sec="transurfing"] .sec { background: #1f4e8c; } .ed-item[data-sec="itworks"] .sec { background: #a8231b; } .ed-item[data-sec="masterkey"] .sec { background: #24603a; }
+.ed-item[data-sec="transurfing"] .eyebrow { color: #1f4e8c; } .ed-item[data-sec="itworks"] .eyebrow { color: #a8231b; } .ed-item[data-sec="masterkey"] .eyebrow { color: #24603a; }
+.ed-item .principle { font-size: 19px; margin: 6px 0 0; }
+.edition:not(.today) .ed-item:not(:first-child) .principle { font-size: 17px; color: var(--muted); }
 </style>
 
 <div class="masthead">
@@ -1585,26 +1601,26 @@ const BOOKS = {
   transurfing: {
     id: "transurfing", title: "Reality Transurfing", author: "Vadim Zeland",
     parts: PARTS, lessons: LESSONS, practices: PRACTICES, glossary: GLOSSARY, principles: PRINCIPLES,
-    tabs: ["today", "t78", "lessons", "practice", "journal", "glossary", "calendar", "settings"],
+    tabs: ["today", "t78", "lessons", "practice", "journal", "glossary", "editions", "calendar", "settings"],
     note: `The core lessons and the 78 daily summaries are plain-language study notes on Vadim Zeland's <i>Reality Transurfing</i> and <i>Transurfing in 78 Days</i>, written for this app. They are not the books' text; read each day's full principle in your own copy.`,
   },
   itworks: {
     id: "itworks", title: "It Works", author: "R. H. Jarrett",
     parts: IW_PARTS, lessons: IW_LESSONS, practices: IW_PRACTICES, glossary: IW_GLOSSARY, principles: IW_PRINCIPLES,
     text: IW_TEXT,
-    tabs: ["today", "read", "list", "lessons", "practice", "journal", "glossary", "calendar", "settings"],
+    tabs: ["today", "read", "list", "lessons", "practice", "journal", "glossary", "editions", "calendar", "settings"],
     note: `Lessons are study notes. The full original text of <i>It Works</i> (1926) and <i>The Magic Story</i> (1900) is in the Read tab.`,
   },
   masterkey: {
     id: "masterkey", title: "The Master Key System", author: "Charles F. Haanel",
     parts: MK_PARTS, lessons: MK_LESSONS, practices: MK_PRACTICES, glossary: MK_GLOSSARY, principles: MK_PRINCIPLES,
-    tabs: ["today", "read", "lessons", "practice", "journal", "glossary", "calendar", "settings"],
+    tabs: ["today", "read", "lessons", "practice", "journal", "glossary", "editions", "calendar", "settings"],
     labels: { lessons: "Weeks" }, unit: "Week", tryLabel: "This week's exercise",
     lede: "24 parts, one per week, the way Haanel intended. Each has a reading, an exercise for your daily sitting, a quiz and a reflection.",
     note: `The weekly notes and quizzes are written for this app. The complete original text of <i>The Master Key System</i> (1912, 1916), with Haanel's study questions, is in the Read tab.`,
   },
 };
-const TAB_LABEL = { today: "Today", t78: "78 Days", read: "Read", list: "My List", lessons: "Lessons", practice: "Practice", journal: "Journal", glossary: "Glossary", calendar: "Calendar", settings: "Data" };
+const TAB_LABEL = { today: "Today", t78: "78 Days", read: "Read", list: "My List", lessons: "Lessons", practice: "Practice", journal: "Journal", glossary: "Glossary", editions: "Past Editions", calendar: "Calendar", settings: "Data" };
 const ALL_LESSONS = Object.values(BOOKS).flatMap((b) => b.lessons);
 
 /* ------------------------------------------------------------------
@@ -1757,7 +1773,7 @@ function render() {
   if (view === "lessons" && openLesson) m.innerHTML = vLesson(lessonById(openLesson));
   else if (view === "read" && B.id === "masterkey") m.innerHTML = openCh ? vPartMK(openCh) : vReadMK();
   else if (view === "read" && openCh) m.innerHTML = vChapter(openCh);
-  else m.innerHTML = ({ today: vToday, t78: vT78, calendar: vCalendar, read: vRead, list: vList, lessons: vLessons, practice: vPractice, journal: vJournal, glossary: vGlossary, settings: vSettings })[view]();
+  else m.innerHTML = ({ today: vToday, t78: vT78, editions: vEditions, calendar: vCalendar, read: vRead, list: vList, lessons: vLessons, practice: vPractice, journal: vJournal, glossary: vGlossary, settings: vSettings })[view]();
   bind();
 }
 
@@ -1769,9 +1785,36 @@ function pracRow(p) {
   </div>`;
 }
 
-function principleOfDay() {
-  const di = Math.floor((Date.now() - new Date(2026, 0, 1)) / 864e5);
-  return B.principles[((di % B.principles.length) + B.principles.length) % B.principles.length];
+/* The daily line rotates through each book's list by calendar day, so any past day can be recomputed. */
+const THOUGHT_LABEL = { transurfing: "Principle of the day", itworks: "From the book", masterkey: "Thought for today" };
+const SECTION = { transurfing: "A", itworks: "B", masterkey: "C" };
+function thoughtFor(book, date) {
+  const d = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12);
+  const di = Math.floor((d - new Date(2026, 0, 1)) / 864e5), L = book.principles;
+  return L[((di % L.length) + L.length) % L.length];
+}
+function principleOfDay() { return thoughtFor(B, new Date()); }
+
+/* Past editions: every day's thoughts, newest first */
+let editionsShown = 30;
+function vEditions() {
+  const today = new Date(); today.setHours(12, 0, 0, 0);
+  const days = [];
+  for (let i = 0; i < editionsShown; i++) { const d = new Date(today); d.setDate(d.getDate() - i); days.push(d); }
+  const order = [B, ...Object.values(BOOKS).filter((b) => b.id !== B.id)];
+  return `
+  <h2 class="view-title">Past Editions</h2>
+  <p class="lede">Every day's principle, quote and thought, going back day by day. The section you're reading is listed first.</p>
+  <div class="editions">
+    ${days.map((d, i) => `<article class="edition ${i === 0 ? "today" : ""}">
+      <header class="ed-date"><span>${i === 0 ? "Today's edition" : i === 1 ? "Yesterday" : i + " days ago"}</span><b>${esc(d.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric", year: "numeric" }))}</b></header>
+      <div class="ed-items">${order.map((b) => `<div class="ed-item" data-sec="${b.id}">
+        <div class="eyebrow"><span class="sec">${SECTION[b.id]}</span>${esc(b.title)} · ${THOUGHT_LABEL[b.id]}</div>
+        <p class="principle">${esc(thoughtFor(b, d))}</p>
+      </div>`).join("")}</div>
+    </article>`).join("")}
+  </div>
+  <div class="row" style="justify-content:center;margin-top:18px"><button class="btn" id="ed-more">Show ${editionsShown >= 365 ? "no more" : "30 more days"}</button></div>`;
 }
 
 function vToday() {
@@ -2497,6 +2540,8 @@ function vCalendar() {
     <div class="panel stack" style="gap:10px">
       <div class="eyebrow">${selDate.toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long" })}</div>
       ${selItems.length ? `<ul class="cal-items">${selItems.map((x) => `<li><i style="background:${BOOK_DOT[x.book] || "var(--muted)"}"></i>${esc(x.text)}</li>`).join("")}</ul>` : `<p class="note" style="margin:0">${sel > today ? "Nothing yet. This day is still ahead of you." : "No activity logged on this day."}</p>`}
+      <div class="eyebrow" style="margin-top:6px">That day's edition</div>
+      <ul class="cal-items">${Object.values(BOOKS).map((b) => `<li><i style="background:${BOOK_DOT[b.id]}"></i><span><b>${SECTION[b.id]}.</b> ${esc(thoughtFor(b, selDate))}</span></li>`).join("")}</ul>
       ${sel === today && alarmsToday.length ? `<div class="eyebrow" style="margin-top:6px">Alarms today</div><ul class="cal-items">${alarmsToday.map((r) => `<li><b class="cal-time">${r.time}</b>${esc(r.label)}</li>`).join("")}</ul>` : ""}
     </div>
     ${alarmPanel()}
@@ -2647,6 +2692,8 @@ function bind() {
   const m = $("#main");
   if (B.id === "masterkey") { bindMK(); bindReadMK(); }
   if (view === "t78") bindT78();
+  const more = $("#ed-more");
+  if (more) { more.disabled = editionsShown >= 365; more.onclick = () => { const y = window.scrollY; editionsShown = Math.min(365, editionsShown + 30); render(); window.scrollTo(0, y); }; }
   m.querySelectorAll("[data-day78]").forEach((b) => b.onclick = () => { go("t78"); t78View = +b.dataset.day78; render(); });
   m.querySelectorAll("[data-open]").forEach((b) => b.onclick = () => go("lessons", { lesson: b.dataset.open }));
   m.querySelectorAll("[data-openany]").forEach((b) => b.onclick = () => openLessonAnyBook(b.dataset.openany));
